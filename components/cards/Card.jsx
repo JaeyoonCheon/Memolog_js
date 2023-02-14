@@ -1,7 +1,11 @@
-import {StyleSheet, Text, View, Platform, TouchableOpacity} from 'react-native';
-import React from 'react';
-
-import {listItem} from './CardList';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  TouchableOpacity,
+} from "react-native";
+import React from "react";
 
 const Card = () => {
   return (
@@ -31,14 +35,14 @@ const styles = StyleSheet.create({
     minHeight: 100,
 
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     ...Platform.select({
       ios: {
         shadowOffset: {
           width: 1,
           height: 1,
         },
-        shadowColor: '#000000',
+        shadowColor: "#000000",
         shadowOpacity: 0.25,
         shadowRadius: 1.5,
       },
@@ -51,12 +55,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 10,
     marginVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
 
     borderWidth: 1,
-    borderColor: 'green',
+    borderColor: "green",
   },
-  title: {flex: 1},
-  body: {flex: 4},
-  addon: {flex: 1},
+  title: { flex: 1 },
+  body: { flex: 4 },
+  addon: { flex: 1 },
 });
