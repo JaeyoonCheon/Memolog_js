@@ -5,7 +5,7 @@ import BaseHeader from "../components/headers/BaseHeader";
 
 const SignInScreen = () => {
   return (
-    <View>
+    <View style={styles.block}>
       <BaseHeader></BaseHeader>
       <Text>SignInScreen</Text>
     </View>
@@ -14,4 +14,10 @@ const SignInScreen = () => {
 
 export default SignInScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  block: {
+    flex: 1,
+
+    backgroundColor: "#FFFFFF",
+  },
+});
