@@ -11,7 +11,7 @@ import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 
-const SearchHeader = () => {
+const BaseHeader = () => {
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
 
@@ -29,19 +29,11 @@ const SearchHeader = () => {
           color="#000000"
         ></MaterialIcons>
       </TouchableOpacity>
-      <TextInput
-        style={[styles.input, { width: width - 120 }]}
-        placeholder="검색하려는 내용을 검색해주세요."
-        autoFocus
-      ></TextInput>
-      <TouchableOpacity style={styles.close}>
-        <MaterialIcons name="close" size={24} color="#000000"></MaterialIcons>
-      </TouchableOpacity>
     </View>
   );
 };
 
-export default SearchHeader;
+export default BaseHeader;
 
 const styles = StyleSheet.create({
   block: {
@@ -53,9 +45,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   back: {},
-  input: {
-    flex: 1,
-    marginHorizontal: 16,
-  },
-  close: {},
 });
