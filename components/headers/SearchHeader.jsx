@@ -9,13 +9,20 @@ import {
 } from "react-native";
 import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useNavigation } from "@react-navigation/native";
 
 const SearchHeader = () => {
   const { width } = useWindowDimensions();
+  const navigation = useNavigation();
 
   return (
     <View style={styles.block}>
-      <TouchableOpacity style={styles.back}>
+      <TouchableOpacity
+        style={styles.back}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
         <MaterialIcons
           name="arrow-back"
           size={24}

@@ -1,16 +1,21 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 
 import CardList from "../components/cards/CardList";
+import FlatCardList from "../components/cards/FlatCardList";
 import SearchButton from "../components/buttons/SearchButton";
 
 const MyDocumentsScreen = () => {
   const navigation = useNavigation();
+  const [layout, setLayout] = useState("grid");
 
   const onPressSearch = () => {
     navigation.navigate("MySearch");
+  };
+  const onPressLayout = (style) => {
+    setLayout(style);
   };
 
   useEffect(() => {
@@ -25,19 +30,29 @@ const MyDocumentsScreen = () => {
         <View style={styles.sort}>
           <Text>날짜순</Text>
         </View>
-        <View style={styles.view}>
-          <MaterialIcons
-            name="grid-view"
-            color="#000000"
-            size={20}
-          ></MaterialIcons>
-          <MaterialIcons name="list" color="#000000" size={20}></MaterialIcons>
+        <View style={styles.layout}>
+          <TouchableOpacity onPress={() => onPressLayout("grid")}>
+            <MaterialIcons
+              name="grid-view"
+              color="#000000"
+              size={20}
+            ></MaterialIcons>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => onPressLayout("list")}>
+            <MaterialIcons
+              name="list"
+              color="#000000"
+              size={20}
+            ></MaterialIcons>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.itemsWrapper}>
-        <View style={styles.items}>
+        {layout === "grid" ? (
           <CardList></CardList>
-        </View>
+        ) : (
+          <FlatCardList></FlatCardList>
+        )}
       </View>
     </View>
   );
@@ -67,18 +82,11 @@ const styles = StyleSheet.create({
     borderColor: "#000111",
     borderRadius: 15,
   },
-  view: {
+  layout: {
     flexDirection: "row",
   },
   itemsWrapper: {
     flex: 1,
     marginTop: 32,
-    marginHorizontal: 16,
-  },
-  items: {
-    flex: 1,
-
-    borderWidth: 1,
-    borderColor: "blue",
   },
 });

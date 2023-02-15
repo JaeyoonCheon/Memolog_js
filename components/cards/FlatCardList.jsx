@@ -1,9 +1,9 @@
 import { StyleSheet, FlatList, FlatListProps } from "react-native";
 import React from "react";
 
-import Card from "./Card";
+import FlatCard from "./FlatCard";
 
-const CardList = () => {
+const FlatCardList = () => {
   const test = [
     { title: "1", body: "1" },
     { title: "2", body: "2" },
@@ -20,16 +20,14 @@ const CardList = () => {
   return (
     <FlatList
       style={styles.cardList}
-      contentContainerStyle={{ paddingHorizontal: 8 }}
       data={test}
-      renderItem={(item) => <Card />}
+      renderItem={(item) => <FlatCard />}
       keyExtractor={(item) => item.title}
-      numColumns={2}
     ></FlatList>
   );
 };
 
-export default CardList;
+export default FlatCardList;
 
 const styles = StyleSheet.create({
   cardList: {
