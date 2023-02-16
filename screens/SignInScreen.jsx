@@ -3,6 +3,7 @@ import React from "react";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
+import BaseButton from "../components/buttons/BaseButton";
 
 const SignInScreen = () => {
   return (
@@ -10,6 +11,8 @@ const SignInScreen = () => {
       <BaseHeader></BaseHeader>
       <Text>SignInScreen</Text>
       <BaseTextField></BaseTextField>
+      <BaseTextField></BaseTextField>
+      <BaseButton label="로그인하기"></BaseButton>
     </View>
   );
 };
