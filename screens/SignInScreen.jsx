@@ -10,19 +10,26 @@ const SignInScreen = () => {
   return (
     <View style={styles.block}>
       <BaseHeader></BaseHeader>
-      <Text>SignInScreen</Text>
-      <BaseTextField></BaseTextField>
-      <BaseTextField></BaseTextField>
-      <BouncyCheckbox
-        size={20}
-        fillColor="#22BCCE"
-        text="자동로그인"
-        iconStyle={{ borderRadius: 5 }}
-        innerIconStyle={{ borderRadius: 5 }}
-        textStyle={{ textDecorationLine: "none", fontSize: 12 }}
-        textContainerStyle={{ marginLeft: 8 }}
-      ></BouncyCheckbox>
-      <BaseButton label="로그인하기"></BaseButton>
+      <View style={styles.titleBlock}>
+        <Text style={styles.title}>로그인 정보를 입력해주세요</Text>
+      </View>
+      <View style={styles.form}>
+        <BaseTextField></BaseTextField>
+        <BaseTextField></BaseTextField>
+        <BouncyCheckbox
+          style={styles.authOption}
+          size={20}
+          fillColor="#22BCCE"
+          text="자동로그인"
+          iconStyle={{ borderRadius: 5 }}
+          innerIconStyle={{ borderRadius: 5 }}
+          textStyle={{ textDecorationLine: "none", fontSize: 12 }}
+          textContainerStyle={{ marginLeft: 8 }}
+        ></BouncyCheckbox>
+      </View>
+      <View style={styles.button}>
+        <BaseButton label="로그인하기"></BaseButton>
+      </View>
     </View>
   );
 };
@@ -34,5 +41,25 @@ const styles = StyleSheet.create({
     flex: 1,
 
     backgroundColor: "#FFFFFF",
+  },
+  titleBlock: {
+    marginVertical: 32,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 24,
+  },
+  form: {
+    flex: 1,
+    marginHorizontal: 16,
+  },
+  authOption: {
+    marginVertical: 4,
+    alignSelf: "flex-end",
+  },
+  button: {
+    height: 48,
+    marginVertical: 32,
+    marginHorizontal: 16,
   },
 });

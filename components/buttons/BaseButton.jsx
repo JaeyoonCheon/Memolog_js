@@ -14,7 +14,7 @@ export default BaseButton;
 const styles = (props) =>
   StyleSheet.create({
     block: {
-      height: 48,
+      flex: 1,
       alignItems: "center",
       justifyContent: "center",
 

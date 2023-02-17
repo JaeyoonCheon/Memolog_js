@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import React from "react";
 
-const BaseTextField = () => {
+const BaseTextField = ({ indicator = "" }) => {
   return (
     <View style={styles.block}>
       <View style={styles.labelBlock}>
         <Text style={styles.label}>테스트라벨</Text>
       </View>
       <TextInput style={styles.input}></TextInput>
-      <Text style={styles.indicator}></Text>
+      <Text style={styles.indicator}>{indicator}</Text>
     </View>
   );
 };
@@ -16,9 +16,7 @@ const BaseTextField = () => {
 export default BaseTextField;
 
 const styles = StyleSheet.create({
-  block: {
-    height: 76,
-  },
+  block: {},
   labelBlock: {
     alignSelf: "flex-start",
     paddingHorizontal: 4,
@@ -49,7 +47,7 @@ const styles = StyleSheet.create({
   indicator: {
     lineHeight: 24,
 
-    fontSize: 16,
+    fontSize: 12,
     letterSpacing: 0.5,
   },
 });
