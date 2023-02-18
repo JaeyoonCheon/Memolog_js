@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
   toolbar: {
     width: "100%",
     height: 50,
+    paddingHorizontal: 16,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
     borderColor: "#000111",
-    borderRadius: 15,
+    borderRadius: 5,
   },
   layout: {
     flexDirection: "row",

@@ -4,21 +4,31 @@ import {
   View,
   Platform,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React from "react";
+
+const testData = {
+  title: "문서 제목 .. 1",
+  body: "대통령은 헌법과 법률이 정하는 바에 의하여 국군을 통수한다. 국회의원이 회기전에 체포 또는 구금된 때에는 현행범인이 아닌 한 국회의 요구가 있으면 회기중 석방된다.",
+  imageURL: "https://picsum.photos/200/300",
+};
 
 const Card = () => {
   return (
     <TouchableOpacity style={styles.block}>
+      <View style={styles.imageBlock}>
+        <Image style={styles.image} source={{ uri: testData.imageURL }}></Image>
+      </View>
       <View style={styles.contents}>
-        <View style={styles.title}>
-          <Text>제목</Text>
+        <View style={styles.titleBlock}>
+          <Text style={styles.title}>{testData.title}</Text>
         </View>
-        <View style={styles.body}>
-          <Text>본문</Text>
+        <View style={styles.bodyBlock}>
+          <Text style={styles.body}>{testData.body}</Text>
         </View>
-        <View style={styles.addon}>
-          <Text>기타 정보</Text>
+        <View style={styles.addonBlock}>
+          <Text style={styles.addon}>기타 정보</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -32,9 +42,9 @@ const styles = StyleSheet.create({
     flex: 0.5,
     marginHorizontal: 5,
     marginVertical: 5,
-    minHeight: 100,
 
     borderRadius: 16,
+    overflow: "hidden",
     backgroundColor: "#FFFFFF",
     ...Platform.select({
       ios: {
@@ -51,16 +61,30 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  imageBlock: {
+    height: 150,
+    resizeMode: "cover",
+  },
+  image: {
+    flex: 1,
+  },
   contents: {
     flex: 1,
     marginHorizontal: 10,
     marginVertical: 10,
-    alignItems: "center",
 
-    borderWidth: 1,
-    borderColor: "green",
+    overflow: "hidden",
   },
-  title: { flex: 1 },
-  body: { flex: 4 },
-  addon: { flex: 1 },
+  titleBlock: { marginBottom: 4 },
+  title: {
+    fontSize: 16,
+    color: "#000000",
+  },
+  bodyBlock: {},
+  body: {
+    fontSize: 12,
+    color: "#000000",
+  },
+  addonBlock: {},
+  addon: {},
 });

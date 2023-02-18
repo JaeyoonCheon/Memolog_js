@@ -34,7 +34,5 @@ export default CardList;
 const styles = StyleSheet.create({
   cardList: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: "red",
   },
 });
