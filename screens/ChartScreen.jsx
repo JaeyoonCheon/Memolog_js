@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
-import TabHeader from "../components/headers/TabHeader";
+import BaseHeader from "../components/headers/BaseHeader";
 import SearchButton from "../components/buttons/SearchButton";
 
 const ChartScreen = () => {
@@ -14,10 +14,10 @@ const ChartScreen = () => {
 
   return (
     <View style={styles.block}>
-      <TabHeader
+      <BaseHeader
         title="통계"
         buttons={[<SearchButton onPress={onPressSearch}></SearchButton>]}
-      ></TabHeader>
+      ></BaseHeader>
       <Text>ChartScreen</Text>
     </View>
   );

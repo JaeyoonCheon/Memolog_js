@@ -1,34 +1,18 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Pressable,
-  useWindowDimensions,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { useNavigation } from "@react-navigation/native";
 
-const BaseHeader = () => {
-  const { width } = useWindowDimensions();
-  const navigation = useNavigation();
-
+const BaseHeader = ({ leftButtons, title, rightButtons }) => {
   return (
     <View style={styles.block}>
-      <TouchableOpacity
-        style={styles.back}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <MaterialIcons
-          name="arrow-back"
-          size={24}
-          color="#000000"
-        ></MaterialIcons>
-      </TouchableOpacity>
+      {leftButtons && (
+        <View style={styles.left}>{leftButtons.map((button) => button)}</View>
+      )}
+      <View style={styles.titleBlock}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
+      {rightButtons && (
+        <View style={styles.right}>{rightButtons.map((button) => button)}</View>
+      )}
     </View>
   );
 };
@@ -44,5 +28,17 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#FFFFFF",
   },
-  back: {},
+  titleBlock: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 20,
+    color: "#000000",
+  },
+  left: {
+    justifyContent: "flex-start",
+  },
+  right: {
+    justifyContent: "flex-end",
+  },
 });

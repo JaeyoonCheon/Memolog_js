@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import BouncyCheckbox from "../node_modules/react-native-bouncy-checkbox/build/dist/BouncyCheckbox";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
@@ -9,7 +10,15 @@ import BaseButton from "../components/buttons/BaseButton";
 const SignInScreen = () => {
   return (
     <View style={styles.block}>
-      <BaseHeader></BaseHeader>
+      <BaseHeader
+        leftButtons={[
+          <MaterialIcons
+            name="arrow-back"
+            size={24}
+            color="#000000"
+          ></MaterialIcons>,
+        ]}
+      ></BaseHeader>
       <View style={styles.titleBlock}>
         <Text style={styles.title}>로그인 정보를 입력해주세요</Text>
       </View>
