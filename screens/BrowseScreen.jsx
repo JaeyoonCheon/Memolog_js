@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import CardList from "../components/cards/CardList";
+import TabHeader from "../components/headers/TabHeader";
 import SearchButton from "../components/buttons/SearchButton";
 
 const BrowseScreen = () => {
@@ -12,14 +13,12 @@ const BrowseScreen = () => {
     navigation.navigate("Search");
   };
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <SearchButton onPress={onPressSearch}></SearchButton>,
-    });
-  }, []);
-
   return (
     <View style={styles.block}>
+      <TabHeader
+        title="탐색"
+        buttons={[<SearchButton onPress={onPressSearch}></SearchButton>]}
+      ></TabHeader>
       <CardList></CardList>
     </View>
   );

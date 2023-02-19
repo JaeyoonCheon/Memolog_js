@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 
+import TabHeader from "../components/headers/TabHeader";
 import CardList from "../components/cards/CardList";
 import FlatCardList from "../components/cards/FlatCardList";
 import SearchButton from "../components/buttons/SearchButton";
@@ -18,14 +19,12 @@ const MyDocumentsScreen = () => {
     setLayout(style);
   };
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <SearchButton onPress={onPressSearch}></SearchButton>,
-    });
-  }, []);
-
   return (
     <View style={styles.block}>
+      <TabHeader
+        title="내 기록"
+        buttons={[<SearchButton onPress={onPressSearch}></SearchButton>]}
+      ></TabHeader>
       <View style={styles.toolbar}>
         <View style={styles.sort}>
           <Text>날짜순</Text>
