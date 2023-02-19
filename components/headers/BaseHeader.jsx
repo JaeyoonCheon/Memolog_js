@@ -4,15 +4,11 @@ import React from "react";
 const BaseHeader = ({ leftButtons, title, rightButtons }) => {
   return (
     <View style={styles.block}>
-      {leftButtons && (
-        <View style={styles.left}>{leftButtons.map((button) => button)}</View>
-      )}
+      {leftButtons && <View style={styles.left}>{leftButtons}</View>}
       <View style={styles.titleBlock}>
         <Text style={styles.title}>{title}</Text>
       </View>
-      {rightButtons && (
-        <View style={styles.right}>{rightButtons.map((button) => button)}</View>
-      )}
+      {rightButtons && <View style={styles.right}>{rightButtons}</View>}
     </View>
   );
 };

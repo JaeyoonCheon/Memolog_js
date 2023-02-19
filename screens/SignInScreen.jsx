@@ -11,13 +11,13 @@ const SignInScreen = () => {
   return (
     <View style={styles.block}>
       <BaseHeader
-        leftButtons={[
+        leftButtons={
           <MaterialIcons
             name="arrow-back"
             size={24}
             color="#000000"
-          ></MaterialIcons>,
-        ]}
+          ></MaterialIcons>
+        }
       ></BaseHeader>
       <View style={styles.titleBlock}>
         <Text style={styles.title}>로그인 정보를 입력해주세요</Text>

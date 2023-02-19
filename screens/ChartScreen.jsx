@@ -14,10 +14,7 @@ const ChartScreen = () => {
 
   return (
     <View style={styles.block}>
-      <BaseHeader
-        title="통계"
-        buttons={[<SearchButton onPress={onPressSearch}></SearchButton>]}
-      ></BaseHeader>
+      <BaseHeader title="통계"></BaseHeader>
       <Text>ChartScreen</Text>
     </View>
   );

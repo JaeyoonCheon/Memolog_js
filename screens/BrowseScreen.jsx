@@ -17,7 +17,7 @@ const BrowseScreen = () => {
     <View style={styles.block}>
       <BaseHeader
         title="탐색"
-        buttons={[<SearchButton onPress={onPressSearch}></SearchButton>]}
+        rightButtons={<SearchButton onPress={onPressSearch}></SearchButton>}
       ></BaseHeader>
       <CardList></CardList>
     </View>

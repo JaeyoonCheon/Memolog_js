@@ -23,7 +23,7 @@ const MyDocumentsScreen = () => {
     <View style={styles.block}>
       <BaseHeader
         title="내 기록"
-        rightButtons={[<SearchButton onPress={onPressSearch}></SearchButton>]}
+        rightButtons={<SearchButton onPress={onPressSearch}></SearchButton>}
       ></BaseHeader>
       <View style={styles.toolbar}>
         <View style={styles.sort}>
