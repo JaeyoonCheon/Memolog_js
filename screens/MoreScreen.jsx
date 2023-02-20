@@ -22,6 +22,13 @@ const MoreScreen = () => {
       >
         <Text>회원가입</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Detail");
+        }}
+      >
+        <Text>상세</Text>
+      </TouchableOpacity>
     </View>
   );
 };
