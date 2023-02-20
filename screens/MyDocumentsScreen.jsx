@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
+import DropDownPicker from "react-native-dropdown-picker";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import CardList from "../components/cards/CardList";
@@ -11,6 +12,12 @@ import SearchButton from "../components/buttons/SearchButton";
 
 const MyDocumentsScreen = () => {
   const navigation = useNavigation();
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("date");
+  const [items, setItems] = useState([
+    { label: "날짜순", value: "date" },
+    { label: "제목순", value: "title" },
+  ]);
   const [layout, setLayout] = useState("grid");
 
   const onPressSearch = () => {
@@ -39,7 +46,16 @@ const MyDocumentsScreen = () => {
       ></BaseHeader>
       <View style={styles.toolbar}>
         <View style={styles.sort}>
-          <Text>날짜순</Text>
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            style={styles.sort.dropdown}
+            listItemContainerStyle={{ height: 32 }}
+          />
         </View>
         <View style={styles.layout}>
           <TouchableOpacity onPress={() => onPressLayout("grid")}>
@@ -83,16 +99,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    zIndex: 1,
   },
   sort: {
-    height: 32,
     width: 100,
     alignItems: "center",
     justifyContent: "center",
-
-    borderWidth: 1,
-    borderColor: "#000111",
-    borderRadius: 5,
+    dropdown: {
+      minHeight: 32,
+    },
   },
   layout: {
     flexDirection: "row",
