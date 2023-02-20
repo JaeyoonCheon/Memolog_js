@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 
 import BaseHeader from "../components/headers/BaseHeader";
@@ -23,7 +24,18 @@ const MyDocumentsScreen = () => {
     <View style={styles.block}>
       <BaseHeader
         title="내 기록"
-        rightButtons={<SearchButton onPress={onPressSearch}></SearchButton>}
+        rightButtons={
+          <>
+            <TouchableOpacity onPress={() => navigation.navigate("Write")}>
+              <MaterialCommunityIcons
+                name="feather"
+                size={24}
+                color="#000000"
+              ></MaterialCommunityIcons>
+            </TouchableOpacity>
+            <SearchButton onPress={onPressSearch}></SearchButton>
+          </>
+        }
       ></BaseHeader>
       <View style={styles.toolbar}>
         <View style={styles.sort}>
