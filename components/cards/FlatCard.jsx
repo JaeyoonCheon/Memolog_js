@@ -13,11 +13,11 @@ const FlatCard = () => {
   return (
     <TouchableOpacity style={styles.block}>
       <View style={styles.contents}>
-        <View style={styles.title}>
-          <Text>{testData.title}</Text>
+        <View style={styles.titleBlock}>
+          <Text style={styles.title}>{testData.title}</Text>
         </View>
-        <View style={styles.body}>
-          <Text>{testData.body}</Text>
+        <View style={styles.bodyBlock}>
+          <Text style={styles.body}>{testData.body}</Text>
         </View>
         <View style={styles.addon}>
           <Text>기타 정보</Text>
@@ -48,8 +48,15 @@ const styles = StyleSheet.create({
 
     overflow: "hidden",
   },
-  title: {},
-  body: {},
+  titleBlock: {},
+  title: {
+    fontSize: 16,
+    color: "#000000",
+  },
+  bodyBlock: {},
+  body: {
+    fontSize: 12,
+  },
   addon: {},
   image: {
     width: 72,
