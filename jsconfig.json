@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": { "*": ["node_modules/*", "./*"] },
     "target": "ES6"
   }
 }
