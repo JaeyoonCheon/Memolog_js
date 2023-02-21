@@ -4,11 +4,13 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
+import { useQuery } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import CardList from "../components/cards/CardList";
 import FlatCardList from "../components/cards/FlatCardList";
 import SearchButton from "../components/buttons/SearchButton";
+import { getDocuments } from "../api/documents";
 
 const MyDocumentsScreen = () => {
   const navigation = useNavigation();
@@ -19,6 +21,9 @@ const MyDocumentsScreen = () => {
     { label: "제목순", value: "title" },
   ]);
   const [layout, setLayout] = useState("grid");
+  const { data, isLoading } = useQuery("document", getDocuments);
+
+  console.log("query: " + data);
 
   const onPressSearch = () => {
     navigation.navigate("MySearch");
