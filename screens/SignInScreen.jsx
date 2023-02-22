@@ -2,12 +2,30 @@ import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React from "react";
 import BouncyCheckbox from "../node_modules/react-native-bouncy-checkbox/build/dist/BouncyCheckbox";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { Controller, useForm } from "react-hook-form";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
+import PasswordField from "../components/textfields/PasswordField";
 import BaseButton from "../components/buttons/BaseButton";
 
 const SignInScreen = () => {
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
     <View style={styles.block}>
       <BaseHeader
@@ -24,8 +42,36 @@ const SignInScreen = () => {
       </View>
       <ScrollView contentContainerStyle={styles.form}>
         <View>
-          <BaseTextField></BaseTextField>
-          <BaseTextField></BaseTextField>
+          <Controller
+            control={control}
+            rules={{
+              required: "이메일을 입력해주세요!",
+            }}
+            render={({ field: { onChange, value } }) => (
+              <BaseTextField
+                label="이메일"
+                indicator={errors.email?.message}
+                onChange={onChange}
+                value={value}
+              ></BaseTextField>
+            )}
+            name="email"
+          ></Controller>
+          <Controller
+            control={control}
+            rules={{
+              required: "비밀번호를 입력해주세요!",
+            }}
+            render={({ field: { onChange, value } }) => (
+              <PasswordField
+                label="비밀번호"
+                indicator={errors.password?.message}
+                onChange={onChange}
+                value={value}
+              ></PasswordField>
+            )}
+            name="password"
+          ></Controller>
           <BouncyCheckbox
             style={styles.authOption}
             size={20}
@@ -38,7 +84,10 @@ const SignInScreen = () => {
           ></BouncyCheckbox>
         </View>
         <View style={styles.button}>
-          <BaseButton label="로그인하기"></BaseButton>
+          <BaseButton
+            label="로그인하기"
+            onPress={handleSubmit(onSubmit)}
+          ></BaseButton>
         </View>
       </ScrollView>
     </View>

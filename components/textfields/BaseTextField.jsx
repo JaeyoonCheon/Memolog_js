@@ -49,9 +49,11 @@ const styles = StyleSheet.create({
     borderColor: "#79747E",
   },
   indicator: {
-    lineHeight: 20,
+    lineHeight: 16,
 
     fontSize: 12,
+    fontWeight: "500",
     letterSpacing: 0.5,
+    color: "blue",
   },
 });
