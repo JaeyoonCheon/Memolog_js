@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import React from "react";
 
-const BaseTextField = ({ label = "입력", indicator = "", onChange, value }) => {
+const PasswordField = ({ label = "입력", indicator = "", onChange, value }) => {
   return (
     <View style={styles.block}>
       <View style={styles.labelBlock}>
@@ -11,13 +11,14 @@ const BaseTextField = ({ label = "입력", indicator = "", onChange, value }) =>
         style={styles.input}
         value={value}
         onChangeText={onChange}
+        secureTextEntry
       ></TextInput>
       <Text style={styles.indicator}>{indicator}</Text>
     </View>
   );
 };
 
-export default BaseTextField;
+export default PasswordField;
 
 const styles = StyleSheet.create({
   block: {},

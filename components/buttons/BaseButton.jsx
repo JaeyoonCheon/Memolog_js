@@ -1,9 +1,12 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 
-const BaseButton = ({ label, onPress, secondary = false }) => {
+const BaseButton = ({ style, label, onPress, secondary = false }) => {
   return (
-    <TouchableOpacity style={styles({ secondary }).block} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles({ secondary }).block, style]}
+      onPress={onPress}
+    >
       <Text style={styles({ secondary }).label}>{label}</Text>
     </TouchableOpacity>
   );
