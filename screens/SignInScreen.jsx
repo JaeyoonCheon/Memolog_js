@@ -8,6 +8,7 @@ import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
 import PasswordField from "../components/textfields/PasswordField";
 import BaseButton from "../components/buttons/BaseButton";
+import { signIn } from "../api/auth";
 
 const SignInScreen = () => {
   const {
@@ -22,8 +23,8 @@ const SignInScreen = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    await signIn({ email: data.email, password: data.password });
   };
 
   return (

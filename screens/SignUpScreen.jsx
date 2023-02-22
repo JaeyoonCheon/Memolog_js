@@ -4,6 +4,7 @@ import {
   View,
   ScrollView,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
 import React, { useEffect } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -13,6 +14,7 @@ import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
 import PasswordField from "../components/textfields/PasswordField";
 import BaseButton from "../components/buttons/BaseButton";
+import { signUp } from "../api/auth";
 
 const SignUpScreen = () => {
   const {
@@ -21,13 +23,20 @@ const SignUpScreen = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
+      name: "",
       email: "",
       password: "",
       passwordConfirm: "",
     },
   });
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    await signUp({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
+  };
 
   return (
     <View style={styles.block}>
@@ -45,6 +54,25 @@ const SignUpScreen = () => {
       </View>
       <ScrollView contentContainerStyle={styles.form}>
         <View>
+          <Controller
+            control={control}
+            rules={{
+              required: "이름을 입력해주세요!",
+              pattern: {
+                value: /^[가-힣]{2,4}|[a-zA-Z]{2,10}$/,
+                message: "한글이나 영문으로 입력해주세요",
+              },
+            }}
+            render={({ field: { onChange, value } }) => (
+              <BaseTextField
+                label="이름"
+                indicator={errors.name?.message}
+                onChange={onChange}
+                value={value}
+              ></BaseTextField>
+            )}
+            name="name"
+          ></Controller>
           <Controller
             control={control}
             rules={{
