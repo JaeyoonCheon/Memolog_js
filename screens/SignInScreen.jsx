@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Alert } from "react-native";
 import React from "react";
 import BouncyCheckbox from "../node_modules/react-native-bouncy-checkbox/build/dist/BouncyCheckbox";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Controller, useForm } from "react-hook-form";
+import { useNavigation } from "@react-navigation/native";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
@@ -11,6 +13,7 @@ import BaseButton from "../components/buttons/BaseButton";
 import { signIn } from "../api/auth";
 
 const SignInScreen = () => {
+  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
@@ -24,8 +27,20 @@ const SignInScreen = () => {
   });
 
   const onSubmit = async (data) => {
-    const result = await signIn({ email: data.email, password: data.password });
-    console.log(result);
+    try {
+      const result = await signIn({
+        email: data.email,
+        password: data.password,
+      });
+
+      const { getItem: getRefresh } = useAsyncStorage("Refresh");
+      const refreshT = await getRefresh();
+      console.log(refreshT);
+
+      navigation.navigate("MainTab");
+    } catch (e) {
+      navigation.navigate("SignIn");
+    }
   };
 
   return (
