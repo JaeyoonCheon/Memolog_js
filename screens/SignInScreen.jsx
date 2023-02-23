@@ -24,7 +24,8 @@ const SignInScreen = () => {
   });
 
   const onSubmit = async (data) => {
-    await signIn({ email: data.email, password: data.password });
+    const result = await signIn({ email: data.email, password: data.password });
+    console.log(result);
   };
 
   return (

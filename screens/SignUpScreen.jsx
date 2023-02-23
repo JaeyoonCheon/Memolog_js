@@ -31,11 +31,24 @@ const SignUpScreen = () => {
   });
 
   const onSubmit = async (data) => {
-    await signUp({
+    const result = await signUp({
       name: data.name,
       email: data.email,
       password: data.password,
     });
+
+    Alert.alert(
+      "쿼리 결과",
+      result,
+      [
+        {
+          text: "아니요",
+          style: "cancel",
+        },
+        { text: "네" },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
