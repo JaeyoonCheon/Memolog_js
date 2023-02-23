@@ -1,13 +1,15 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useUserContext } from "../contexts/UserContext";
 
 const MoreScreen = () => {
   const navigation = useNavigation();
+  const [user, _] = useUserContext();
 
   return (
     <View>
-      <Text>MoreScreen</Text>
+      <Text>{user?.name}</Text>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("SignIn");

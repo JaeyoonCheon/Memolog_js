@@ -9,4 +9,12 @@ const client = axios.create({
   baseURL,
 });
 
+export const addToken = (token) => {
+  client.defaults.headers.Authorization = `Bearer ${token}`;
+};
+
+export const removeToken = (token) => {
+  client.defaults.headers.Authorization = undefined;
+};
+
 export default client;
