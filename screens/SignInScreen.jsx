@@ -28,16 +28,12 @@ const SignInScreen = () => {
 
   const onSubmit = async (data) => {
     try {
-      const result = await signIn({
+      await signIn({
         email: data.email,
         password: data.password,
       });
 
-      const { getItem: getRefresh } = useAsyncStorage("Refresh");
-      const refreshT = await getRefresh();
-      console.log(refreshT);
-
-      navigation.navigate("MainTab");
+      navigation.navigate("MyDocuments");
     } catch (e) {
       navigation.navigate("SignIn");
     }

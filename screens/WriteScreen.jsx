@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 
@@ -10,10 +10,14 @@ const WriteScreen = () => {
 
   const [contents, setContents] = useState("");
 
+  const onSubmit = () => {};
   const onChangeHTML = (html) => {
     setContents(html);
-    console.log(contents);
   };
+
+  useEffect(() => {
+    console.log(contents);
+  }, [contents]);
 
   return (
     <View style={styles.block}>

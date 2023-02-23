@@ -5,3 +5,9 @@ export const getDocuments = async () => {
 
   return results.data;
 };
+
+export const writeDocuments = async (payload) => {
+  const results = await client.post("/document", payload);
+
+  return results.data;
+};
