@@ -11,13 +11,12 @@ import BouncyCheckbox from "../node_modules/react-native-bouncy-checkbox/build/d
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
-import { useMutation } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
 import PasswordField from "../components/textfields/PasswordField";
 import BaseButton from "../components/buttons/BaseButton";
-import { signIn } from "../api/auth";
+import useSignin from "../hooks/useSignin";
 
 const SignInScreen = () => {
   const navigation = useNavigation();
@@ -33,14 +32,7 @@ const SignInScreen = () => {
     },
   });
 
-  const {
-    mutate: signInMutate,
-    isLoading,
-    isSuccess,
-    isError,
-  } = useMutation(signIn, {
-    onSuccess: () => {},
-  });
+  const { mutate: signInMutate, isLoading } = useSignin();
 
   const onSubmit = (data) => {
     if (isLoading) {

@@ -3,20 +3,21 @@ import {
   Text,
   View,
   ScrollView,
-  KeyboardAvoidingView,
-  Alert,
+  ActivityIndicator,
 } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Controller, useForm } from "react-hook-form";
+import { useNavigation } from "@react-navigation/native";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
 import PasswordField from "../components/textfields/PasswordField";
 import BaseButton from "../components/buttons/BaseButton";
-import { signUp } from "../api/auth";
+import useSignup from "../hooks/useSignup";
 
 const SignUpScreen = () => {
+  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
@@ -30,25 +31,22 @@ const SignUpScreen = () => {
     },
   });
 
-  const onSubmit = async (data) => {
-    const result = await signUp({
+  const { mutate: signUpMutate, isLoading, isSuccess } = useSignup();
+
+  const onSubmit = (data) => {
+    if (isLoading) {
+      return;
+    }
+
+    signUpMutate({
       name: data.name,
       email: data.email,
       password: data.password,
     });
 
-    Alert.alert(
-      "쿼리 결과",
-      result,
-      [
-        {
-          text: "아니요",
-          style: "cancel",
-        },
-        { text: "네" },
-      ],
-      { cancelable: false }
-    );
+    if (isSuccess) {
+      navigation.navigate("MyDocuments");
+    }
   };
 
   return (
@@ -153,12 +151,16 @@ const SignUpScreen = () => {
             name="passwordConfirm"
           ></Controller>
         </View>
-        <View style={styles.button}>
-          <BaseButton
-            label="회원 가입하기"
-            onPress={handleSubmit(onSubmit)}
-          ></BaseButton>
-        </View>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#22BCCE"></ActivityIndicator>
+        ) : (
+          <View style={styles.button}>
+            <BaseButton
+              label="회원 가입하기"
+              onPress={handleSubmit(onSubmit)}
+            ></BaseButton>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
