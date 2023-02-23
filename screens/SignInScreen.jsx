@@ -1,10 +1,17 @@
-import { StyleSheet, Text, View, ScrollView, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import React from "react";
 import BouncyCheckbox from "../node_modules/react-native-bouncy-checkbox/build/dist/BouncyCheckbox";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
-import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { useMutation } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
@@ -26,17 +33,26 @@ const SignInScreen = () => {
     },
   });
 
-  const onSubmit = async (data) => {
-    try {
-      await signIn({
-        email: data.email,
-        password: data.password,
-      });
+  const {
+    mutate: signInMutate,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useMutation(signIn, {
+    onSuccess: () => {},
+  });
 
-      navigation.navigate("MyDocuments");
-    } catch (e) {
-      navigation.navigate("SignIn");
+  const onSubmit = (data) => {
+    if (isLoading) {
+      return;
     }
+
+    signInMutate({
+      email: data.email,
+      password: data.password,
+    });
+
+    navigation.navigate("MyDocuments");
   };
 
   return (
@@ -96,12 +112,16 @@ const SignInScreen = () => {
             textContainerStyle={{ marginLeft: 8 }}
           ></BouncyCheckbox>
         </View>
-        <View style={styles.button}>
-          <BaseButton
-            label="로그인하기"
-            onPress={handleSubmit(onSubmit)}
-          ></BaseButton>
-        </View>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#22BCCE"></ActivityIndicator>
+        ) : (
+          <View style={styles.button}>
+            <BaseButton
+              label="로그인하기"
+              onPress={handleSubmit(onSubmit)}
+            ></BaseButton>
+          </View>
+        )}
       </ScrollView>
     </View>
   );

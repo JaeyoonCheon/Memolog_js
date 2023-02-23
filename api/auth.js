@@ -14,7 +14,6 @@ export const signIn = async (payload) => {
 };
 
 export const signUp = async (payload) => {
-  console.log(payload);
   const results = await client.post("/user/signup", payload);
 
   return results.data;
