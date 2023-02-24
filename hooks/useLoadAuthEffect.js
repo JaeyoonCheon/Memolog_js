@@ -18,7 +18,7 @@ export default function useLoadAuthEffect() {
 
       const userInfoString = await getUserInfo();
       const userInfo = JSON.parse(userInfoString);
-      if (userInfo) {
+      if (!userInfo) {
         return;
       }
 
@@ -26,5 +26,5 @@ export default function useLoadAuthEffect() {
       addToken(accessToken);
     };
     loadFn();
-  }, [setUser]);
+  }, []);
 }
