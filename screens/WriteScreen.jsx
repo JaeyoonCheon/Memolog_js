@@ -1,17 +1,35 @@
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { RichEditor, RichToolbar } from "react-native-pell-rich-editor";
+import { useMutation } from "react-query";
+import { useNavigation } from "@react-navigation/native";
 
 import WriteHeader from "../components/headers/WriteHeader";
+import { writeDocuments } from "../api/documents";
+import { useUserContext } from "../contexts/UserContext";
 
 const WriteScreen = () => {
+  const naviagation = useNavigation();
   const richText = useRef();
   const scrollRef = useRef();
 
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
+  const [user, _] = useUserContext();
 
-  const onSubmit = () => {};
+  const { mutate: writeMutate, isLoading } = useMutation(writeDocuments, {
+    onSuccess: () => {
+      naviagation.navigate("MyDocuments");
+    },
+    onError: () => {},
+  });
+
+  const onSubmit = () => {
+    if (isLoading) {
+      return;
+    }
+    writeMutate({ title, form: contents, userId: user?.userId });
+  };
   const onChangeHTML = (html) => {
     setContents(html);
   };
