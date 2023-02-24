@@ -1,19 +1,25 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const BaseHeader = ({ children, leftButtons, title, rightButtons }) => {
+import { MaterialIconButton } from "../buttons/IconButton";
+
+import BaseHeader from "./BaseHeader";
+
+const WriteHeader = () => {
   return (
-    <View style={styles.block}>
-      {leftButtons && <View style={styles.left}>{leftButtons}</View>}
-      <View style={styles.centerBlock}>
-        {children || <Text style={styles.title}>{title}</Text>}
-      </View>
-      {rightButtons && <View style={styles.right}>{rightButtons}</View>}
-    </View>
+    <BaseHeader
+      leftButtons={
+        <MaterialIconButton
+          iconName="arrow-back"
+          size={24}
+          color="#000000"
+        ></MaterialIconButton>
+      }
+    ></BaseHeader>
   );
 };
 
-export default BaseHeader;
+export default WriteHeader;
 
 const styles = StyleSheet.create({
   block: {
@@ -24,7 +30,7 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#FFFFFF",
   },
-  centerBlock: {
+  titleBlock: {
     flex: 1,
   },
   title: {

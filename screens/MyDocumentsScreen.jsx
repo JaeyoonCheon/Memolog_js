@@ -9,8 +9,11 @@ import { useQuery } from "react-query";
 import BaseHeader from "../components/headers/BaseHeader";
 import CardList from "../components/cards/CardList";
 import FlatCardList from "../components/cards/FlatCardList";
-import SearchButton from "../components/buttons/SearchButton";
 import { getDocuments } from "../api/documents";
+import {
+  MaterialIconButton,
+  MaterialCommunityIconButton,
+} from "../components/buttons/IconButton";
 
 const MyDocumentsScreen = () => {
   const navigation = useNavigation();
@@ -38,14 +41,18 @@ const MyDocumentsScreen = () => {
         title="내 기록"
         rightButtons={
           <>
-            <TouchableOpacity onPress={() => navigation.navigate("Write")}>
-              <MaterialCommunityIcons
-                name="feather"
-                size={24}
-                color="#000000"
-              ></MaterialCommunityIcons>
-            </TouchableOpacity>
-            <SearchButton onPress={onPressSearch}></SearchButton>
+            <MaterialCommunityIconButton
+              onPress={() => navigation.navigate("Write")}
+              iconName="feather"
+              size={24}
+              color="#000000"
+            ></MaterialCommunityIconButton>
+            <MaterialIconButton
+              onPress={onPressSearch}
+              iconName="search"
+              size={24}
+              color="#000000"
+            ></MaterialIconButton>
           </>
         }
       ></BaseHeader>

@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import CardList from "../components/cards/CardList";
 import BaseHeader from "../components/headers/BaseHeader";
-import SearchButton from "../components/buttons/SearchButton";
+import { MaterialIconButton } from "../components/buttons/IconButton";
 
 const BrowseScreen = () => {
   const navigation = useNavigation();
@@ -17,7 +17,14 @@ const BrowseScreen = () => {
     <View style={styles.block}>
       <BaseHeader
         title="탐색"
-        rightButtons={<SearchButton onPress={onPressSearch}></SearchButton>}
+        rightButtons={
+          <MaterialIconButton
+            onPress={onPressSearch}
+            iconName="search"
+            size={24}
+            color="#000000"
+          ></MaterialIconButton>
+        }
       ></BaseHeader>
       <CardList></CardList>
     </View>

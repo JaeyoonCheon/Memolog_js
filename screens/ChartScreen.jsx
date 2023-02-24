@@ -5,7 +5,6 @@ import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 
 import BaseHeader from "../components/headers/BaseHeader";
-import SearchButton from "../components/buttons/SearchButton";
 
 const data = {
   labels: ["January", "February", "March", "April", "May", "June"],
