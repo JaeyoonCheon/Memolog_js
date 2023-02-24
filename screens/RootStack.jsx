@@ -8,10 +8,13 @@ import SignInScreen from "./SignInScreen";
 import SignUpScreen from "./SignUpScreen";
 import WriteScreen from "./WriteScreen";
 import DocumentDetailScreen from "./DocumentDetailScreen";
+import useLoadAuthEffect from "../hooks/useLoadAuthEffect";
 
 const Stack = createNativeStackNavigator();
 
 const RootStack = () => {
+  useLoadAuthEffect();
+
   return (
     <Stack.Navigator>
       <Stack.Screen
