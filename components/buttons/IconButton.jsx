@@ -28,6 +28,4 @@ export const MaterialCommunityIconButton = ({
   );
 };
 
-export default MaterialIconButton;
-
 const styles = StyleSheet.create({});

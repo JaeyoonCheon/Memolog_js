@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -6,9 +6,11 @@ import SearchHeader from "../components/headers/SearchHeader";
 import FlatCardList from "../components/cards/FlatCardList";
 
 const MySearchScreen = () => {
+  const [keyword, setKeyword] = useState("");
+
   return (
     <View style={styles.block}>
-      <SearchHeader></SearchHeader>
+      <SearchHeader value={keyword} onChangeText={setKeyword}></SearchHeader>
       <FlatCardList></FlatCardList>
     </View>
   );

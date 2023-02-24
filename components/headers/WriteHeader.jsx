@@ -1,11 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, TextInput, View, useWindowDimensions } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
 import { MaterialIconButton } from "../buttons/IconButton";
 
 import BaseHeader from "./BaseHeader";
 
-const WriteHeader = () => {
+const WriteHeader = ({ value, onChangeText, onSubmit }) => {
+  const { width } = useWindowDimensions();
+  const navigation = useNavigation();
+
   return (
     <BaseHeader
       leftButtons={
@@ -13,34 +17,41 @@ const WriteHeader = () => {
           iconName="arrow-back"
           size={24}
           color="#000000"
+          onPress={() => navigation.goBack()}
         ></MaterialIconButton>
       }
-    ></BaseHeader>
+      rightButtons={
+        <>
+          <MaterialIconButton
+            iconName="close"
+            size={24}
+            color="#000000"
+            onPress={() => onChangeText("")}
+          ></MaterialIconButton>
+          <MaterialIconButton
+            iconName="check"
+            size={24}
+            color="#000000"
+            onPress={onSubmit}
+          ></MaterialIconButton>
+        </>
+      }
+    >
+      <TextInput
+        style={[styles.input, { width: width - 120 }]}
+        placeholder="제목을 입력해주세요."
+        value={value}
+        onChangeText={onChangeText}
+      ></TextInput>
+    </BaseHeader>
   );
 };
 
 export default WriteHeader;
 
 const styles = StyleSheet.create({
-  block: {
-    height: 60,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-
-    backgroundColor: "#FFFFFF",
-  },
-  titleBlock: {
+  input: {
     flex: 1,
-  },
-  title: {
-    fontSize: 20,
-    color: "#000000",
-  },
-  left: {
-    justifyContent: "flex-start",
-  },
-  right: {
-    flexDirection: "row",
+    marginHorizontal: 16,
   },
 });

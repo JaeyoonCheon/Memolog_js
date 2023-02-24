@@ -3,11 +3,12 @@ import React, { useState, useRef, useEffect } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 
-import BaseHeader from "../components/headers/BaseHeader";
+import WriteHeader from "../components/headers/WriteHeader";
 
 const WriteScreen = () => {
   const richText = useRef();
 
+  const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
 
   const onSubmit = () => {};
@@ -21,18 +22,11 @@ const WriteScreen = () => {
 
   return (
     <View style={styles.block}>
-      <BaseHeader
-        leftButtons={
-          <MaterialIcons
-            name="arrow-back"
-            size={24}
-            color="#000000"
-          ></MaterialIcons>
-        }
-        rightButtons={
-          <MaterialIcons name="check" size={24} color="#000000"></MaterialIcons>
-        }
-      ></BaseHeader>
+      <WriteHeader
+        value={title}
+        onChangeText={setTitle}
+        onSubmit={onSubmit}
+      ></WriteHeader>
       <RichToolbar editor={richText}></RichToolbar>
       <RichEditor
         ref={richText}
