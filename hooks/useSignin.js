@@ -9,6 +9,7 @@ export default function useSignin() {
   const [_, setUser] = useUserContext();
   const { setItem: setAccess } = useAsyncStorage("Access");
   const { setItem: setRefresh } = useAsyncStorage("Refresh");
+  const { setItem: setExpire } = useAsyncStorage("Expire");
   const { setItem: setUserInfo } = useAsyncStorage("UserInfo");
 
   const mutation = useMutation(signIn, {
@@ -16,6 +17,7 @@ export default function useSignin() {
       setUser(data.user);
       setAccess(data.token.accessToken);
       setRefresh(data.token.refreshToken);
+      setExpire(data.token.expireTime);
       setUserInfo(JSON.stringify(data.user));
       addToken(data.token.accessToken);
     },
