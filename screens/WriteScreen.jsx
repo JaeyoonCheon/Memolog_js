@@ -21,13 +21,16 @@ const WriteScreen = () => {
     onSuccess: () => {
       naviagation.navigate("MyDocuments");
     },
-    onError: () => {},
+    onError: () => {
+      console.log("error");
+    },
   });
 
   const onSubmit = () => {
     if (isLoading) {
       return;
     }
+    console.log("SUBMIT!");
     writeMutate({ title, form: contents, userId: user?.userId });
   };
   const onChangeHTML = (html) => {

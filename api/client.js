@@ -12,21 +12,25 @@ const client = axios.create({
 
 export const addToken = async (token) => {
   const { getItem: getExpireTime } = useAsyncStorage("Expire");
+  const { setItem: setAccess } = useAsyncStorage("Access");
+  const { setItem: setExpire } = useAsyncStorage("Expire");
 
   client.defaults.headers.Authorization = `Bearer ${token}`;
 
-  const expireTimeNewDate = new Date(await getExpireTime());
+  try {
+    const expireTimeNewDate = new Date(await getExpireTime());
+    const now = new Date();
+    const diff = (now.getTime() - expireTimeNewDate.getTime()) / 1000;
 
-  const now = new Date();
-
-  console.log(now + "  " + expireTimeNewDate);
-  const diff = (now.getTime() - expireTimeNewDate.getTime()) / 1000;
-
-  console.log(diff);
-
-  if (diff > 60) {
-    console.log("over!");
-    console.log(await refreshToken());
+    if (diff > 60) {
+      const { token } = await refreshToken();
+      const accessToken = token.accessToken;
+      client.defaults.headers.Authorization = `Bearer ${accessToken}`;
+      setAccess(token.accessToken);
+      setExpire(token.expireTime);
+    }
+  } catch (e) {
+    console.log(e);
   }
 };
 
@@ -38,22 +42,20 @@ export const refreshToken = async () => {
   const { getItem: getRefreshToken } = useAsyncStorage("Refresh");
   const { getItem: getUserInfo } = useAsyncStorage("UserInfo");
 
-  console.log("Refreshing...");
+  try {
+    const refreshToken = await getRefreshToken();
 
-  const refreshToken = await getRefreshToken();
+    const { userId } = JSON.parse(await getUserInfo());
 
-  const { userId } = JSON.parse(await getUserInfo());
+    client.defaults.headers.Authorization = `Bearer ${refreshToken}`;
+    const result = await client.post("/user/token", {
+      userId: userId,
+    });
 
-  client.defaults.headers.Authorization = `Bearer ${refreshToken}`;
-  const result = await client.post("/user/token", {
-    userId: userId,
-  });
-
-  console.log("refresh");
-  console.log(result);
-  console.log(result.data);
-
-  return result.data;
+    return result.data;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export default client;

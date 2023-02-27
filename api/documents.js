@@ -7,6 +7,7 @@ export const getDocuments = async () => {
 };
 
 export const writeDocuments = async (payload) => {
+  console.log(payload);
   const results = await client.post("/document", payload);
 
   return results.data;
