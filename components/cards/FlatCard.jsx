@@ -7,17 +7,17 @@ const testData = {
   imageURL: "https://picsum.photos/200/300",
 };
 
-const FlatCard = () => {
+const FlatCard = ({ title, form }) => {
   const image = true;
 
   return (
     <TouchableOpacity style={styles.block}>
       <View style={styles.contents}>
         <View style={styles.titleBlock}>
-          <Text style={styles.title}>{testData.title}</Text>
+          <Text style={styles.title}>{title}</Text>
         </View>
         <View style={styles.bodyBlock}>
-          <Text style={styles.body}>{testData.body}</Text>
+          <Text style={styles.body}>{form}</Text>
         </View>
         <View style={styles.addon}>
           <Text>기타 정보</Text>

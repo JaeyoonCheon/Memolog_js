@@ -14,7 +14,8 @@ const testData = {
   imageURL: "https://picsum.photos/200/300",
 };
 
-const Card = () => {
+const Card = ({ title, form }) => {
+  console.log(title, form);
   return (
     <TouchableOpacity style={styles.block}>
       <View style={styles.imageBlock}>
@@ -22,10 +23,10 @@ const Card = () => {
       </View>
       <View style={styles.contents}>
         <View style={styles.titleBlock}>
-          <Text style={styles.title}>{testData.title}</Text>
+          <Text style={styles.title}>{title}</Text>
         </View>
         <View style={styles.bodyBlock}>
-          <Text style={styles.body}>{testData.body}</Text>
+          <Text style={styles.body}>{form}</Text>
         </View>
         <View style={styles.addonBlock}>
           <Text style={styles.addon}>기타 정보</Text>

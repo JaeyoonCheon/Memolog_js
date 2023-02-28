@@ -24,9 +24,9 @@ const MyDocumentsScreen = () => {
     { label: "제목순", value: "title" },
   ]);
   const [layout, setLayout] = useState("grid");
-  const { data, isLoading } = useQuery("document", getDocuments);
+  const { data: documents, isLoading } = useQuery("document", getDocuments);
 
-  console.log("query: " + data);
+  console.log("query: " + documents);
 
   const onPressSearch = () => {
     navigation.navigate("MySearch");
@@ -88,9 +88,9 @@ const MyDocumentsScreen = () => {
       </View>
       <View style={styles.itemsWrapper}>
         {layout === "grid" ? (
-          <CardList></CardList>
+          <CardList data={documents}></CardList>
         ) : (
-          <FlatCardList></FlatCardList>
+          <FlatCardList data={documents}></FlatCardList>
         )}
       </View>
     </View>

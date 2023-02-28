@@ -3,27 +3,16 @@ import React from "react";
 
 import Card from "./Card";
 
-const CardList = () => {
-  const test = [
-    { title: "1", body: "1" },
-    { title: "2", body: "2" },
-    { title: "3", body: "3" },
-    { title: "4", body: "4" },
-    { title: "5", body: "5" },
-    { title: "11", body: "11" },
-    { title: "22", body: "22" },
-    { title: "33", body: "33" },
-    { title: "44", body: "44" },
-    { title: "55", body: "55" },
-  ];
+const CardList = ({ data }) => {
+  console.log("update " + data);
 
   return (
     <FlatList
       style={styles.cardList}
       contentContainerStyle={{ paddingHorizontal: 8 }}
-      data={test}
-      renderItem={(item) => <Card />}
-      keyExtractor={(item) => item.title}
+      data={data}
+      renderItem={({ item }) => <Card title={item.title} form={item.form} />}
+      keyExtractor={(item) => item.id}
       numColumns={2}
     ></FlatList>
   );

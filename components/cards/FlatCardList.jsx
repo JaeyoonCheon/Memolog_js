@@ -3,7 +3,7 @@ import React from "react";
 
 import FlatCard from "./FlatCard";
 
-const FlatCardList = () => {
+const FlatCardList = ({ data }) => {
   const test = [
     { title: "1", body: "1" },
     { title: "2", body: "2" },
@@ -20,8 +20,10 @@ const FlatCardList = () => {
   return (
     <FlatList
       style={styles.cardList}
-      data={test}
-      renderItem={(item) => <FlatCard />}
+      data={data}
+      renderItem={({ item }) => (
+        <FlatCard title={item.title} form={item.form} />
+      )}
       keyExtractor={(item) => item.title}
     ></FlatList>
   );
