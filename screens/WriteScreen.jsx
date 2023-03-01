@@ -1,6 +1,10 @@
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { RichEditor, RichToolbar } from "react-native-pell-rich-editor";
+import {
+  RichEditor,
+  RichToolbar,
+  actions,
+} from "react-native-pell-rich-editor";
 import { useMutation } from "react-query";
 import { useNavigation } from "@react-navigation/native";
 
@@ -25,6 +29,16 @@ const WriteScreen = () => {
       console.log("error");
     },
   });
+
+  const onPressAddImage = useCallback(() => {
+    // insert URL
+    richText.current?.insertImage(
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/100px-React-icon.svg.png",
+      "background: gray;"
+    );
+    // insert base64
+    // this.richText.current?.insertImage(`data:${image.mime};base64,${image.data}`);
+  }, []);
 
   const onSubmit = () => {
     if (isLoading) {
@@ -56,8 +70,34 @@ const WriteScreen = () => {
         onChangeText={setTitle}
         onSubmit={onSubmit}
       ></WriteHeader>
-      <RichToolbar editor={richText}></RichToolbar>
+      <RichToolbar
+        editor={richText}
+        onPressAddImage={onPressAddImage}
+        actions={[
+          actions.undo,
+          actions.redo,
+          actions.insertVideo,
+          actions.insertImage,
+          actions.setStrikethrough,
+          // actions.checkboxList,
+          actions.insertOrderedList,
+          actions.blockquote,
+          actions.alignLeft,
+          actions.alignCenter,
+          actions.alignRight,
+          actions.code,
+          actions.line,
+          // actions.foreColor,
+          // actions.hiliteColor,
+          // actions.heading1,
+          // actions.heading4,
+          "insertEmoji",
+          "insertHTML",
+          "fontSize",
+        ]}
+      ></RichToolbar>
       <ScrollView
+        style={styles.editorWrapper}
         ref={scrollRef}
         nestedScrollEnabled={true}
         keyboardDismissMode={"none"}
@@ -66,6 +106,7 @@ const WriteScreen = () => {
           style={styles.editor}
           ref={richText}
           initialContentHTML={contents}
+          initialHeight={600}
           useContainer={true}
           onChange={onChangeHTML}
           onCursorPosition={handleCursorPosition}
@@ -83,9 +124,16 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#FFFFFF",
   },
+  editorWrapper: {
+    flex: 1,
+
+    borderWidth: 1,
+    borderColor: "red",
+  },
   editor: {
     flex: 1,
-    marginHorizontal: 4,
-    marginTop: 4,
+
+    borderWidth: 1,
+    borderColor: "blue",
   },
 });

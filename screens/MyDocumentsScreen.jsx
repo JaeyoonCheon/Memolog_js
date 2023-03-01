@@ -31,8 +31,11 @@ const MyDocumentsScreen = () => {
   const onPressSearch = () => {
     navigation.navigate("MySearch");
   };
-  const onPressLayout = (style) => {
+  const onPressLayout = (style) => {  
     setLayout(style);
+  };
+  const onPressCard = (id) => {
+    navigation.navigate("Detail", {id});
   };
 
   return (

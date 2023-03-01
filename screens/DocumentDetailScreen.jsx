@@ -2,10 +2,14 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { WebView } from "react-native-webview";
+import { useRoute } from "@react-navigation/native";
+import { useQuery } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
 
 const DocumentDetailScreen = () => {
+  const { params } = useRoute();
+
   return (
     <View style={styles.block}>
       <BaseHeader
