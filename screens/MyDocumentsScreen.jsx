@@ -24,18 +24,18 @@ const MyDocumentsScreen = () => {
     { label: "제목순", value: "title" },
   ]);
   const [layout, setLayout] = useState("grid");
-  const { data: documents, isLoading } = useQuery("document", getDocuments);
+  const { data: documents, isLoading } = useQuery("Documents", getDocuments);
 
   console.log("query: " + documents);
 
   const onPressSearch = () => {
     navigation.navigate("MySearch");
   };
-  const onPressLayout = (style) => {  
+  const onPressLayout = (style) => {
     setLayout(style);
   };
   const onPressCard = (id) => {
-    navigation.navigate("Detail", {id});
+    navigation.navigate("Detail", { id });
   };
 
   return (
@@ -91,9 +91,12 @@ const MyDocumentsScreen = () => {
       </View>
       <View style={styles.itemsWrapper}>
         {layout === "grid" ? (
-          <CardList data={documents}></CardList>
+          <CardList data={documents} onPressCard={onPressCard}></CardList>
         ) : (
-          <FlatCardList data={documents}></FlatCardList>
+          <FlatCardList
+            data={documents}
+            onPressCard={onPressCard}
+          ></FlatCardList>
         )}
       </View>
     </View>

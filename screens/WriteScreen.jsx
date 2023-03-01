@@ -9,7 +9,7 @@ import { useMutation } from "react-query";
 import { useNavigation } from "@react-navigation/native";
 
 import WriteHeader from "../components/headers/WriteHeader";
-import { writeDocuments } from "../api/documents";
+import { writeDocument } from "../api/documents";
 import { useUserContext } from "../contexts/UserContext";
 
 const WriteScreen = () => {
@@ -21,7 +21,7 @@ const WriteScreen = () => {
   const [contents, setContents] = useState("");
   const [user, _] = useUserContext();
 
-  const { mutate: writeMutate, isLoading } = useMutation(writeDocuments, {
+  const { mutate: writeMutate, isLoading } = useMutation(writeDocument, {
     onSuccess: () => {
       naviagation.navigate("MyDocuments");
     },

@@ -3,7 +3,7 @@ import React from "react";
 
 import Card from "./Card";
 
-const CardList = ({ data }) => {
+const CardList = ({ data, onPressCard }) => {
   console.log("update " + data);
 
   return (
@@ -11,7 +11,7 @@ const CardList = ({ data }) => {
       style={styles.cardList}
       contentContainerStyle={{ paddingHorizontal: 8 }}
       data={data}
-      renderItem={({ item }) => <Card title={item.title} form={item.form} />}
+      renderItem={({ item }) => <Card item={item} onPress={onPressCard} />}
       keyExtractor={(item) => item.id}
       numColumns={2}
     ></FlatList>

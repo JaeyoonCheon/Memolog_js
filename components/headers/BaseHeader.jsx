@@ -6,7 +6,11 @@ const BaseHeader = ({ children, leftButtons, title, rightButtons }) => {
     <View style={styles.block}>
       {leftButtons && <View style={styles.left}>{leftButtons}</View>}
       <View style={styles.centerBlock}>
-        {children || <Text style={styles.title}>{title}</Text>}
+        {children || (
+          <Text style={[styles.title, leftButtons && styles.titleLeft]}>
+            {title}
+          </Text>
+        )}
       </View>
       {rightButtons && <View style={styles.right}>{rightButtons}</View>}
     </View>
@@ -30,6 +34,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     color: "#000000",
+  },
+  titleLeft: {
+    marginLeft: 16,
   },
   left: {
     justifyContent: "flex-start",

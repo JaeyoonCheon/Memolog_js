@@ -14,23 +14,29 @@ const testData = {
   imageURL: "https://picsum.photos/200/300",
 };
 
-const Card = ({ title, form }) => {
-  console.log(title, form);
+const Card = ({ item, onPress }) => {
   return (
-    <TouchableOpacity style={styles.block}>
-      <View style={styles.imageBlock}>
-        <Image style={styles.image} source={{ uri: testData.imageURL }}></Image>
-      </View>
+    <TouchableOpacity style={styles.block} onPress={() => onPress(item.id)}>
+      {item.images && (
+        <View style={styles.imageBlock}>
+          <Image
+            style={styles.image}
+            source={{ uri: testData.imageURL }}
+          ></Image>
+        </View>
+      )}
       <View style={styles.contents}>
         <View style={styles.titleBlock}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>{item.title}</Text>
         </View>
         <View style={styles.bodyBlock}>
-          <Text style={styles.body}>{form}</Text>
+          <Text style={styles.body}>{item.form}</Text>
         </View>
-        <View style={styles.addonBlock}>
-          <Text style={styles.addon}>기타 정보</Text>
-        </View>
+        {item?.addon && (
+          <View style={styles.addonBlock}>
+            <Text style={styles.addon}>기타 정보</Text>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -41,8 +47,8 @@ export default Card;
 const styles = StyleSheet.create({
   block: {
     flex: 0.5,
-    marginHorizontal: 5,
-    marginVertical: 5,
+    marginHorizontal: 8,
+    marginVertical: 4,
 
     borderRadius: 16,
     overflow: "hidden",
@@ -63,7 +69,7 @@ const styles = StyleSheet.create({
     }),
   },
   imageBlock: {
-    height: 150,
+    minHeight: 100,
     resizeMode: "cover",
   },
   image: {
@@ -81,7 +87,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000000",
   },
-  bodyBlock: {},
+  bodyBlock: {
+    minHeight: 100,
+  },
   body: {
     fontSize: 12,
     color: "#000000",

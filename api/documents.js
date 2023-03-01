@@ -6,9 +6,15 @@ export const getDocuments = async () => {
   return results.data;
 };
 
-export const writeDocuments = async (payload) => {
+export const writeDocument = async (payload) => {
   console.log(payload);
   const results = await client.post("/document", payload);
+
+  return results.data;
+};
+
+export const getDocument = async (id) => {
+  const results = await client.get(`/document/${id}`);
 
   return results.data;
 };
