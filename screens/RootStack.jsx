@@ -8,6 +8,8 @@ import SignInScreen from "./SignInScreen";
 import SignUpScreen from "./SignUpScreen";
 import WriteScreen from "./WriteScreen";
 import DocumentDetailScreen from "./DocumentDetailScreen";
+import SplashScreen from "./SplashScreen";
+import WelcomeScreen from "./WelcomeScreen";
 import useLoadAuthEffect from "../hooks/useLoadAuthEffect";
 
 const Stack = createNativeStackNavigator();
@@ -45,6 +47,16 @@ const RootStack = () => {
       <Stack.Screen
         name="Detail"
         component={DocumentDetailScreen}
+        options={{ headerShown: false }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="Splash"
+        component={SplashScreen}
+        options={{ headerShown: false }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
         options={{ headerShown: false }}
       ></Stack.Screen>
     </Stack.Navigator>

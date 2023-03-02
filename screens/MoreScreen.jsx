@@ -26,10 +26,17 @@ const MoreScreen = () => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Detail");
+          navigation.navigate("Splash");
         }}
       >
-        <Text>상세</Text>
+        <Text>스플래시</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Welcome");
+        }}
+      >
+        <Text>환영</Text>
       </TouchableOpacity>
     </View>
   );

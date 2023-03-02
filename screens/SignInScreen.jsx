@@ -17,6 +17,7 @@ import BaseTextField from "../components/textfields/BaseTextField";
 import PasswordField from "../components/textfields/PasswordField";
 import BaseButton from "../components/buttons/BaseButton";
 import useSignin from "../hooks/useSignin";
+import { MaterialIconButton } from "../components/buttons/IconButton";
 
 const SignInScreen = () => {
   const navigation = useNavigation();
@@ -51,11 +52,12 @@ const SignInScreen = () => {
     <View style={styles.block}>
       <BaseHeader
         leftButtons={
-          <MaterialIcons
-            name="arrow-back"
+          <MaterialIconButton
+            iconName="arrow-back"
             size={24}
             color="#000000"
-          ></MaterialIcons>
+            onPress={() => navigation.goBack()}
+          ></MaterialIconButton>
         }
       ></BaseHeader>
       <View style={styles.titleBlock}>
