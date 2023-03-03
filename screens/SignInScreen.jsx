@@ -45,7 +45,7 @@ const SignInScreen = () => {
       password: data.password,
     });
 
-    navigation.navigate("MyDocuments");
+    navigation.navigate("MainTab");
   };
 
   return (

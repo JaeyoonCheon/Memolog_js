@@ -4,8 +4,6 @@ import React from "react";
 import Card from "./Card";
 
 const CardList = ({ data, onPressCard }) => {
-  console.log("update " + data);
-
   return (
     <FlatList
       style={styles.cardList}

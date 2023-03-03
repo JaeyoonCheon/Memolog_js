@@ -26,8 +26,6 @@ const MyDocumentsScreen = () => {
   const [layout, setLayout] = useState("grid");
   const { data: documents, isLoading } = useQuery("Documents", getDocuments);
 
-  console.log("query: " + documents);
-
   const onPressSearch = () => {
     navigation.navigate("MySearch");
   };

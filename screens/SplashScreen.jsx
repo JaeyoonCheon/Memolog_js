@@ -1,7 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+
+import { useUserContext } from "../contexts/UserContext";
 
 const SplashScreen = () => {
+  const navigation = useNavigation();
+  const [userInfo, _] = useUserContext();
+
+  useEffect(() => {
+    if (userInfo) {
+      navigation.navigate("MainTab");
+    } else {
+      navigation.navigate("Welcome");
+    }
+  }, [userInfo]);
+
   return (
     <View style={styles.block}>
       <View style={styles.logoBlock}>

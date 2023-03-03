@@ -44,7 +44,6 @@ const WriteScreen = () => {
     if (isLoading) {
       return;
     }
-    console.log("SUBMIT!");
     writeMutate({ title, form: contents, userId: user?.userId });
   };
   const onChangeHTML = (html) => {

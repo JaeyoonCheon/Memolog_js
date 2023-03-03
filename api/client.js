@@ -3,7 +3,7 @@ import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 // wsl2 서버 실행 시 wsl2의 IP address를 대응 후 adb 포트 연동 필요
 const baseURL = __DEV__
-  ? "http://192.168.234.89:3367"
+  ? "http://192.168.235.100:3367"
   : "http://localhost:3367";
 
 const client = axios.create({
@@ -11,9 +11,9 @@ const client = axios.create({
 });
 
 export const addToken = async (token) => {
-  const { getItem: getExpireTime } = useAsyncStorage("Expire");
+  const { getItem: getExpireTime, setItem: setExpireTime } =
+    useAsyncStorage("Expire");
   const { setItem: setAccess } = useAsyncStorage("Access");
-  const { setItem: setExpire } = useAsyncStorage("Expire");
 
   client.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -27,10 +27,19 @@ export const addToken = async (token) => {
       const accessToken = token.accessToken;
       client.defaults.headers.Authorization = `Bearer ${accessToken}`;
       setAccess(token.accessToken);
-      setExpire(token.expireTime);
+      setExpireTime(token.expireTime);
     }
   } catch (e) {
     console.log(e);
+    const { removeItem: removeUserInfo } = useAsyncStorage("UserInfo");
+    const { removeItem: removeAccess } = useAsyncStorage("Access");
+    const { removeItem: removeRefresh } = useAsyncStorage("Refresh");
+
+    await removeUserInfo();
+    await removeAccess();
+    await removeRefresh();
+
+    removeToken();
   }
 };
 
@@ -54,7 +63,9 @@ export const refreshToken = async () => {
 
     return result.data;
   } catch (e) {
-    console.log(e);
+    console.log(e.response.data);
+
+    throw new Error("Token Error");
   }
 };
 

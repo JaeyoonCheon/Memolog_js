@@ -20,6 +20,16 @@ const RootStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name="Splash"
+        component={SplashScreen}
+        options={{ headerShown: false }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{ headerShown: false }}
+      ></Stack.Screen>
+      <Stack.Screen
         name="MainTab"
         component={MainTab}
         options={{ headerShown: false }}
@@ -47,16 +57,6 @@ const RootStack = () => {
       <Stack.Screen
         name="Detail"
         component={DocumentDetailScreen}
-        options={{ headerShown: false }}
-      ></Stack.Screen>
-      <Stack.Screen
-        name="Splash"
-        component={SplashScreen}
-        options={{ headerShown: false }}
-      ></Stack.Screen>
-      <Stack.Screen
-        name="Welcome"
-        component={WelcomeScreen}
         options={{ headerShown: false }}
       ></Stack.Screen>
     </Stack.Navigator>
