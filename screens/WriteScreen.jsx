@@ -42,7 +42,7 @@ const WriteScreen = () => {
     console.log(image);
     // insert URL
     if (Platform.OS === "ios") {
-      richText.current?.insertImage(image.assets[0].uri, "background: gray;");
+      richText.current?.insertImage(image.assets[0].uri);
     }
     // insert base64
     if (Platform.OS === "android") {
@@ -50,7 +50,7 @@ const WriteScreen = () => {
         `data:${image.assets[0].type};base64,${image.assets[0].base64}`
       );
     }
-  }, []);
+  }, [richText]);
 
   const onSubmit = () => {
     if (isLoading) {
@@ -137,14 +137,8 @@ const styles = StyleSheet.create({
   },
   editorWrapper: {
     flex: 1,
-
-    borderWidth: 1,
-    borderColor: "red",
   },
   editor: {
     flex: 1,
-
-    borderWidth: 1,
-    borderColor: "blue",
   },
 });
