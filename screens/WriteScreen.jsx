@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Platform, View, ScrollView } from "react-native";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   RichEditor,
@@ -7,6 +7,7 @@ import {
 } from "react-native-pell-rich-editor";
 import { useMutation } from "react-query";
 import { useNavigation } from "@react-navigation/native";
+import { launchImageLibrary } from "react-native-image-picker";
 
 import WriteHeader from "../components/headers/WriteHeader";
 import { writeDocument } from "../api/documents";
@@ -30,14 +31,25 @@ const WriteScreen = () => {
     },
   });
 
-  const onPressAddImage = useCallback(() => {
+  const onPressAddImage = useCallback(async () => {
+    const image = await launchImageLibrary({
+      mediaType: "photo",
+      maxWidth: 512,
+      maxHeight: 512,
+      includeBase64: Platform.OS === "android",
+    });
+
+    console.log(image);
     // insert URL
-    richText.current?.insertImage(
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/100px-React-icon.svg.png",
-      "background: gray;"
-    );
+    if (Platform.OS === "ios") {
+      richText.current?.insertImage(image.assets[0].uri, "background: gray;");
+    }
     // insert base64
-    // this.richText.current?.insertImage(`data:${image.mime};base64,${image.data}`);
+    if (Platform.OS === "android") {
+      richText.current?.insertImage(
+        `data:${image.assets[0].type};base64,${image.assets[0].base64}`
+      );
+    }
   }, []);
 
   const onSubmit = () => {
