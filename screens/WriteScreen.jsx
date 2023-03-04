@@ -8,6 +8,8 @@ import {
 import { useMutation } from "react-query";
 import { useNavigation } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
+import { utils } from "@react-native-firebase/app";
+import storage from "@react-native-firebase/storage";
 
 import WriteHeader from "../components/headers/WriteHeader";
 import { writeDocument } from "../api/documents";
@@ -20,6 +22,7 @@ const WriteScreen = () => {
 
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
+  const [uploadImages, setUploadImages] = useState([]);
   const [user, _] = useUserContext();
 
   const { mutate: writeMutate, isLoading } = useMutation(writeDocument, {
@@ -32,31 +35,54 @@ const WriteScreen = () => {
   });
 
   const onPressAddImage = useCallback(async () => {
-    const image = await launchImageLibrary({
-      mediaType: "photo",
-      maxWidth: 512,
-      maxHeight: 512,
-      includeBase64: Platform.OS === "android",
-    });
+    const image = await launchImageLibrary(
+      {
+        mediaType: "photo",
+        maxWidth: 512,
+        maxHeight: 512,
+        includeBase64: Platform.OS === "android",
+      },
+      (res) => {
+        console.log(res);
+      }
+    );
 
     console.log(image);
+
     // insert URL
     if (Platform.OS === "ios") {
       richText.current?.insertImage(image.assets[0].uri);
     }
     // insert base64
     if (Platform.OS === "android") {
-      richText.current?.insertImage(
-        `data:${image.assets[0].type};base64,${image.assets[0].base64}`
-      );
+      // richText.current?.insertImage(
+      //   `data:${image.assets[0].type};base64,${image.assets[0].base64}`
+      // );
+      console.log(image.assets[0].uri.split("file://"));
+      console.log(image.assets[0].uri.split("file://")[1]);
+      richText.current?.insertImage(image.assets[0].uri);
     }
+
+    setUploadImages([...uploadImages, image.assets[0]]);
   }, [richText]);
 
-  const onSubmit = () => {
-    if (isLoading) {
-      return;
+  const onSubmit = async () => {
+    const imageSet = new Set(uploadImages);
+    const uniqueImages = [...imageSet];
+
+    try {
+      await Promise.all(
+        uniqueImages.map(async (image) => {
+          const uploadImageRef = storage().ref(image?.fileName);
+
+          await uploadImageRef.putFile(image.uri);
+        })
+      );
+
+      writeMutate({ title, form: contents, userId: user?.userId });
+    } catch (e) {
+      console.log(e);
     }
-    writeMutate({ title, form: contents, userId: user?.userId });
   };
   const onChangeHTML = (html) => {
     setContents(html);
