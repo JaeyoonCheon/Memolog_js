@@ -1,4 +1,4 @@
-import { StyleSheet, Platform, View, ScrollView } from "react-native";
+import { StyleSheet, Platform, View, ScrollView, Image } from "react-native";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   RichEditor,
@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
 import { utils } from "@react-native-firebase/app";
 import storage from "@react-native-firebase/storage";
+import { copyFile, DocumentDirectoryPath, readFile } from "react-native-fs";
 
 import WriteHeader from "../components/headers/WriteHeader";
 import { writeDocument } from "../api/documents";
@@ -43,27 +44,37 @@ const WriteScreen = () => {
         includeBase64: Platform.OS === "android",
       },
       (res) => {
-        console.log(res);
+        const imagePath = `${DocumentDirectoryPath}/${res.assets[0].fileName}`;
+        copyFile(res.assets[0].uri, imagePath)
+          .then(() => {
+            console.log(imagePath);
+            setUploadImages([...uploadImages, imagePath]);
+
+            richText.current?.insertImage(res.assets[0].uri, "my-image");
+
+            readFile(imagePath, "base64").then((file) =>
+              console.log(`read : ${file}`)
+            );
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       }
     );
 
-    console.log(image);
+    // console.log(image);
 
-    // insert URL
-    if (Platform.OS === "ios") {
-      richText.current?.insertImage(image.assets[0].uri);
-    }
-    // insert base64
-    if (Platform.OS === "android") {
-      // richText.current?.insertImage(
-      //   `data:${image.assets[0].type};base64,${image.assets[0].base64}`
-      // );
-      console.log(image.assets[0].uri.split("file://"));
-      console.log(image.assets[0].uri.split("file://")[1]);
-      richText.current?.insertImage(image.assets[0].uri);
-    }
-
-    setUploadImages([...uploadImages, image.assets[0]]);
+    // // insert URL
+    // if (Platform.OS === "ios") {
+    //   richText.current?.insertImage(image.assets[0].uri);
+    // }
+    // // insert base64
+    // if (Platform.OS === "android") {
+    //   // richText.current?.insertImage(
+    //   //   `data:${image.assets[0].type};base64,${image.assets[0].base64}`
+    //   // );
+    //   richText.current?.insertImage(image.assets[0].uri);
+    // }
   }, [richText]);
 
   const onSubmit = async () => {
@@ -147,6 +158,9 @@ const WriteScreen = () => {
           useContainer={true}
           onChange={onChangeHTML}
           onCursorPosition={handleCursorPosition}
+          originWhitelist={["file://"]}
+          allowFileAccess={true}
+          allowFileAccessFromFileURLs={true}
         />
       </ScrollView>
     </View>
@@ -160,6 +174,9 @@ const styles = StyleSheet.create({
     flex: 1,
 
     backgroundColor: "#FFFFFF",
+  },
+  testBlock: {
+    height: 400,
   },
   editorWrapper: {
     flex: 1,
