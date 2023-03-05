@@ -22,6 +22,7 @@ const WriteScreen = () => {
   const naviagation = useNavigation();
   const richText = useRef();
   const scrollRef = useRef();
+  const isSubmit = useRef(false);
 
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
@@ -32,6 +33,7 @@ const WriteScreen = () => {
 
   const { mutate: writeMutate, isLoading } = useMutation(writeDocument, {
     onSuccess: () => {
+      isSubmit.current = false;
       naviagation.navigate("MyDocuments");
     },
     onError: () => {
@@ -54,10 +56,8 @@ const WriteScreen = () => {
     const usedImages = contents
       .match(imgRegex)
       .map((x) => x.replace(/.*src="([^"]*)".*/, "$1"));
-    console.log(usedImages);
 
     try {
-      let newContents = contents;
       await Promise.all(
         usedImages.map(async (imagePath) => {
           const fileNameRegex = /\/([^/]+)$/;
@@ -66,15 +66,12 @@ const WriteScreen = () => {
 
           await uploadImageRef.putFile(imagePath);
           const downloadUrl = await uploadImageRef.getDownloadURL();
-          console.log(downloadUrl);
 
-          newContents.replace(imagePath, downloadUrl);
-          console.log(newContents);
+          setContents(contents.replace(imagePath, downloadUrl));
         })
       );
-      setContents(newContents);
 
-      setPayload({ title, form: contents, userId: user?.userId });
+      isSubmit.current = true;
     } catch (e) {
       console.log(e);
     }
@@ -84,14 +81,10 @@ const WriteScreen = () => {
   };
 
   useEffect(() => {
-    console.log(contents);
-  }, [contents]);
-
-  useEffect(() => {
-    if (payload) {
-      writeMutate(payload);
+    if (isSubmit.current === true) {
+      writeMutate({ title, form: contents, userId: user?.userId });
     }
-  }, [payload, writeMutate]);
+  }, [isSubmit.current]);
 
   // 에디터 스크롤을 위한 커서 조정
   const handleCursorPosition = useCallback((scrollY) => {
