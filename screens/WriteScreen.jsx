@@ -16,6 +16,8 @@ import WriteHeader from "../components/headers/WriteHeader";
 import { writeDocument } from "../api/documents";
 import { useUserContext } from "../contexts/UserContext";
 
+const imgRegex = /<img.*?src=["|'](.*?)["|']/gm;
+
 const WriteScreen = () => {
   const naviagation = useNavigation();
   const richText = useRef();
@@ -23,6 +25,8 @@ const WriteScreen = () => {
 
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
+  const [payload, setPayload] = useState(null);
+
   const [uploadImages, setUploadImages] = useState([]);
   const [user, _] = useUserContext();
 
@@ -36,61 +40,41 @@ const WriteScreen = () => {
   });
 
   const onPressAddImage = useCallback(async () => {
-    const image = await launchImageLibrary(
-      {
-        mediaType: "photo",
-        maxWidth: 512,
-        maxHeight: 512,
-        includeBase64: Platform.OS === "android",
-      },
-      (res) => {
-        const imagePath = `${DocumentDirectoryPath}/${res.assets[0].fileName}`;
-        copyFile(res.assets[0].uri, imagePath)
-          .then(() => {
-            console.log(imagePath);
-            setUploadImages([...uploadImages, imagePath]);
+    const image = await launchImageLibrary({
+      mediaType: "photo",
+      maxWidth: 512,
+      maxHeight: 512,
+      includeBase64: Platform.OS === "android",
+    });
 
-            richText.current?.insertImage(res.assets[0].uri, "image");
-
-            readFile(imagePath, "base64").then((file) =>
-              console.log(`read : ${file}`)
-            );
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      }
-    );
-
-    // console.log(image);
-
-    // // insert URL
-    // if (Platform.OS === "ios") {
-    //   richText.current?.insertImage(image.assets[0].uri);
-    // }
-    // // insert base64
-    // if (Platform.OS === "android") {
-    //   // richText.current?.insertImage(
-    //   //   `data:${image.assets[0].type};base64,${image.assets[0].base64}`
-    //   // );
-    //   richText.current?.insertImage(image.assets[0].uri);
-    // }
+    richText.current?.insertImage(image.assets[0].uri, "image");
   }, [richText]);
 
   const onSubmit = async () => {
-    const imageSet = new Set(uploadImages);
-    const uniqueImages = [...imageSet];
+    const usedImages = contents
+      .match(imgRegex)
+      .map((x) => x.replace(/.*src="([^"]*)".*/, "$1"));
+    console.log(usedImages);
 
     try {
+      let newContents = contents;
       await Promise.all(
-        uniqueImages.map(async (image) => {
-          const uploadImageRef = storage().ref(image?.fileName);
+        usedImages.map(async (imagePath) => {
+          const fileNameRegex = /\/([^/]+)$/;
+          const fileName = imagePath.match(fileNameRegex)[1];
+          const uploadImageRef = storage().ref(fileName);
 
-          await uploadImageRef.putFile(image.uri);
+          await uploadImageRef.putFile(imagePath);
+          const downloadUrl = await uploadImageRef.getDownloadURL();
+          console.log(downloadUrl);
+
+          newContents.replace(imagePath, downloadUrl);
+          console.log(newContents);
         })
       );
+      setContents(newContents);
 
-      writeMutate({ title, form: contents, userId: user?.userId });
+      setPayload({ title, form: contents, userId: user?.userId });
     } catch (e) {
       console.log(e);
     }
@@ -102,6 +86,12 @@ const WriteScreen = () => {
   useEffect(() => {
     console.log(contents);
   }, [contents]);
+
+  useEffect(() => {
+    if (payload) {
+      writeMutate(payload);
+    }
+  }, [payload, writeMutate]);
 
   // 에디터 스크롤을 위한 커서 조정
   const handleCursorPosition = useCallback((scrollY) => {
