@@ -50,7 +50,7 @@ const WriteScreen = () => {
             console.log(imagePath);
             setUploadImages([...uploadImages, imagePath]);
 
-            richText.current?.insertImage(res.assets[0].uri, "my-image");
+            richText.current?.insertImage(res.assets[0].uri, "image");
 
             readFile(imagePath, "base64").then((file) =>
               console.log(`read : ${file}`)
