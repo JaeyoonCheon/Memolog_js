@@ -19,17 +19,6 @@ import { isNoSubstitutionTemplateLiteral } from "typescript";
 
 const imgRegex = /<img.*?src=["|'](.*?)["|']/gm;
 
-const useIsSubmit = () => {
-  const [isSubmit, setIsSubmit] = useState(false);
-
-  const ref = useCallback(() => {
-    console.log("toggle");
-    setIsSubmit(!isSubmit);
-  }, []);
-
-  return [isSubmit, ref];
-};
-
 const ModifyScreen = () => {
   const naviagation = useNavigation();
   const { params } = useRoute();
@@ -37,7 +26,7 @@ const ModifyScreen = () => {
 
   const richText = useRef();
   const scrollRef = useRef();
-  const [isSubmit, ref] = useIsSubmit();
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const [title, setTitle] = useState(documentData?.title);
   const [contents, setContents] = useState(documentData?.form);
@@ -45,7 +34,7 @@ const ModifyScreen = () => {
 
   const { mutate: modifyMutate, isLoading } = useMutation(modifyDocument, {
     onSuccess: () => {
-      ref();
+      setIsSubmit(false);
       naviagation.navigate("MyDocuments");
     },
     onError: () => {
@@ -73,7 +62,7 @@ const ModifyScreen = () => {
         payload: { title, form: contents, userId: user?.userId },
       });
     }
-  }, [isNoSubstitutionTemplateLiteral]);
+  }, [isSubmit]);
 
   const onSubmit = async () => {
     const usedImages = contents
@@ -108,7 +97,7 @@ const ModifyScreen = () => {
 
       console.log(`flag 2: ${isSubmit}`);
 
-      ref();
+      setIsSubmit(true);
       console.log(`flag 3: ${isSubmit}`);
     } catch (e) {
       console.log(e);
