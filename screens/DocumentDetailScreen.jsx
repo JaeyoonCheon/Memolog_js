@@ -36,11 +36,24 @@ const DocumentDetailScreen = () => {
         }
         title={contents?.title}
         rightButtons={
-          <MaterialIconButton
-            iconName="search"
-            size={24}
-            color="#000000"
-          ></MaterialIconButton>
+          <>
+            <MaterialIconButton
+              iconName="mode-edit"
+              size={24}
+              color="#000000"
+              onPress={() => {
+                navigation.navigate("Modify", {
+                  id: id,
+                  documentData: contents,
+                });
+              }}
+            ></MaterialIconButton>
+            <MaterialIconButton
+              iconName="search"
+              size={24}
+              color="#000000"
+            ></MaterialIconButton>
+          </>
         }
       ></BaseHeader>
       <WebView

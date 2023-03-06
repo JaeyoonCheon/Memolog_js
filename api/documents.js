@@ -17,3 +17,10 @@ export const getDocument = async (id) => {
 
   return results.data;
 };
+
+export const modifyDocument = async ({ id, payload }) => {
+  console.log(`id: ${id}, contents: ${payload}`);
+  const results = await client.post(`/document/${id}`, payload);
+
+  return results.data;
+};

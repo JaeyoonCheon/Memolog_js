@@ -6,31 +6,46 @@ import {
   actions,
 } from "react-native-pell-rich-editor";
 import { useMutation } from "react-query";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
 import { utils } from "@react-native-firebase/app";
 import storage from "@react-native-firebase/storage";
 import { copyFile, DocumentDirectoryPath, readFile } from "react-native-fs";
 
 import WriteHeader from "../components/headers/WriteHeader";
-import { writeDocument } from "../api/documents";
+import { modifyDocument } from "../api/documents";
 import { useUserContext } from "../contexts/UserContext";
+import { isNoSubstitutionTemplateLiteral } from "typescript";
 
 const imgRegex = /<img.*?src=["|'](.*?)["|']/gm;
 
-const WriteScreen = () => {
+const useIsSubmit = () => {
+  const [isSubmit, setIsSubmit] = useState(false);
+
+  const ref = useCallback(() => {
+    console.log("toggle");
+    setIsSubmit(!isSubmit);
+  }, []);
+
+  return [isSubmit, ref];
+};
+
+const ModifyScreen = () => {
   const naviagation = useNavigation();
+  const { params } = useRoute();
+  const { id, documentData } = params;
+
   const richText = useRef();
   const scrollRef = useRef();
-  const isSubmit = useRef(false);
+  const [isSubmit, ref] = useIsSubmit();
 
-  const [title, setTitle] = useState("");
-  const [contents, setContents] = useState("");
+  const [title, setTitle] = useState(documentData?.title);
+  const [contents, setContents] = useState(documentData?.form);
   const [user, _] = useUserContext();
 
-  const { mutate: writeMutate, isLoading } = useMutation(writeDocument, {
+  const { mutate: modifyMutate, isLoading } = useMutation(modifyDocument, {
     onSuccess: () => {
-      isSubmit.current = false;
+      ref();
       naviagation.navigate("MyDocuments");
     },
     onError: () => {
@@ -49,26 +64,52 @@ const WriteScreen = () => {
     richText.current?.insertImage(image.assets[0].uri, "image");
   }, [richText]);
 
+  useEffect(() => {
+    console.log(`flag 4: ${isSubmit}`);
+    if (isSubmit === true) {
+      console.log(`id: ${id}, contents: ${contents}`);
+      modifyMutate({
+        id,
+        payload: { title, form: contents, userId: user?.userId },
+      });
+    }
+  }, [isNoSubstitutionTemplateLiteral]);
+
   const onSubmit = async () => {
     const usedImages = contents
       .match(imgRegex)
-      .map((x) => x.replace(/.*src="([^"]*)".*/, "$1"));
+      ?.map((x) => x.replace(/.*src="([^"]*)".*/, "$1"));
 
     try {
-      await Promise.all(
-        usedImages.map(async (imagePath) => {
-          const fileNameRegex = /\/([^/]+)$/;
-          const fileName = imagePath.match(fileNameRegex)[1];
-          const uploadImageRef = storage().ref(fileName);
+      console.log(`flag 1: ${isSubmit}`);
+      if (usedImages) {
+        await Promise.all(
+          usedImages.map(async (imagePath) => {
+            const protocolRegex = /^([^:]+):\/\//;
+            const protocol = imagePath.match(protocolRegex)[1];
 
-          await uploadImageRef.putFile(imagePath);
-          const downloadUrl = await uploadImageRef.getDownloadURL();
+            if (protocol !== "file") {
+              return;
+            }
 
-          setContents(contents.replace(imagePath, downloadUrl));
-        })
-      );
+            console.log(imagePath);
 
-      isSubmit.current = true;
+            const fileNameRegex = /\/([^/]+)$/;
+            const fileName = imagePath.match(fileNameRegex)[1];
+            const uploadImageRef = storage().ref(fileName);
+
+            await uploadImageRef.putFile(imagePath);
+            const downloadUrl = await uploadImageRef.getDownloadURL();
+
+            setContents(contents.replace(imagePath, downloadUrl));
+          })
+        );
+      }
+
+      console.log(`flag 2: ${isSubmit}`);
+
+      ref();
+      console.log(`flag 3: ${isSubmit}`);
     } catch (e) {
       console.log(e);
     }
@@ -76,12 +117,6 @@ const WriteScreen = () => {
   const onChangeHTML = (html) => {
     setContents(html);
   };
-
-  useEffect(() => {
-    if (isSubmit.current === true) {
-      writeMutate({ title, form: contents, userId: user?.userId });
-    }
-  }, [isSubmit.current]);
 
   // 에디터 스크롤을 위한 커서 조정
   const handleCursorPosition = useCallback((scrollY) => {
@@ -147,7 +182,7 @@ const WriteScreen = () => {
   );
 };
 
-export default WriteScreen;
+export default ModifyScreen;
 
 const styles = StyleSheet.create({
   block: {
