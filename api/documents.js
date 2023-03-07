@@ -19,8 +19,13 @@ export const getDocument = async (id) => {
 };
 
 export const modifyDocument = async ({ id, payload }) => {
-  console.log(`id: ${id}, contents: ${payload}`);
   const results = await client.post(`/document/${id}`, payload);
+
+  return results.data;
+};
+
+export const deleteDocument = async (id) => {
+  const results = await client.delete(`/document/${id}`);
 
   return results.data;
 };

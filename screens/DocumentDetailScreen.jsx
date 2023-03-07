@@ -2,12 +2,11 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { WebView } from "react-native-webview";
-import { useRoute } from "@react-navigation/native";
-import { useQuery } from "react-query";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { useQuery, useMutation } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
-import { getDocument } from "../api/documents";
+import { getDocument, deleteDocument } from "../api/documents";
 import { MaterialIconButton } from "../components/buttons/IconButton";
 
 const DocumentDetailScreen = () => {
@@ -18,6 +17,14 @@ const DocumentDetailScreen = () => {
   const { data: contents, isLoading } = useQuery(["Document", id], () =>
     getDocument(id)
   );
+  const { mutate: deleteMutate } = useMutation(deleteDocument, {
+    onSuccess: () => {
+      navigation.navigate("MyDocuments");
+    },
+    onError: () => {
+      console.log("error");
+    },
+  });
 
   if (!isLoading) {
     console.log(contents);
@@ -37,6 +44,14 @@ const DocumentDetailScreen = () => {
         title={contents?.title}
         rightButtons={
           <>
+            <MaterialIconButton
+              iconName="delete"
+              size={24}
+              color="#000000"
+              onPress={() => {
+                deleteMutate(id);
+              }}
+            ></MaterialIconButton>
             <MaterialIconButton
               iconName="mode-edit"
               size={24}

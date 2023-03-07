@@ -20,7 +20,7 @@ import { isNoSubstitutionTemplateLiteral } from "typescript";
 const imgRegex = /<img.*?src=["|'](.*?)["|']/gm;
 
 const ModifyScreen = () => {
-  const naviagation = useNavigation();
+  const navigation = useNavigation();
   const { params } = useRoute();
   const { id, documentData } = params;
 
@@ -35,7 +35,7 @@ const ModifyScreen = () => {
   const { mutate: modifyMutate, isLoading } = useMutation(modifyDocument, {
     onSuccess: () => {
       setIsSubmit(false);
-      naviagation.navigate("MyDocuments");
+      navigation.navigate("MyDocuments");
     },
     onError: () => {
       console.log("error");
@@ -54,9 +54,7 @@ const ModifyScreen = () => {
   }, [richText]);
 
   useEffect(() => {
-    console.log(`flag 4: ${isSubmit}`);
     if (isSubmit === true) {
-      console.log(`id: ${id}, contents: ${contents}`);
       modifyMutate({
         id,
         payload: { title, form: contents, userId: user?.userId },
@@ -70,7 +68,6 @@ const ModifyScreen = () => {
       ?.map((x) => x.replace(/.*src="([^"]*)".*/, "$1"));
 
     try {
-      console.log(`flag 1: ${isSubmit}`);
       if (usedImages) {
         await Promise.all(
           usedImages.map(async (imagePath) => {
@@ -80,8 +77,6 @@ const ModifyScreen = () => {
             if (protocol !== "file") {
               return;
             }
-
-            console.log(imagePath);
 
             const fileNameRegex = /\/([^/]+)$/;
             const fileName = imagePath.match(fileNameRegex)[1];
@@ -95,10 +90,7 @@ const ModifyScreen = () => {
         );
       }
 
-      console.log(`flag 2: ${isSubmit}`);
-
       setIsSubmit(true);
-      console.log(`flag 3: ${isSubmit}`);
     } catch (e) {
       console.log(e);
     }
