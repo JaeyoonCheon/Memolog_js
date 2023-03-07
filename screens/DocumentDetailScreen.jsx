@@ -8,11 +8,14 @@ import { useQuery, useMutation } from "react-query";
 import BaseHeader from "../components/headers/BaseHeader";
 import { getDocument, deleteDocument } from "../api/documents";
 import { MaterialIconButton } from "../components/buttons/IconButton";
+import { useUserContext } from "../contexts/UserContext";
 
 const DocumentDetailScreen = () => {
   const navigation = useNavigation();
   const { params } = useRoute();
   const { id } = params;
+
+  const [user, _] = useUserContext();
 
   const { data: contents, isLoading } = useQuery(["Document", id], () =>
     getDocument(id)
@@ -29,6 +32,7 @@ const DocumentDetailScreen = () => {
   if (!isLoading) {
     console.log(contents);
   }
+  console.log(user);
 
   return (
     <View style={styles.block}>
@@ -44,25 +48,29 @@ const DocumentDetailScreen = () => {
         title={contents?.title}
         rightButtons={
           <>
-            <MaterialIconButton
-              iconName="delete"
-              size={24}
-              color="#000000"
-              onPress={() => {
-                deleteMutate(id);
-              }}
-            ></MaterialIconButton>
-            <MaterialIconButton
-              iconName="mode-edit"
-              size={24}
-              color="#000000"
-              onPress={() => {
-                navigation.navigate("Modify", {
-                  id: id,
-                  documentData: contents,
-                });
-              }}
-            ></MaterialIconButton>
+            {contents?.user_id === user?.userId && (
+              <>
+                <MaterialIconButton
+                  iconName="delete"
+                  size={24}
+                  color="#000000"
+                  onPress={() => {
+                    deleteMutate(id);
+                  }}
+                ></MaterialIconButton>
+                <MaterialIconButton
+                  iconName="mode-edit"
+                  size={24}
+                  color="#000000"
+                  onPress={() => {
+                    navigation.navigate("Modify", {
+                      id: id,
+                      documentData: contents,
+                    });
+                  }}
+                ></MaterialIconButton>
+              </>
+            )}
             <MaterialIconButton
               iconName="search"
               size={24}

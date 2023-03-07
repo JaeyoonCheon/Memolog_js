@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { useUserContext } from "../contexts/UserContext";
-import useSignOut from "../hooks/useSignout";
+import useSignOut from "../hooks/useSignOut";
 
 const MoreScreen = () => {
   const navigation = useNavigation();
