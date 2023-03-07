@@ -14,7 +14,7 @@ import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
 import PasswordField from "../components/textfields/PasswordField";
 import BaseButton from "../components/buttons/BaseButton";
-import useSignup from "../hooks/useSignup";
+import useSignUp from "../hooks/useSignUp";
 import { MaterialIconButton } from "../components/buttons/IconButton";
 
 const SignUpScreen = () => {
@@ -32,7 +32,7 @@ const SignUpScreen = () => {
     },
   });
 
-  const { mutate: signUpMutate, isLoading, isSuccess } = useSignup();
+  const { mutate: signUpMutate, isLoading, isSuccess } = useSignUp();
 
   const onSubmit = (data) => {
     if (isLoading) {

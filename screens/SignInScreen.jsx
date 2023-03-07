@@ -16,7 +16,7 @@ import BaseHeader from "../components/headers/BaseHeader";
 import BaseTextField from "../components/textfields/BaseTextField";
 import PasswordField from "../components/textfields/PasswordField";
 import BaseButton from "../components/buttons/BaseButton";
-import useSignin from "../hooks/useSignin";
+import useSignIn from "../hooks/useSignIn";
 import { MaterialIconButton } from "../components/buttons/IconButton";
 
 const SignInScreen = () => {
@@ -33,7 +33,7 @@ const SignInScreen = () => {
     },
   });
 
-  const { mutate: signInMutate, isLoading } = useSignin();
+  const { mutate: signInMutate, isLoading } = useSignIn();
 
   const onSubmit = (data) => {
     if (isLoading) {

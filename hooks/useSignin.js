@@ -5,7 +5,7 @@ import { signIn } from "../api/auth";
 import { useUserContext } from "../contexts/UserContext";
 import { addToken } from "../api/client";
 
-export default function useSignin() {
+export default function useSignIn() {
   const [_, setUser] = useUserContext();
   const { setItem: setAccess } = useAsyncStorage("Access");
   const { setItem: setRefresh } = useAsyncStorage("Refresh");
