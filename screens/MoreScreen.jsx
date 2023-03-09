@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
@@ -11,50 +17,50 @@ const MoreScreen = () => {
   const [isLoading, signOut] = useSignOut();
 
   return (
-    <View>
-      <Text>{user?.name}</Text>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("SignIn");
-        }}
-      >
-        <Text>로그인</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("SignUp");
-        }}
-      >
-        <Text>회원가입</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          signOut();
-          {
-            isLoading && navigation.navigate("Splash");
-          }
-        }}
-      >
-        <Text>로그아웃</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Splash");
-        }}
-      >
-        <Text>스플래시</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Welcome");
-        }}
-      >
-        <Text>환영</Text>
-      </TouchableOpacity>
+    <View style={styles.block}>
+      <View style={styles.profileBlock}>
+        <Text style={styles.helloText}>{`${user?.name} 님 안녕하세요!`}</Text>
+      </View>
+      <ScrollView>
+        <TouchableOpacity
+          style={styles.menuBlock}
+          onPress={() => {
+            signOut();
+            {
+              isLoading && navigation.navigate("Splash");
+            }
+          }}
+        >
+          <Text style={styles.menuLabel}>로그아웃</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };
 
 export default MoreScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  block: { flex: 1, backgroundColor: "#FFFFFF" },
+  profileBlock: {
+    height: 200,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  helloText: {
+    fontSize: 28,
+  },
+  menuBlock: {
+    height: 48,
+    paddingHorizontal: 8,
+    flex: 1,
+    justifyContent: "center",
+
+    borderBottomWidth: 1,
+    borderBottomColor: "#000000",
+  },
+  menuLabel: {
+    fontSize: 16,
+    fontWeight: "400",
+  },
+});

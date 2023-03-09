@@ -35,15 +35,18 @@ const ModifyScreen = () => {
 
   const [user, _] = useUserContext();
 
-  const { mutate: modifyMutate, isLoading } = useMutation(modifyDocument, {
-    onSuccess: () => {
-      setIsSubmit(false);
-      navigation.navigate("MyDocuments");
-    },
-    onError: () => {
-      console.log("error");
-    },
-  });
+  const { mutate: modifyMutate, isLoading } = useMutation(
+    [modifyDocument, id],
+    {
+      onSuccess: () => {
+        setIsSubmit(false);
+        navigation.navigate("MyDocuments");
+      },
+      onError: () => {
+        console.log("error");
+      },
+    }
+  );
 
   const onPressAddImage = useCallback(async () => {
     const image = await launchImageLibrary({
@@ -58,6 +61,8 @@ const ModifyScreen = () => {
 
   useEffect(() => {
     if (isSubmit === true) {
+      console.log("check");
+      console.log(thumbnailUrl);
       modifyMutate({
         id,
         payload: {
@@ -72,19 +77,22 @@ const ModifyScreen = () => {
   }, [isSubmit]);
 
   const onSubmit = async () => {
-    const usedImages = contents
-      .match(imgRegex)
-      ?.map((x) => x.replace(/.*src="([^"]*)".*/, "$1"));
-    const imageUrls = [];
+    const usedImageNodes = contents.match(imgRegex);
 
     try {
-      if (usedImages.length > 0) {
+      if (usedImageNodes) {
+        const usedImages = usedImageNodes.map((x) =>
+          x.replace(/.*src="([^"]*)".*/, "$1")
+        );
+        const imageUrls = [];
+
         await Promise.all(
           usedImages.map(async (imagePath) => {
             const protocolRegex = /^([^:]+):\/\//;
             const protocol = imagePath.match(protocolRegex)[1];
 
             if (protocol !== "file") {
+              console.log(imagePath);
               imageUrls.push(imagePath);
               return;
             }

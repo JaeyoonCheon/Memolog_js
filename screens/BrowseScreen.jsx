@@ -31,6 +31,8 @@ const BrowseScreen = () => {
     navigation.navigate("Detail", { id });
   };
 
+  console.log(documents);
+
   return (
     <View style={styles.block}>
       <BaseHeader
