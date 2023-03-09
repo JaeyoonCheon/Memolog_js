@@ -74,20 +74,20 @@ const MyDocumentsScreen = () => {
           />
         </View>
         <View style={styles.layout}>
-          <TouchableOpacity onPress={() => onPressLayout("grid")}>
-            <MaterialIcons
-              name="grid-view"
-              color="#000000"
-              size={20}
-            ></MaterialIcons>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => onPressLayout("list")}>
-            <MaterialIcons
-              name="list"
-              color="#000000"
-              size={20}
-            ></MaterialIcons>
-          </TouchableOpacity>
+          <MaterialIconButton
+            containerStyle={styles.layoutButton}
+            onPress={() => onPressLayout("grid")}
+            iconName="grid-view"
+            size={24}
+            color="#000000"
+          ></MaterialIconButton>
+          <MaterialIconButton
+            containerStyle={styles.layoutButton}
+            onPress={() => onPressLayout("list")}
+            iconName="list"
+            size={24}
+            color="#000000"
+          ></MaterialIconButton>
         </View>
       </View>
       <View style={styles.itemsWrapper}>
@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
   layout: {
     flexDirection: "row",
   },
+  layoutButton: { marginLeft: 4 },
   itemsWrapper: {
     flex: 1,
     marginTop: 32,

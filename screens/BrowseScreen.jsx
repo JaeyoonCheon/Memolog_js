@@ -61,15 +61,17 @@ const BrowseScreen = () => {
         </View>
         <View style={styles.layout}>
           <MaterialIconButton
+            containerStyle={styles.layoutButton}
             onPress={() => onPressLayout("grid")}
             iconName="grid-view"
-            size={20}
+            size={24}
             color="#000000"
           ></MaterialIconButton>
           <MaterialIconButton
+            containerStyle={styles.layoutButton}
             onPress={() => onPressLayout("list")}
             iconName="list"
-            size={20}
+            size={24}
             color="#000000"
           ></MaterialIconButton>
         </View>
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
   layout: {
     flexDirection: "row",
   },
+  layoutButton: { marginLeft: 4 },
   itemsWrapper: {
     flex: 1,
     marginTop: 32,
