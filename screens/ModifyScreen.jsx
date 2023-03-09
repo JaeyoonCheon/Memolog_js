@@ -26,10 +26,13 @@ const ModifyScreen = () => {
 
   const richText = useRef();
   const scrollRef = useRef();
-  const [isSubmit, setIsSubmit] = useState(false);
 
+  const [isSubmit, setIsSubmit] = useState(false);
   const [title, setTitle] = useState(documentData?.title);
   const [contents, setContents] = useState(documentData?.form);
+  const [scope, setScope] = useState("private");
+  const [thumbnailUrl, setThumbnailUrl] = useState(null);
+
   const [user, _] = useUserContext();
 
   const { mutate: modifyMutate, isLoading } = useMutation(modifyDocument, {
@@ -57,7 +60,13 @@ const ModifyScreen = () => {
     if (isSubmit === true) {
       modifyMutate({
         id,
-        payload: { title, form: contents, userId: user?.userId },
+        payload: {
+          title,
+          form: contents,
+          userId: user?.userId,
+          scope,
+          thumbnail_url: thumbnailUrl,
+        },
       });
     }
   }, [isSubmit]);
@@ -66,15 +75,17 @@ const ModifyScreen = () => {
     const usedImages = contents
       .match(imgRegex)
       ?.map((x) => x.replace(/.*src="([^"]*)".*/, "$1"));
+    const imageUrls = [];
 
     try {
-      if (usedImages) {
+      if (usedImages.length > 0) {
         await Promise.all(
           usedImages.map(async (imagePath) => {
             const protocolRegex = /^([^:]+):\/\//;
             const protocol = imagePath.match(protocolRegex)[1];
 
             if (protocol !== "file") {
+              imageUrls.push(imagePath);
               return;
             }
 
@@ -84,10 +95,13 @@ const ModifyScreen = () => {
 
             await uploadImageRef.putFile(imagePath);
             const downloadUrl = await uploadImageRef.getDownloadURL();
+            imageUrls.push(downloadUrl);
 
             setContents(contents.replace(imagePath, downloadUrl));
           })
         );
+
+        setThumbnailUrl(imageUrls[0]);
       }
 
       setIsSubmit(true);

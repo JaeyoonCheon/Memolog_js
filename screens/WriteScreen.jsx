@@ -20,17 +20,22 @@ const imgRegex = /<img.*?src=["|'](.*?)["|']/gm;
 
 const WriteScreen = () => {
   const naviagation = useNavigation();
+
   const richText = useRef();
   const scrollRef = useRef();
-  const isSubmit = useRef(false);
 
+  const [isSubmit, setIsSubmit] = useState(false);
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
+  const [scope, setScope] = useState("private");
+  const [thumbnailUrl, setThumbnailUrl] = useState(null);
+
   const [user, _] = useUserContext();
 
   const { mutate: writeMutate, isLoading } = useMutation(writeDocument, {
     onSuccess: () => {
-      isSubmit.current = false;
+      setIsSubmit(false);
+      console.log("Finished!");
       naviagation.navigate("MyDocuments");
     },
     onError: () => {
@@ -49,26 +54,47 @@ const WriteScreen = () => {
     richText.current?.insertImage(image.assets[0].uri, "image");
   }, [richText]);
 
+  useEffect(() => {
+    if (isSubmit === true) {
+      writeMutate({
+        title,
+        form: contents,
+        userId: user?.userId,
+        scope,
+        thumbnail_url: thumbnailUrl,
+      });
+    }
+  }, [isSubmit]);
+
   const onSubmit = async () => {
-    const usedImages = contents
-      .match(imgRegex)
-      .map((x) => x.replace(/.*src="([^"]*)".*/, "$1"));
+    const usedImageNodes = contents.match(imgRegex);
+
+    console.log(usedImageNodes);
 
     try {
-      await Promise.all(
-        usedImages.map(async (imagePath) => {
-          const fileNameRegex = /\/([^/]+)$/;
-          const fileName = imagePath.match(fileNameRegex)[1];
-          const uploadImageRef = storage().ref(fileName);
+      if (usedImageNodes) {
+        const usedImages = usedImageNodes.map((x) =>
+          x.replace(/.*src="([^"]*)".*/, "$1")
+        );
+        const imageUrls = [];
 
-          await uploadImageRef.putFile(imagePath);
-          const downloadUrl = await uploadImageRef.getDownloadURL();
+        await Promise.all(
+          usedImages.map(async (imagePath) => {
+            const fileNameRegex = /\/([^/]+)$/;
+            const fileName = imagePath.match(fileNameRegex)[1];
+            const uploadImageRef = storage().ref(fileName);
 
-          setContents(contents.replace(imagePath, downloadUrl));
-        })
-      );
+            await uploadImageRef.putFile(imagePath);
+            const downloadUrl = await uploadImageRef.getDownloadURL();
+            imageUrls.push(downloadUrl);
 
-      isSubmit.current = true;
+            setContents(contents.replace(imagePath, downloadUrl));
+          })
+        );
+
+        setThumbnailUrl(imageUrls[0]);
+      }
+      setIsSubmit(true);
     } catch (e) {
       console.log(e);
     }
@@ -76,12 +102,6 @@ const WriteScreen = () => {
   const onChangeHTML = (html) => {
     setContents(html);
   };
-
-  useEffect(() => {
-    if (isSubmit.current === true) {
-      writeMutate({ title, form: contents, userId: user?.userId });
-    }
-  }, [isSubmit.current]);
 
   // 에디터 스크롤을 위한 커서 조정
   const handleCursorPosition = useCallback((scrollY) => {

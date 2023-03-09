@@ -18,6 +18,7 @@ const MainTab = () => {
         component={MyDocumentsScreen}
         options={{
           headerShown: false,
+          tabBarLabel: "내 기록",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons
               name="grid-on"
@@ -32,6 +33,7 @@ const MainTab = () => {
         component={BrowseScreen}
         options={{
           headerShown: false,
+          tabBarLabel: "탐색",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons
               name="search"
@@ -46,6 +48,7 @@ const MainTab = () => {
         component={ChartScreen}
         options={{
           headerShown: false,
+          tabBarLabel: "통계",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons
               name="bar-chart"
@@ -60,6 +63,7 @@ const MainTab = () => {
         component={MoreScreen}
         options={{
           headerShown: false,
+          tabBarLabel: "더 보기",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons
               name="keyboard-control"

@@ -3,9 +3,15 @@ import React from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-export const MaterialIconButton = ({ onPress, iconName, size, color }) => {
+export const MaterialIconButton = ({
+  onPress,
+  iconName,
+  size,
+  color,
+  containerStyle = {},
+}) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity style={[styles.block, containerStyle]} onPress={onPress}>
       <MaterialIcons name={iconName} size={size} color={color}></MaterialIcons>
     </TouchableOpacity>
   );
@@ -16,9 +22,10 @@ export const MaterialCommunityIconButton = ({
   iconName,
   size,
   color,
+  containerStyle = {},
 }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity style={[styles.block, containerStyle]} onPress={onPress}>
       <MaterialCommunityIcons
         name={iconName}
         size={size}
@@ -28,4 +35,6 @@ export const MaterialCommunityIconButton = ({
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  block: {},
+});

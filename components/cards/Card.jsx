@@ -17,15 +17,15 @@ const testData = {
 const Card = ({ item, onPress }) => {
   return (
     <TouchableOpacity style={styles.block} onPress={() => onPress(item.id)}>
-      {item.images && (
+      {item.thumbnail_url && (
         <View style={styles.imageBlock}>
           <Image
             style={styles.image}
-            source={{ uri: testData.imageURL }}
+            source={{ uri: item.thumbnail_url }}
           ></Image>
         </View>
       )}
-      <View style={styles.contents}>
+      <View style={[styles.contents, item.thumbnail_url && { flex: 0.5 }]}>
         <View style={styles.titleBlock}>
           <Text style={styles.title}>{item.title}</Text>
         </View>
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     flex: 0.5,
     marginHorizontal: 8,
     marginVertical: 4,
+    flexDirection: "column",
 
     borderRadius: 16,
     overflow: "hidden",
@@ -69,16 +70,18 @@ const styles = StyleSheet.create({
     }),
   },
   imageBlock: {
-    minHeight: 100,
+    flex: 0.5,
+    minHeight: 150,
     resizeMode: "cover",
   },
   image: {
     flex: 1,
   },
   contents: {
+    minHeight: 100,
     flex: 1,
-    marginHorizontal: 10,
-    marginVertical: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
 
     overflow: "hidden",
   },
@@ -87,9 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000000",
   },
-  bodyBlock: {
-    minHeight: 100,
-  },
+  bodyBlock: {},
   body: {
     fontSize: 12,
     color: "#000000",

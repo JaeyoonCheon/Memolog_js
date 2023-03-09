@@ -29,11 +29,6 @@ const DocumentDetailScreen = () => {
     },
   });
 
-  if (!isLoading) {
-    console.log(contents);
-  }
-  console.log(user);
-
   return (
     <View style={styles.block}>
       <BaseHeader

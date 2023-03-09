@@ -47,6 +47,7 @@ const MyDocumentsScreen = () => {
               iconName="feather"
               size={24}
               color="#000000"
+              containerStyle={{ marginRight: 2 }}
             ></MaterialCommunityIconButton>
             <MaterialIconButton
               onPress={onPressSearch}
