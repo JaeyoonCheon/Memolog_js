@@ -8,14 +8,11 @@ import {
 import { useMutation } from "react-query";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
-import { utils } from "@react-native-firebase/app";
 import storage from "@react-native-firebase/storage";
-import { copyFile, DocumentDirectoryPath, readFile } from "react-native-fs";
 
 import WriteHeader from "../components/headers/WriteHeader";
 import { modifyDocument } from "../api/documents";
 import { useUserContext } from "../contexts/UserContext";
-import { isNoSubstitutionTemplateLiteral } from "typescript";
 
 const imgRegex = /<img.*?src=["|'](.*?)["|']/gm;
 
@@ -35,18 +32,15 @@ const ModifyScreen = () => {
 
   const [user, _] = useUserContext();
 
-  const { mutate: modifyMutate, isLoading } = useMutation(
-    [modifyDocument, id],
-    {
-      onSuccess: () => {
-        setIsSubmit(false);
-        navigation.navigate("MyDocuments");
-      },
-      onError: () => {
-        console.log("error");
-      },
-    }
-  );
+  const { mutate: modifyMutate, isLoading } = useMutation(modifyDocument, {
+    onSuccess: () => {
+      setIsSubmit(false);
+      navigation.navigate("MyDocuments");
+    },
+    onError: () => {
+      console.log("error");
+    },
+  });
 
   const onPressAddImage = useCallback(async () => {
     const image = await launchImageLibrary({

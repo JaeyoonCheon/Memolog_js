@@ -17,14 +17,24 @@ import {
 
 const MyDocumentsScreen = () => {
   const navigation = useNavigation();
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("date");
-  const [items, setItems] = useState([
-    { label: "날짜순", value: "date" },
-    { label: "제목순", value: "title" },
+  const [sortOpen, setSortOpen] = useState(false);
+  const [sortValue, setSortValue] = useState("created_at");
+  const [sortItem, setSortItem] = useState([
+    { label: "작성일", value: "created_at" },
+    { label: "마지막 수정", value: "updated_at" },
+    { label: "제목", value: "title" },
+  ]);
+  const [orderOpen, setOrderOpen] = useState(false);
+  const [orderValue, setOrderValue] = useState("desc");
+  const [orderItem, setOrderItem] = useState([
+    { label: "desc", value: "desc" },
+    { label: "asc", value: "asc" },
   ]);
   const [layout, setLayout] = useState("grid");
-  const { data: documents, isLoading } = useQuery("Documents", getDocuments);
+  const { data: documents, isLoading } = useQuery(
+    ["Documents", sortValue, orderValue],
+    () => getDocuments(sortValue, orderValue)
+  );
 
   const onPressSearch = () => {
     navigation.navigate("MySearch");
@@ -61,17 +71,31 @@ const MyDocumentsScreen = () => {
         }
       ></BaseHeader>
       <View style={styles.toolbar}>
-        <View style={styles.sort}>
-          <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            style={styles.sort.dropdown}
-            listItemContainerStyle={{ height: 32 }}
-          />
+        <View style={styles.sortOrder}>
+          <View style={styles.sort}>
+            <DropDownPicker
+              open={sortOpen}
+              value={sortValue}
+              items={sortItem}
+              setOpen={setSortOpen}
+              setValue={setSortValue}
+              setItems={setSortItem}
+              style={styles.sort.dropdown}
+              listItemContainerStyle={{ height: 32 }}
+            />
+          </View>
+          <View style={styles.sort}>
+            <DropDownPicker
+              open={orderOpen}
+              value={orderValue}
+              items={orderItem}
+              setOpen={setOrderOpen}
+              setValue={setOrderValue}
+              setItems={setOrderItem}
+              style={styles.sort.dropdown}
+              listItemContainerStyle={{ height: 32 }}
+            />
+          </View>
         </View>
         <View style={styles.layout}>
           <MaterialIconButton
@@ -119,6 +143,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     zIndex: 1,
+  },
+  sortOrder: {
+    flexDirection: "row",
   },
   sort: {
     width: 100,

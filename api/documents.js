@@ -1,7 +1,10 @@
 import client from "./client";
 
-export const getDocuments = async () => {
-  const results = await client.get("/document");
+export const getDocuments = async (sort, order) => {
+  const query = `?sort=${sort}&order=${order}`;
+  console.log(query);
+
+  const results = await client.get(`/document${query}`);
 
   return results.data;
 };
