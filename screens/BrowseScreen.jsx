@@ -12,12 +12,6 @@ import { getOtherDocuments } from "../api/browse";
 
 const BrowseScreen = () => {
   const navigation = useNavigation();
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("date");
-  const [items, setItems] = useState([
-    { label: "날짜순", value: "date" },
-    { label: "제목순", value: "title" },
-  ]);
   const [layout, setLayout] = useState("grid");
   const { data: documents, isLoading } = useQuery("Browse", getOtherDocuments);
 
@@ -47,18 +41,6 @@ const BrowseScreen = () => {
         }
       ></BaseHeader>
       <View style={styles.toolbar}>
-        <View style={styles.sort}>
-          <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            style={styles.sort.dropdown}
-            listItemContainerStyle={{ height: 32 }}
-          />
-        </View>
         <View style={styles.layout}>
           <MaterialIconButton
             containerStyle={styles.layoutButton}
@@ -115,6 +97,7 @@ const styles = StyleSheet.create({
     },
   },
   layout: {
+    marginLeft: "auto",
     flexDirection: "row",
   },
   layoutButton: { marginLeft: 4 },

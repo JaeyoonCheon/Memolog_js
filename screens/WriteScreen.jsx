@@ -5,7 +5,7 @@ import {
   RichToolbar,
   actions,
 } from "react-native-pell-rich-editor";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useNavigation } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
 import { utils } from "@react-native-firebase/app";
@@ -20,6 +20,7 @@ const imgRegex = /<img.*?src=["|'](.*?)["|']/gm;
 
 const WriteScreen = () => {
   const naviagation = useNavigation();
+  const queryClient = useQueryClient();
 
   const richText = useRef();
   const scrollRef = useRef();
@@ -36,6 +37,7 @@ const WriteScreen = () => {
     onSuccess: () => {
       setIsSubmit(false);
       console.log("Finished!");
+      queryClient.invalidateQueries("Documents");
       naviagation.navigate("MyDocuments");
     },
     onError: () => {

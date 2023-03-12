@@ -25,10 +25,10 @@ const MyDocumentsScreen = () => {
     { label: "제목", value: "title" },
   ]);
   const [orderOpen, setOrderOpen] = useState(false);
-  const [orderValue, setOrderValue] = useState("desc");
+  const [orderValue, setOrderValue] = useState("DESC");
   const [orderItem, setOrderItem] = useState([
-    { label: "desc", value: "desc" },
-    { label: "asc", value: "asc" },
+    { label: "desc", value: "DESC" },
+    { label: "asc", value: "ASC" },
   ]);
   const [layout, setLayout] = useState("grid");
   const { data: documents, isLoading } = useQuery(

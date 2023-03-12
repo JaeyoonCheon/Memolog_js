@@ -5,7 +5,7 @@ import {
   RichToolbar,
   actions,
 } from "react-native-pell-rich-editor";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
 import storage from "@react-native-firebase/storage";
@@ -18,6 +18,7 @@ const imgRegex = /<img.*?src=["|'](.*?)["|']/gm;
 
 const ModifyScreen = () => {
   const navigation = useNavigation();
+  const queryClient = useQueryClient();
   const { params } = useRoute();
   const { id, documentData } = params;
 
@@ -35,6 +36,7 @@ const ModifyScreen = () => {
   const { mutate: modifyMutate, isLoading } = useMutation(modifyDocument, {
     onSuccess: () => {
       setIsSubmit(false);
+      queryClient.invalidateQueries(["Documents"]);
       navigation.navigate("MyDocuments");
     },
     onError: () => {
