@@ -4,7 +4,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useQuery } from "react-query";
+import { useQuery, useInfiniteQuery } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import CardList from "../components/cards/CardList";
@@ -31,10 +31,19 @@ const MyDocumentsScreen = () => {
     { label: "asc", value: "ASC" },
   ]);
   const [layout, setLayout] = useState("grid");
-  const { data: documents, isLoading } = useQuery(
-    ["Documents", sortValue, orderValue],
-    () => getDocuments(sortValue, orderValue)
-  );
+  const { data, isSuccess, hasNextPage, fetchNextPage } = useInfiniteQuery({
+    queryKey: ["Documents", sortValue, orderValue],
+    queryFn: ({ pageParam = { id: "", cursor: "" } }) =>
+      getDocuments(pageParam, sortValue, orderValue),
+    getNextPageParam: (lastPage, pages) => {
+      return lastPage[lastPage.length - 1]
+        ? {
+            id: lastPage[lastPage.length - 1]?.id,
+            cursor: lastPage[lastPage.length - 1][`${sortValue}`],
+          }
+        : undefined;
+    },
+  });
 
   const onPressSearch = () => {
     navigation.navigate("MySearch");
@@ -45,8 +54,12 @@ const MyDocumentsScreen = () => {
   const onPressCard = (id) => {
     navigation.navigate("Detail", { id });
   };
-
-  console.log(documents);
+  const onEndReachFetch = () => {
+    console.log("Fetch");
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   return (
     <View style={styles.block}>
@@ -116,11 +129,16 @@ const MyDocumentsScreen = () => {
       </View>
       <View style={styles.itemsWrapper}>
         {layout === "grid" ? (
-          <CardList data={documents} onPressCard={onPressCard}></CardList>
+          <CardList
+            data={data?.pages.flat()}
+            onPressCard={onPressCard}
+            onEndReached={onEndReachFetch}
+          ></CardList>
         ) : (
           <FlatCardList
-            data={documents}
+            data={data?.pages.flat()}
             onPressCard={onPressCard}
+            onEndReached={onEndReachFetch}
           ></FlatCardList>
         )}
       </View>
