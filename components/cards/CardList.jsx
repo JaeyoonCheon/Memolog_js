@@ -3,7 +3,13 @@ import React from "react";
 
 import Card from "./Card";
 
-const CardList = ({ data, onPressCard, onEndReached }) => {
+const CardList = ({
+  data,
+  onPressCard,
+  onEndReached,
+  onRefresh,
+  refreshing,
+}) => {
   return (
     <FlatList
       style={styles.cardList}
@@ -12,6 +18,8 @@ const CardList = ({ data, onPressCard, onEndReached }) => {
       renderItem={({ item }) => <Card item={item} onPress={onPressCard} />}
       keyExtractor={(item) => item.id}
       numColumns={2}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
       onEndReached={onEndReached}
     ></FlatList>
   );

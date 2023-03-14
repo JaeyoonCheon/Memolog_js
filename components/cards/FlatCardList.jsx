@@ -3,13 +3,21 @@ import React from "react";
 
 import FlatCard from "./FlatCard";
 
-const FlatCardList = ({ data, onPressCard, onEndReached }) => {
+const FlatCardList = ({
+  data,
+  onPressCard,
+  onRefresh,
+  refreshing,
+  onEndReached,
+}) => {
   return (
     <FlatList
       style={styles.cardList}
       data={data}
       renderItem={({ item }) => <FlatCard item={item} onPress={onPressCard} />}
       keyExtractor={(item) => item.id}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
       onEndReached={onEndReached}
     ></FlatList>
   );

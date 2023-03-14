@@ -31,7 +31,9 @@ const MyDocumentsScreen = () => {
     { label: "asc", value: "ASC" },
   ]);
   const [layout, setLayout] = useState("grid");
-  const { data, isSuccess, hasNextPage, fetchNextPage } = useInfiniteQuery({
+  const [refreshing, setRefreshing] = useState(false);
+
+  const { data, refetch, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: ["Documents", sortValue, orderValue],
     queryFn: ({ pageParam = { id: "", cursor: "" } }) =>
       getDocuments(pageParam, sortValue, orderValue),
@@ -53,6 +55,11 @@ const MyDocumentsScreen = () => {
   };
   const onPressCard = (id) => {
     navigation.navigate("Detail", { id });
+  };
+  const onRefresh = () => {
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
   };
   const onEndReachFetch = () => {
     console.log("Fetch");
@@ -132,12 +139,16 @@ const MyDocumentsScreen = () => {
           <CardList
             data={data?.pages.flat()}
             onPressCard={onPressCard}
+            onRefresh={onRefresh}
+            refreshing={refreshing}
             onEndReached={onEndReachFetch}
           ></CardList>
         ) : (
           <FlatCardList
             data={data?.pages.flat()}
             onPressCard={onPressCard}
+            onRefresh={onRefresh}
+            refreshing={refreshing}
             onEndReached={onEndReachFetch}
           ></FlatCardList>
         )}
