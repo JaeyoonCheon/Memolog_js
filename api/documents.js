@@ -3,11 +3,9 @@ import client from "./client";
 export const getDocuments = async (pageParam, sort, order) => {
   const { id, cursor } = pageParam;
   const query = `?id=${id}&sort=${sort}&order=${order}&cursor=${cursor}`;
-  console.log(query);
 
   const results = await client.get(`/document${query}`);
 
-  console.log(results.data);
   return results.data;
 };
 

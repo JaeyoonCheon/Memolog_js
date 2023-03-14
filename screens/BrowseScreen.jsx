@@ -1,8 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "react-query";
-import DropDownPicker from "react-native-dropdown-picker";
+import { useInfiniteQuery } from "react-query";
 
 import CardList from "../components/cards/CardList";
 import FlatCardList from "../components/cards/FlatCardList";
@@ -12,8 +11,28 @@ import { getOtherDocuments } from "../api/browse";
 
 const BrowseScreen = () => {
   const navigation = useNavigation();
+
   const [layout, setLayout] = useState("grid");
-  const { data: documents, isLoading } = useQuery("Browse", getOtherDocuments);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const {
+    data: documents,
+    refetch,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["Browse"],
+    queryFn: ({ pageParam = { id: "", cursor: "" } }) =>
+      getOtherDocuments(pageParam),
+    getNextPageParam: (lastPage, pages) => {
+      return lastPage[lastPage.length - 1]
+        ? {
+            id: lastPage[lastPage.length - 1]?.id,
+            cursor: lastPage[lastPage.length - 1]["created_at"],
+          }
+        : undefined;
+    },
+  });
 
   const onPressSearch = () => {
     navigation.navigate("Search");
@@ -23,6 +42,17 @@ const BrowseScreen = () => {
   };
   const onPressCard = (id) => {
     navigation.navigate("Detail", { id });
+  };
+  const onRefresh = () => {
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  };
+  const onEndReachFetch = () => {
+    console.log("Fetch");
+    if (hasNextPage) {
+      fetchNextPage();
+    }
   };
 
   console.log(documents);
@@ -60,11 +90,20 @@ const BrowseScreen = () => {
       </View>
       <View style={styles.itemsWrapper}>
         {layout === "grid" ? (
-          <CardList data={documents} onPressCard={onPressCard}></CardList>
+          <CardList
+            data={documents?.pages.flat()}
+            onPressCard={onPressCard}
+            onEndReached={onEndReachFetch}
+            onRefresh={onRefresh}
+            refreshing={refreshing}
+          ></CardList>
         ) : (
           <FlatCardList
-            data={documents}
+            data={documents?.pages.flat()}
             onPressCard={onPressCard}
+            onEndReached={onEndReachFetch}
+            onRefresh={onRefresh}
+            refreshing={refreshing}
           ></FlatCardList>
         )}
       </View>

@@ -33,7 +33,12 @@ const MyDocumentsScreen = () => {
   const [layout, setLayout] = useState("grid");
   const [refreshing, setRefreshing] = useState(false);
 
-  const { data, refetch, hasNextPage, fetchNextPage } = useInfiniteQuery({
+  const {
+    data: documents,
+    refetch,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: ["Documents", sortValue, orderValue],
     queryFn: ({ pageParam = { id: "", cursor: "" } }) =>
       getDocuments(pageParam, sortValue, orderValue),
@@ -137,7 +142,7 @@ const MyDocumentsScreen = () => {
       <View style={styles.itemsWrapper}>
         {layout === "grid" ? (
           <CardList
-            data={data?.pages.flat()}
+            data={documents?.pages.flat()}
             onPressCard={onPressCard}
             onRefresh={onRefresh}
             refreshing={refreshing}
@@ -145,7 +150,7 @@ const MyDocumentsScreen = () => {
           ></CardList>
         ) : (
           <FlatCardList
-            data={data?.pages.flat()}
+            data={documents?.pages.flat()}
             onPressCard={onPressCard}
             onRefresh={onRefresh}
             refreshing={refreshing}
