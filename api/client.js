@@ -3,7 +3,7 @@ import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 // wsl2 서버 실행 시 wsl2의 IP address를 대응 후 adb 포트 연동 필요
 const baseURL = __DEV__
-  ? "http://192.168.101.199:3367"
+  ? "http://192.168.102.206:3367"
   : "http://localhost:3367";
 
 const client = axios.create({
@@ -14,10 +14,12 @@ client.interceptors.response.use(
   function (res) {
     return res;
   },
-  function (error) {
+  async function (error) {
+    console.log(error);
     // Access token 만료
-    if (error.code === 401) {
-      refreshToken();
+    if (error.response.status === 401) {
+      console.log("Access token check - expire");
+      await refreshToken();
 
       return axios.request(error.config);
     }
@@ -25,23 +27,23 @@ client.interceptors.response.use(
 );
 
 export const addToken = async (token) => {
-  const { getItem: getExpireTime, setItem: setExpireTime } =
-    useAsyncStorage("Expire");
-  const { setItem: setAccess } = useAsyncStorage("Access");
+  const { getItem: getExpireTime } = useAsyncStorage("Expire");
 
   client.defaults.headers.Authorization = `Bearer ${token}`;
+
+  console.log("add token to header");
 
   try {
     const expireTimeNewDate = new Date(await getExpireTime());
     const now = new Date();
-    const diff = (now.getTime() - expireTimeNewDate.getTime()) / 1000;
+    const diff = (expireTimeNewDate.getTime() - now.getTime()) / 1000;
 
-    if (diff > 60) {
-      const { token } = await refreshToken();
-      const accessToken = token.accessToken;
-      client.defaults.headers.Authorization = `Bearer ${accessToken}`;
-      setAccess(token.accessToken);
-      setExpireTime(token.expireTime);
+    console.log(`now : ${now}`);
+    console.log(`expire : ${expireTimeNewDate}`);
+    console.log(`diff : ${diff}`);
+
+    if (diff < 60) {
+      await refreshToken();
     }
   } catch (e) {
     console.log(e);
@@ -64,6 +66,10 @@ export const removeToken = () => {
 export const refreshToken = async () => {
   const { getItem: getRefreshToken } = useAsyncStorage("Refresh");
   const { getItem: getUserInfo } = useAsyncStorage("UserInfo");
+  const { setItem: setAccess } = useAsyncStorage("Access");
+  const { setItem: setExpireTime } = useAsyncStorage("Expire");
+
+  console.log("Refresh token");
 
   try {
     const refreshToken = await getRefreshToken();
@@ -75,7 +81,13 @@ export const refreshToken = async () => {
       userId: userId,
     });
 
-    return result.data;
+    console.log(result.data);
+    const { token } = result.data;
+    const { accessToken, expireTime } = token;
+
+    client.defaults.headers.Authorization = `Bearer ${accessToken}`;
+    setAccess(accessToken);
+    setExpireTime(expireTime);
   } catch (e) {
     console.log(e.response.data);
 
