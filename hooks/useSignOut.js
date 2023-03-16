@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
-import { useNavigation, CommonActions } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import { useQueryClient } from "react-query";
 
 import { useUserContext } from "../contexts/UserContext";
 import { removeToken } from "../api/client";
 
 export default function useSignOut() {
   const navigation = useNavigation();
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const [_, setUser] = useUserContext();
   const { removeItem: removeAccess } = useAsyncStorage("Access");
@@ -28,6 +30,8 @@ export default function useSignOut() {
       console.log("remove user");
       removeToken();
       console.log("remove header");
+      queryClient.removeQueries();
+      console.log("remove query caches");
 
       console.log("remove complete");
       navigation.reset({
