@@ -7,6 +7,7 @@ import { useUserContext } from "../contexts/UserContext";
 export default function useLoadAuthEffect() {
   const { getItem: getAccess } = useAsyncStorage("Access");
   const { getItem: getUserInfo } = useAsyncStorage("UserInfo");
+  const { getItem: getRemember } = useAsyncStorage("Remember");
   const [_, setUser] = useUserContext();
 
   useEffect(() => {

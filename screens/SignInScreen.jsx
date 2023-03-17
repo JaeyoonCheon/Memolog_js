@@ -6,9 +6,8 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import BouncyCheckbox from "../node_modules/react-native-bouncy-checkbox/build/dist/BouncyCheckbox";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
 
@@ -21,6 +20,7 @@ import { MaterialIconButton } from "../components/buttons/IconButton";
 
 const SignInScreen = () => {
   const navigation = useNavigation();
+  const [isRemember, setIsRemember] = useState(false);
   const {
     control,
     handleSubmit,
@@ -33,7 +33,7 @@ const SignInScreen = () => {
     },
   });
 
-  const { mutate: signInMutate, isLoading } = useSignIn();
+  const { mutate: signInMutate, isLoading } = useSignIn({ isRemember });
 
   const onSubmit = (data) => {
     if (isLoading) {
@@ -104,6 +104,8 @@ const SignInScreen = () => {
             innerIconStyle={{ borderRadius: 5 }}
             textStyle={{ textDecorationLine: "none", fontSize: 12 }}
             textContainerStyle={{ marginLeft: 8 }}
+            isChecked={isRemember}
+            onPress={() => setIsRemember(!isRemember)}
           ></BouncyCheckbox>
         </View>
         {isLoading ? (
