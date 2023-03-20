@@ -12,6 +12,13 @@ export default function useLoadAuthEffect() {
 
   useEffect(() => {
     const loadFn = async () => {
+      const isRememberString = await getRemember();
+      const isRemember = JSON.parse(isRememberString);
+      if (!isRemember) {
+        console.log("No auto-login");
+        return;
+      }
+
       const accessToken = await getAccess();
       if (!accessToken) {
         return;
