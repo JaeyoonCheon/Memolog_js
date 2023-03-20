@@ -96,7 +96,7 @@ const SignInScreen = () => {
             name="password"
           ></Controller>
           <BouncyCheckbox
-            style={styles.authOption}
+            style={styles.checkbox}
             size={20}
             fillColor="#22BCCE"
             text="자동로그인"
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     justifyContent: "space-between",
   },
-  authOption: {
+  checkbox: {
     marginVertical: 4,
     alignSelf: "flex-end",
   },

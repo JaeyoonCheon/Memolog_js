@@ -1,4 +1,4 @@
-import { StyleSheet, Platform, View, ScrollView, Image } from "react-native";
+import { StyleSheet, Platform, View, ScrollView, Text } from "react-native";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   RichEditor,
@@ -8,9 +8,8 @@ import {
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigation } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
-import { utils } from "@react-native-firebase/app";
 import storage from "@react-native-firebase/storage";
-import { copyFile, DocumentDirectoryPath, readFile } from "react-native-fs";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import WriteHeader from "../components/headers/WriteHeader";
 import { writeDocument } from "../api/documents";
@@ -28,7 +27,7 @@ const WriteScreen = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
-  const [scope, setScope] = useState("private");
+  const [isPrivate, setIsPrivate] = useState(true);
   const [thumbnailUrl, setThumbnailUrl] = useState(null);
 
   const [user, _] = useUserContext();
@@ -58,6 +57,8 @@ const WriteScreen = () => {
 
   useEffect(() => {
     if (isSubmit === true) {
+      const scope = isPrivate ? "private" : "public";
+
       writeMutate({
         title,
         form: contents,
@@ -164,6 +165,20 @@ const WriteScreen = () => {
           allowFileAccess={true}
           allowFileAccessFromFileURLs={true}
         />
+        <View style={styles.footer}>
+          <BouncyCheckbox
+            style={styles.checkbox}
+            size={20}
+            fillColor="#22BCCE"
+            text="비밀글"
+            iconStyle={{ borderRadius: 5 }}
+            innerIconStyle={{ borderRadius: 5 }}
+            textStyle={{ textDecorationLine: "none", fontSize: 12 }}
+            textContainerStyle={{ marginLeft: 8 }}
+            isChecked={isPrivate}
+            onPress={() => setIsPrivate(!isPrivate)}
+          ></BouncyCheckbox>
+        </View>
       </ScrollView>
     </View>
   );
@@ -185,5 +200,13 @@ const styles = StyleSheet.create({
   },
   editor: {
     flex: 1,
+  },
+  footer: {
+    height: 48,
+  },
+  checkbox: {
+    paddingHorizontal: 12,
+    marginVertical: 4,
+    alignSelf: "flex-end",
   },
 });
