@@ -1,17 +1,21 @@
 import React, { useEffect } from "react";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
-import { addToken } from "../api/client";
+import { addToken, refreshToken } from "../api/client";
 import { useUserContext } from "../contexts/UserContext";
+import { useTokenContext } from "../contexts/TokenContext";
 
 export default function useLoadAuthEffect() {
   const { getItem: getAccess } = useAsyncStorage("Access");
   const { getItem: getUserInfo } = useAsyncStorage("UserInfo");
   const { getItem: getRemember } = useAsyncStorage("Remember");
-  const [_, setUser] = useUserContext();
+
+  const [token, setToken] = useTokenContext();
+  const [user, setUser] = useUserContext();
 
   useEffect(() => {
     const loadFn = async () => {
+      console.log("load storage data!");
       const isRememberString = await getRemember();
       const isRemember = JSON.parse(isRememberString);
       if (!isRemember) {
@@ -20,19 +24,24 @@ export default function useLoadAuthEffect() {
       }
 
       const accessToken = await getAccess();
-      if (!accessToken) {
-        return;
-      }
-
       const userInfoString = await getUserInfo();
       const userInfo = JSON.parse(userInfoString);
       if (!userInfo) {
+        console.log("No saved user info");
         return;
       }
 
+      if (!accessToken) {
+        console.log("No access token");
+
+        await refreshToken();
+      }
+
+      setToken(accessToken);
       setUser(userInfo);
       addToken(accessToken);
     };
+
     loadFn();
   }, []);
 }

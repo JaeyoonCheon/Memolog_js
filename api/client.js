@@ -2,7 +2,9 @@ import axios from "axios/index";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 // wsl2 서버 실행 시 wsl2의 IP address를 대응 후 adb 포트 연동 필요
-const baseURL = __DEV__ ? "http://172.29.89.155:3367" : "http://localhost:3367";
+const baseURL = __DEV__
+  ? "http://172.24.145.176:3367"
+  : "http://localhost:3367";
 
 const client = axios.create({
   baseURL,
@@ -58,6 +60,9 @@ export const addToken = async (token) => {
 };
 
 export const removeToken = () => {
+  const [token, setToken] = useTokenContext();
+
+  setToken(null);
   client.defaults.headers.Authorization = undefined;
 };
 
@@ -75,19 +80,21 @@ export const refreshToken = async () => {
     const { userId } = JSON.parse(await getUserInfo());
 
     client.defaults.headers.Authorization = `Bearer ${refreshToken}`;
-    const result = await client.post("/user/token", {
+
+    console.log("post token");
+    const result = await client.post("/auth/token", {
       userId: userId,
     });
+    console.log("post request end");
 
-    console.log(result.data);
-    const { token } = result.data;
+    const { token } = result?.data;
     const { accessToken, expireTime } = token;
 
     client.defaults.headers.Authorization = `Bearer ${accessToken}`;
     setAccess(accessToken);
     setExpireTime(expireTime);
   } catch (e) {
-    console.log(e.response.data);
+    console.log(e);
 
     throw new Error("Token Error");
   }

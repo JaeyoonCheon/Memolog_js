@@ -2,7 +2,7 @@ import client from "./client";
 
 export const signIn = async (payload) => {
   try {
-    const results = await client.post("/user/signin", payload);
+    const results = await client.post("/auth/signin", payload);
 
     return results.data;
   } catch (e) {
@@ -12,7 +12,7 @@ export const signIn = async (payload) => {
 
 export const signUp = async (payload) => {
   try {
-    const results = await client.post("/user/signup", payload);
+    const results = await client.post("/auth/signup", payload);
 
     return results.data;
   } catch (e) {
