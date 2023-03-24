@@ -2,9 +2,7 @@ import axios from "axios/index";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 // wsl2 서버 실행 시 wsl2의 IP address를 대응 후 adb 포트 연동 필요
-const baseURL = __DEV__
-  ? "http://172.24.145.176:3367"
-  : "http://localhost:3367";
+const baseURL = __DEV__ ? "http://172.24.157.6:3367" : "http://localhost:3367";
 
 const client = axios.create({
   baseURL,
@@ -15,13 +13,17 @@ client.interceptors.response.use(
     return res;
   },
   async function (error) {
-    console.log(error);
-    // Access token 만료
-    if (error.response.status === 401) {
-      console.log("Access token check - expire");
-      await refreshToken();
+    try {
+      console.log(error);
+      // Access token 만료
+      if (error.response.status === 401) {
+        console.log("Access token check - expire");
+        await refreshToken();
 
-      return axios.request(error.config);
+        return axios.request(error.config);
+      }
+    } catch (e) {
+      return e;
     }
   }
 );
@@ -78,6 +80,10 @@ export const refreshToken = async () => {
     const refreshToken = await getRefreshToken();
 
     const { userId } = JSON.parse(await getUserInfo());
+
+    if (!refreshToken || !userId) {
+      console.log("Can't refresh token");
+    }
 
     client.defaults.headers.Authorization = `Bearer ${refreshToken}`;
 

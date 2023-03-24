@@ -30,6 +30,7 @@ export default function useLoadAuthEffect() {
         console.log("No saved user info");
         return;
       }
+      setUser(userInfo);
 
       if (!accessToken) {
         console.log("No access token");
@@ -38,7 +39,6 @@ export default function useLoadAuthEffect() {
       }
 
       setToken(accessToken);
-      setUser(userInfo);
       addToken(accessToken);
     };
 

@@ -4,7 +4,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useQuery, useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import CardList from "../components/cards/CardList";
@@ -14,9 +14,13 @@ import {
   MaterialIconButton,
   MaterialCommunityIconButton,
 } from "../components/buttons/IconButton";
+import { useTokenContext } from "../contexts/TokenContext";
 
 const MyDocumentsScreen = () => {
   const navigation = useNavigation();
+
+  const [token, setToken] = useTokenContext();
+
   const [sortOpen, setSortOpen] = useState(false);
   const [sortValue, setSortValue] = useState("created_at");
   const [sortItem, setSortItem] = useState([
@@ -35,6 +39,7 @@ const MyDocumentsScreen = () => {
 
   const {
     data: documents,
+    isFetched,
     refetch,
     hasNextPage,
     fetchNextPage,
@@ -50,6 +55,7 @@ const MyDocumentsScreen = () => {
           }
         : undefined;
     },
+    enabled: !!token,
   });
 
   const onPressSearch = () => {
@@ -73,7 +79,9 @@ const MyDocumentsScreen = () => {
     }
   };
 
-  console.log(documents);
+  if (isFetched) {
+    console.log(documents);
+  }
 
   return (
     <View style={styles.block}>
