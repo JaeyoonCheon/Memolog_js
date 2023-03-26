@@ -39,7 +39,8 @@ const WriteScreen = () => {
   const [contents, setContents] = useState("");
   const [isPrivate, setIsPrivate] = useState(true);
   const [thumbnailUrl, setThumbnailUrl] = useState(null);
-  const [hashtags, setHashtags] = useState("");
+  const [hashtagString, setHashtagString] = useState("");
+  const [hashtags, setHashtags] = useState([]);
 
   const [user, _] = useUserContext();
 
@@ -78,6 +79,7 @@ const WriteScreen = () => {
         userId: user?.userId,
         scope,
         thumbnail_url: thumbnailUrl,
+        hashtags,
       });
     }
   }, [isSubmit]);
@@ -85,11 +87,12 @@ const WriteScreen = () => {
   const onSubmit = async () => {
     const usedImageNodes = contents.match(imgRegex);
     const hashtagsArray =
-      hashtags &&
-      hashtags
+      hashtagString &&
+      hashtagString
         .match(hashtagRegex)
         .map((tag) => tag.slice(1))
         .filter((tag) => !!tag);
+    setHashtags(hashtagsArray);
 
     console.log(hashtagsArray);
 
@@ -183,8 +186,8 @@ const WriteScreen = () => {
         <TextInput
           style={styles.hashtagInput}
           placeholder="해시태그 추가 (#단어)"
-          value={hashtags}
-          onChangeText={setHashtags}
+          value={hashtagString}
+          onChangeText={setHashtagString}
         ></TextInput>
         <BouncyCheckbox
           style={styles.checkbox}
