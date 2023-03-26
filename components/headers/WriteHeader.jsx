@@ -36,22 +36,10 @@ const WriteHeader = ({ value, onChangeText, onSubmit }) => {
           ></MaterialIconButton>
         </>
       }
-    >
-      <TextInput
-        style={[styles.input, { width: width - 120 }]}
-        placeholder="제목을 입력해주세요."
-        value={value}
-        onChangeText={onChangeText}
-      ></TextInput>
-    </BaseHeader>
+    ></BaseHeader>
   );
 };
 
 export default WriteHeader;
 
-const styles = StyleSheet.create({
-  input: {
-    flex: 1,
-    marginHorizontal: 16,
-  },
-});
+const styles = StyleSheet.create({});

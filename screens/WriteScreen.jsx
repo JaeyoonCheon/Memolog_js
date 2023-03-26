@@ -1,4 +1,12 @@
-import { StyleSheet, Platform, View, ScrollView, Text } from "react-native";
+import {
+  StyleSheet,
+  Platform,
+  View,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   RichEditor,
@@ -11,14 +19,15 @@ import { launchImageLibrary } from "react-native-image-picker";
 import storage from "@react-native-firebase/storage";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-import WriteHeader from "../components/headers/WriteHeader";
+import BaseHeader from "../components/headers/BaseHeader";
 import { writeDocument } from "../api/documents";
 import { useUserContext } from "../contexts/UserContext";
+import { MaterialIconButton } from "../components/buttons/IconButton";
 
 const imgRegex = /<img.*?src=["|'](.*?)["|']/gm;
 
 const WriteScreen = () => {
-  const naviagation = useNavigation();
+  const navigation = useNavigation();
   const queryClient = useQueryClient();
 
   const richText = useRef();
@@ -37,7 +46,7 @@ const WriteScreen = () => {
       setIsSubmit(false);
       console.log("Finished!");
       queryClient.invalidateQueries("Documents");
-      naviagation.navigate("MyDocuments");
+      navigation.navigate("MyDocuments");
     },
     onError: () => {
       console.log("error");
@@ -116,11 +125,68 @@ const WriteScreen = () => {
 
   return (
     <View style={styles.block}>
-      <WriteHeader
-        value={title}
-        onChangeText={setTitle}
-        onSubmit={onSubmit}
-      ></WriteHeader>
+      <BaseHeader
+        leftButtons={
+          <MaterialIconButton
+            iconName="arrow-back"
+            size={24}
+            color="#000000"
+            onPress={() => navigation.goBack()}
+          ></MaterialIconButton>
+        }
+        rightButtons={
+          <TouchableOpacity onPress={() => onSubmit()}>
+            <Text>등록</Text>
+          </TouchableOpacity>
+        }
+      ></BaseHeader>
+      <ScrollView
+        style={styles.editorWrapper}
+        ref={scrollRef}
+        nestedScrollEnabled={true}
+        keyboardDismissMode={"none"}
+      >
+        <TextInput
+          style={styles.titleInput}
+          placeholder="제목을 입력해주세요."
+          value={title}
+          onChangeText={setTitle}
+        ></TextInput>
+        <RichEditor
+          style={styles.editor}
+          editorStyle={{ contentCSSText: `padding-left:16px; font-size:16px` }}
+          ref={richText}
+          initialContentHTML={contents}
+          initialHeight={600}
+          placeholder="내용을 입력해주세요."
+          useContainer={true}
+          onChange={onChangeHTML}
+          onCursorPosition={handleCursorPosition}
+          originWhitelist={["file://"]}
+          allowFileAccess={true}
+          allowFileAccessFromFileURLs={true}
+        />
+      </ScrollView>
+      <View style={styles.footerToast}>
+        <TextInput
+          style={styles.hashtagInput}
+          placeholder="해시태그 추가 (#단어)"
+        ></TextInput>
+        <BouncyCheckbox
+          style={styles.checkbox}
+          size={20}
+          fillColor="#22BCCE"
+          text="비밀글"
+          iconStyle={{ borderRadius: 5 }}
+          innerIconStyle={{ borderRadius: 5 }}
+          textStyle={{ textDecorationLine: "none", fontSize: 12 }}
+          textContainerStyle={{
+            marginLeft: 8,
+          }}
+          isChecked={isPrivate}
+          onPress={() => setIsPrivate(!isPrivate)}
+        ></BouncyCheckbox>
+      </View>
       <RichToolbar
         editor={richText}
         onPressAddImage={onPressAddImage}
@@ -147,39 +213,6 @@ const WriteScreen = () => {
           "fontSize",
         ]}
       ></RichToolbar>
-      <ScrollView
-        style={styles.editorWrapper}
-        ref={scrollRef}
-        nestedScrollEnabled={true}
-        keyboardDismissMode={"none"}
-      >
-        <RichEditor
-          style={styles.editor}
-          ref={richText}
-          initialContentHTML={contents}
-          initialHeight={600}
-          useContainer={true}
-          onChange={onChangeHTML}
-          onCursorPosition={handleCursorPosition}
-          originWhitelist={["file://"]}
-          allowFileAccess={true}
-          allowFileAccessFromFileURLs={true}
-        />
-        <View style={styles.footer}>
-          <BouncyCheckbox
-            style={styles.checkbox}
-            size={20}
-            fillColor="#22BCCE"
-            text="비밀글"
-            iconStyle={{ borderRadius: 5 }}
-            innerIconStyle={{ borderRadius: 5 }}
-            textStyle={{ textDecorationLine: "none", fontSize: 12 }}
-            textContainerStyle={{ marginLeft: 8 }}
-            isChecked={isPrivate}
-            onPress={() => setIsPrivate(!isPrivate)}
-          ></BouncyCheckbox>
-        </View>
-      </ScrollView>
     </View>
   );
 };
@@ -192,21 +225,32 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#FFFFFF",
   },
-  testBlock: {
-    height: 400,
-  },
   editorWrapper: {
     flex: 1,
+  },
+  titleInput: {
+    height: 40,
+    paddingHorizontal: 16,
+
+    fontSize: 16,
   },
   editor: {
     flex: 1,
   },
-  footer: {
-    height: 48,
+  footerToast: {
+    height: 40,
+    flexDirection: "row",
+    alignItems: "center",
+
+    borderTopWidth: 1,
+    borderColor: "#C4C7C7",
+  },
+  hashtagInput: {
+    flex: 1,
+    padding: 8,
   },
   checkbox: {
     paddingHorizontal: 12,
     marginVertical: 4,
-    alignSelf: "flex-end",
   },
 });
