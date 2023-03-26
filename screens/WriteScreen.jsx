@@ -25,6 +25,7 @@ import { useUserContext } from "../contexts/UserContext";
 import { MaterialIconButton } from "../components/buttons/IconButton";
 
 const imgRegex = /<img.*?src=["|'](.*?)["|']/gm;
+const hashtagRegex = /#([0-9a-zA-Z가-힣]*)/g;
 
 const WriteScreen = () => {
   const navigation = useNavigation();
@@ -38,6 +39,7 @@ const WriteScreen = () => {
   const [contents, setContents] = useState("");
   const [isPrivate, setIsPrivate] = useState(true);
   const [thumbnailUrl, setThumbnailUrl] = useState(null);
+  const [hashtags, setHashtags] = useState("");
 
   const [user, _] = useUserContext();
 
@@ -68,6 +70,8 @@ const WriteScreen = () => {
     if (isSubmit === true) {
       const scope = isPrivate ? "private" : "public";
 
+      console.log("before mutate");
+
       writeMutate({
         title,
         form: contents,
@@ -80,6 +84,14 @@ const WriteScreen = () => {
 
   const onSubmit = async () => {
     const usedImageNodes = contents.match(imgRegex);
+    const hashtagsArray =
+      hashtags &&
+      hashtags
+        .match(hashtagRegex)
+        .map((tag) => tag.slice(1))
+        .filter((tag) => !!tag);
+
+    console.log(hashtagsArray);
 
     console.log(usedImageNodes);
 
@@ -171,6 +183,8 @@ const WriteScreen = () => {
         <TextInput
           style={styles.hashtagInput}
           placeholder="해시태그 추가 (#단어)"
+          value={hashtags}
+          onChangeText={setHashtags}
         ></TextInput>
         <BouncyCheckbox
           style={styles.checkbox}

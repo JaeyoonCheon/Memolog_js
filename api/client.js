@@ -64,9 +64,6 @@ export const addToken = async (token) => {
 };
 
 export const removeToken = () => {
-  const [token, setToken] = useTokenContext();
-
-  setToken(null);
   client.defaults.headers.Authorization = undefined;
 };
 

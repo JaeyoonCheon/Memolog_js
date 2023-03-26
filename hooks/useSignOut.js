@@ -4,13 +4,15 @@ import { useNavigation } from "@react-navigation/native";
 import { useQueryClient } from "react-query";
 
 import { useUserContext } from "../contexts/UserContext";
+import { useTokenContext } from "../contexts/TokenContext";
 import { removeToken } from "../api/client";
 
 export default function useSignOut() {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
-  const [_, setUser] = useUserContext();
+  const [user, setUser] = useUserContext();
+  const [token, setToken] = useTokenContext();
   const { removeItem: removeAccess } = useAsyncStorage("Access");
   const { removeItem: removeRefresh } = useAsyncStorage("Refresh");
   const { removeItem: removeExpire } = useAsyncStorage("Expire");
@@ -28,10 +30,12 @@ export default function useSignOut() {
       console.log("remove expire");
       await removeUserInfo();
       console.log("remove user");
+      setToken(null);
       removeToken();
       console.log("remove header");
+      queryClient.clear();
       queryClient.removeQueries();
-      console.log("remove query caches");
+      console.log("remove query data and caches");
 
       console.log("remove complete");
       navigation.reset({

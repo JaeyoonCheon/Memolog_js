@@ -10,7 +10,9 @@ export const getDocuments = async (pageParam, sort, order) => {
 };
 
 export const writeDocument = async (payload) => {
+  console.log("write post start");
   const results = await client.post("/document", payload);
+  console.log("write post end");
 
   return results.data;
 };
