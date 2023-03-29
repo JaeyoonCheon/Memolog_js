@@ -119,7 +119,7 @@ const MyDocumentsScreen = () => {
               listItemContainerStyle={{ height: 32 }}
             />
           </View>
-          <View style={styles.sort}>
+          <View style={[styles.sort, { marginLeft: 4 }]}>
             <DropDownPicker
               open={orderOpen}
               value={orderValue}

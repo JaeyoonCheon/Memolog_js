@@ -67,6 +67,13 @@ const WriteScreen = () => {
     richText.current?.insertImage(image.assets[0].uri, "image");
   }, [richText]);
 
+  let handleFontSize = useCallback(() => {
+    // 1=  10px, 2 = 13px, 3 = 16px, 4 = 18px, 5 = 24px, 6 = 32px, 7 = 48px;
+    let size = [1, 2, 3, 4, 5, 6, 7];
+
+    richText.current?.setFontSize(5);
+  }, []);
+
   useEffect(() => {
     if (isSubmit === true) {
       const scope = isPrivate ? "private" : "public";
@@ -196,7 +203,7 @@ const WriteScreen = () => {
           text="비밀글"
           iconStyle={{ borderRadius: 5 }}
           innerIconStyle={{ borderRadius: 5 }}
-          textStyle={{ textDecorationLine: "none", fontSize: 12 }}
+          textStyle={{ textDecorationLine: "none", fontSize: 16 }}
           textContainerStyle={{
             marginLeft: 8,
           }}
@@ -213,7 +220,7 @@ const WriteScreen = () => {
           actions.insertVideo,
           actions.insertImage,
           actions.setStrikethrough,
-          // actions.checkboxList,
+          actions.checkboxList,
           actions.insertOrderedList,
           actions.blockquote,
           actions.alignLeft,
@@ -221,14 +228,12 @@ const WriteScreen = () => {
           actions.alignRight,
           actions.code,
           actions.line,
-          // actions.foreColor,
-          // actions.hiliteColor,
-          // actions.heading1,
-          // actions.heading4,
-          "insertEmoji",
-          "insertHTML",
-          "fontSize",
+          actions.foreColor,
+          actions.hiliteColor,
+          actions.heading1,
+          actions.heading4,
         ]}
+        fontSize={handleFontSize}
       ></RichToolbar>
     </View>
   );
@@ -246,10 +251,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   titleInput: {
-    height: 40,
+    height: 60,
     paddingHorizontal: 16,
 
-    fontSize: 16,
+    fontSize: 21,
   },
   editor: {
     flex: 1,

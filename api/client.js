@@ -3,7 +3,7 @@ import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 // wsl2 서버 실행 시 wsl2의 IP address를 대응 후 adb 포트 연동 필요
 const baseURL = __DEV__
-  ? "http://172.24.146.128:3367"
+  ? "http://172.24.150.105:3367"
   : "http://localhost:3367";
 
 const client = axios.create({
@@ -15,6 +15,7 @@ client.interceptors.response.use(
     return res;
   },
   async function (error) {
+    console.log("Error intercept");
     try {
       console.log(error);
       // Access token 만료
