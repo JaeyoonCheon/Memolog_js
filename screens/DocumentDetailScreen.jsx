@@ -38,6 +38,10 @@ const DocumentDetailScreen = () => {
     },
   });
 
+  if (isSuccess) {
+    console.log(contents);
+  }
+
   return (
     <View style={styles.block}>
       <BaseHeader
