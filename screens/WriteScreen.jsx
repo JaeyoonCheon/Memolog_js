@@ -78,8 +78,6 @@ const WriteScreen = () => {
     if (isSubmit === true) {
       const scope = isPrivate ? "private" : "public";
 
-      console.log("before mutate");
-
       writeMutate({
         title,
         form: contents,
@@ -95,15 +93,12 @@ const WriteScreen = () => {
     const usedImageNodes = contents.match(imgRegex);
     const hashtagsArray =
       hashtagString &&
-      hashtagString
-        .match(hashtagRegex)
-        .map((tag) => tag.slice(1))
-        .filter((tag) => !!tag);
-    setHashtags(hashtagsArray);
+      hashtagString.match(hashtagRegex).map((tag) => tag.slice(1));
 
-    console.log(hashtagsArray);
-
-    console.log(usedImageNodes);
+    const hashtagsUnique = hashtagsArray
+      .filter((v, i) => hashtagsArray.indexOf(v) === i)
+      .filter((tag) => !!tag);
+    setHashtags(hashtagsUnique);
 
     try {
       if (usedImageNodes) {

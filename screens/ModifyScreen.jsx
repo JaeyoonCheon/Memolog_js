@@ -81,8 +81,8 @@ const ModifyScreen = () => {
 
   useEffect(() => {
     if (isSubmit === true) {
-      console.log("check");
-      console.log(thumbnailUrl);
+      const scope = isPrivate ? "private" : "public";
+
       modifyMutate({
         id,
         payload: {
@@ -91,6 +91,7 @@ const ModifyScreen = () => {
           userId: user?.userId,
           scope,
           thumbnail_url: thumbnailUrl,
+          hashtags,
         },
       });
     }
@@ -100,11 +101,12 @@ const ModifyScreen = () => {
     const usedImageNodes = contents.match(imgRegex);
     const hashtagsArray =
       hashtagString &&
-      hashtagString
-        .match(hashtagRegex)
-        .map((tag) => tag.slice(1))
-        .filter((tag) => !!tag);
-    setHashtags(hashtagsArray);
+      hashtagString.match(hashtagRegex).map((tag) => tag.slice(1));
+
+    const hashtagsUnique = hashtagsArray
+      .filter((v, i) => hashtagsArray.indexOf(v) === i)
+      .filter((tag) => !!tag);
+    setHashtags(hashtagsUnique);
 
     try {
       if (usedImageNodes) {
