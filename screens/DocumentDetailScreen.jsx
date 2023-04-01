@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import RenderHTML from "react-native-render-html";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import { getDocument, deleteDocument } from "../api/documents";
@@ -18,6 +18,7 @@ import { useUserContext } from "../contexts/UserContext";
 
 const DocumentDetailScreen = () => {
   const navigation = useNavigation();
+  const queryCilent = useQueryClient();
   const { width } = useWindowDimensions();
   const { params } = useRoute();
   const { id } = params;
@@ -31,6 +32,7 @@ const DocumentDetailScreen = () => {
   } = useQuery(["Document", id], () => getDocument(id));
   const { mutate: deleteMutate } = useMutation(deleteDocument, {
     onSuccess: () => {
+      queryCilent.invalidateQueries("Documents");
       navigation.navigate("MyDocuments");
     },
     onError: () => {

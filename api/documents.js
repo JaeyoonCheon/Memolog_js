@@ -9,6 +9,14 @@ export const getDocuments = async (pageParam, sort, order) => {
   return results.data;
 };
 
+export const searchDocuments = async (keyword) => {
+  const query = `?keyword=${keyword}`;
+
+  const results = await client.get(`/document/search${query}`);
+
+  return results.data;
+};
+
 export const writeDocument = async (payload) => {
   console.log("write post start");
   const results = await client.post("/document", payload);
