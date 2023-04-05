@@ -9,8 +9,9 @@ export const getDocuments = async (pageParam, sort, order) => {
   return results.data;
 };
 
-export const searchDocuments = async (keyword) => {
-  const query = `?keyword=${keyword}`;
+export const searchDocuments = async (pageParam, keyword) => {
+  const { id, cursor } = pageParam;
+  const query = `?id=${id}&keyword=${keyword}&cursor=${cursor}`;
 
   const results = await client.get(`/document/search${query}`);
 
@@ -18,9 +19,7 @@ export const searchDocuments = async (keyword) => {
 };
 
 export const writeDocument = async (payload) => {
-  console.log("write post start");
   const results = await client.post("/document", payload);
-  console.log("write post end");
 
   return results.data;
 };

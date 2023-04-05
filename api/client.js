@@ -1,8 +1,9 @@
 import axios from "axios/index";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 // wsl2 서버 실행 시 wsl2의 IP address를 대응 후 adb 포트 연동 필요
-const baseURL = __DEV__ ? "http://172.18.95.23:3367" : "http://localhost:3367";
+const baseURL = __DEV__ ? "http://172.24.148.32:3367" : "http://localhost:3367";
 
 const client = axios.create({
   baseURL,
@@ -18,14 +19,28 @@ client.interceptors.response.use(
       console.log(error);
       // Access token 만료
       if (error.response.status === 401) {
-        console.log("Access token check - expire");
-        await refreshToken();
+        if (error.response.data.name === "ER04") {
+          await refreshToken();
 
-        return axios.request(error.config);
+          return axios.request(error.config);
+        } else if (error.response.data.name === "ER05") {
+          console.log("Too old account");
+
+          const navigation = useNavigation();
+          navigation.navigate("SignIn");
+        } else if (error.response.data.name === "ER06") {
+          const isRefreshTokenExist = await checkRefreshToken();
+
+          if (isRefreshTokenExist) {
+            console.log("Refetch refresh token");
+            await refreshToken();
+          }
+        }
       }
     } catch (e) {
-      return e;
+      return Promise.reject(e);
     }
+    return Promise.reject(e);
   }
 );
 
@@ -46,6 +61,7 @@ export const addToken = async (token) => {
     console.log(`diff : ${diff}`);
 
     if (diff < 60) {
+      console.log("request token refresh");
       await refreshToken();
     }
   } catch (e) {
@@ -102,6 +118,14 @@ export const refreshToken = async () => {
 
     throw new Error("Token Error");
   }
+};
+
+const checkRefreshToken = async () => {
+  const { getItem: getRefreshToken } = useAsyncStorage("Refresh");
+
+  const refreshToken = await getRefreshToken();
+
+  return !!refreshToken;
 };
 
 export default client;

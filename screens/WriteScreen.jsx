@@ -96,8 +96,11 @@ const WriteScreen = () => {
       hashtagString.match(hashtagRegex).map((tag) => tag.slice(1));
 
     const hashtagsUnique = hashtagsArray
-      .filter((v, i) => hashtagsArray.indexOf(v) === i)
-      .filter((tag) => !!tag);
+      ? hashtagsArray
+          .filter((v, i) => hashtagsArray.indexOf(v) === i)
+          .filter((tag) => !!tag)
+      : [];
+
     setHashtags(hashtagsUnique);
 
     try {

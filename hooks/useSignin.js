@@ -17,7 +17,7 @@ export default function useSignIn({ isRemember }) {
   const [token, setToken] = useTokenContext();
 
   const mutation = useMutation(signIn, {
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       setUser(data.user);
       setToken(data.token.accessToken);
       setAccess(data.token.accessToken);
@@ -25,7 +25,7 @@ export default function useSignIn({ isRemember }) {
       setExpire(data.token.expireTime);
       setUserInfo(JSON.stringify(data.user));
       setRemember(JSON.stringify(isRemember));
-      addToken(data.token.accessToken);
+      await addToken(data.token.accessToken);
     },
   });
 
