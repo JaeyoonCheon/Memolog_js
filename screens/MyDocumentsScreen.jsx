@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
@@ -15,6 +15,8 @@ import {
   MaterialCommunityIconButton,
 } from "../components/buttons/IconButton";
 import { useTokenContext } from "../contexts/TokenContext";
+import BaseDropdown from "../components/dropdowns/BaseDropdown";
+import useDropdown from "../hooks/useDropdown";
 
 const MyDocumentsScreen = () => {
   const navigation = useNavigation();
@@ -34,6 +36,11 @@ const MyDocumentsScreen = () => {
     { label: "desc", value: "DESC" },
     { label: "asc", value: "ASC" },
   ]);
+  const { items, isOpened, selected, handleSelection, toggleOpen } =
+    useDropdown([
+      { label: "test1", value: 1 },
+      { label: "test2", value: 2 },
+    ]);
   const [layout, setLayout] = useState("grid");
   const [refreshing, setRefreshing] = useState(false);
 
@@ -130,6 +137,15 @@ const MyDocumentsScreen = () => {
               style={styles.sort.dropdown}
               listItemContainerStyle={{ height: 32 }}
             />
+          </View>
+          <View style={[styles.sort, { marginLeft: 4 }]}>
+            <BaseDropdown
+              items={items}
+              selected={selected}
+              isOpened={isOpened}
+              handleSelection={handleSelection}
+              toggleOpen={toggleOpen}
+            ></BaseDropdown>
           </View>
         </View>
         <View style={styles.layout}>

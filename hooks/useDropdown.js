@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
-export default function useDropdown(items) {
-  const [list, setList] = useState(items);
-  const [selected, setSelected] = useState(items[0].label);
-  const [open, setOpen] = useState(false);
+export default function useDropdown(values, initialValue) {
+  const [items, setItems] = useState(values);
+  const [selected, setSelected] = useState(initialValue || values[0]);
+  const [isOpened, setIsOpened] = useState(false);
 
   const handleSelection = (item) => {
     setSelected(item);
   };
   const toggleOpen = () => {
-    setOpen(!open);
+    setIsOpened(!isOpened);
   };
 
-  return { list, selected, open, handleSelection, toggleOpen };
+  return { items, selected, isOpened, handleSelection, toggleOpen };
 }

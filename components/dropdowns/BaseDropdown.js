@@ -3,38 +3,61 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Modal,
+  TouchableWithoutFeedback,
   FlatList,
+  Platform,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 const BaseDropdown = ({
-  list,
+  items,
   selected,
-  open,
+  isOpened,
   handleSelection,
   toggleOpen,
 }) => {
-  const DropdownItem = ({ item }) => {
+  const DropdownItem = ({ item, isSelected }) => {
     return (
-      <TouchableOpacity onPress={toggleOpen}>
+      <TouchableOpacity
+        style={styles.dropdownItem}
+        onPress={() => {
+          toggleOpen();
+          handleSelection(item);
+        }}
+      >
         <Text>{item.label}</Text>
       </TouchableOpacity>
     );
   };
 
+  const testRef = useRef();
+
   return (
-    <TouchableOpacity style={styles.block} onPress={toggleOpen}>
-      <Text style={styles.mainLabel}>{selected}</Text>
-      <Modal visible={open} transparent animationType="none">
-        <View style={styles.dropdown}>
-          <FlatList
-            data={list}
-            renderItem={DropdownItem}
-            keyExtractor={(item) => item.value}
-          ></FlatList>
-        </View>
-      </Modal>
+    <TouchableOpacity
+      style={styles.block}
+      onPress={toggleOpen}
+      onBlur={() => toggleOpen()}
+    >
+      <Text style={styles.mainLabel}>{selected.label}</Text>
+      <View style={styles.dropdown}>
+        {isOpened && (
+          <TouchableWithoutFeedback
+            ref={testRef}
+            onPress={() => {
+              console.log(testRef);
+              toggleOpen();
+            }}
+          >
+            <View>
+              <FlatList
+                data={items}
+                renderItem={DropdownItem}
+                keyExtractor={(item) => item.value}
+              ></FlatList>
+            </View>
+          </TouchableWithoutFeedback>
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -50,8 +73,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
 
     backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "blue",
     zIndex: 1,
   },
   mainLabel: {
@@ -59,13 +80,28 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: "absolute",
+    top: 20,
 
-    borderWidth: 1,
-    borderColor: "red",
-  },
-  itemBlock: {
+    zIndex: 99,
+
+    overflow: "hidden",
     backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "#000000",
+    ...Platform.select({
+      ios: {
+        shadowOffset: {
+          width: 1,
+          height: 1,
+        },
+        shadowColor: "#000000",
+        shadowOpacity: 0.25,
+        shadowRadius: 1.5,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+  dropdownItem: {
+    backgroundColor: "#FFFFFF",
   },
 });
