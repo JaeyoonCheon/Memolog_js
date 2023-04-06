@@ -36,7 +36,7 @@ const MyDocumentsScreen = () => {
     { label: "desc", value: "DESC" },
     { label: "asc", value: "ASC" },
   ]);
-  const { items, isOpened, selected, handleSelection, toggleOpen } =
+  const { items, isOpened, selected, handleSelection, handleIsOpened } =
     useDropdown([
       { label: "test1", value: 1 },
       { label: "test2", value: 2 },
@@ -144,7 +144,7 @@ const MyDocumentsScreen = () => {
               selected={selected}
               isOpened={isOpened}
               handleSelection={handleSelection}
-              toggleOpen={toggleOpen}
+              handleIsOpened={handleIsOpened}
             ></BaseDropdown>
           </View>
         </View>

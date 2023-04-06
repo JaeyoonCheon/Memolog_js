@@ -8,9 +8,9 @@ export default function useDropdown(values, initialValue) {
   const handleSelection = (item) => {
     setSelected(item);
   };
-  const toggleOpen = () => {
-    setIsOpened(!isOpened);
+  const handleIsOpened = (flag) => {
+    setIsOpened(flag);
   };
 
-  return { items, selected, isOpened, handleSelection, toggleOpen };
+  return { items, selected, isOpened, handleSelection, handleIsOpened };
 }

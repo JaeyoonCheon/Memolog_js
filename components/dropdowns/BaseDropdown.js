@@ -6,22 +6,28 @@ import {
   TouchableWithoutFeedback,
   FlatList,
   Platform,
+  Modal,
 } from "react-native";
-import React, { useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 
 const BaseDropdown = ({
   items,
   selected,
   isOpened,
   handleSelection,
-  toggleOpen,
+  handleIsOpened,
 }) => {
+  const dropdownButtonRef = useRef();
+  const dropdownRef = useRef();
+
+  const [dropdownButtonFrame, setDropdownButtonFrame] = useState();
+
   const DropdownItem = ({ item, isSelected }) => {
     return (
       <TouchableOpacity
         style={styles.dropdownItem}
         onPress={() => {
-          toggleOpen();
+          handleIsOpened(false);
           handleSelection(item);
         }}
       >
@@ -30,35 +36,49 @@ const BaseDropdown = ({
     );
   };
 
-  const testRef = useRef();
+  const onPressButton = () => {
+    if (dropdownButtonRef.current && dropdownButtonRef.current.measure) {
+      dropdownButtonRef.current.measure((fx, fy, width, height, x, y) => {
+        setDropdownButtonFrame({ width, height, x, y });
+        handleIsOpened(!isOpened);
+      });
+    }
+  };
+
+  console.log(isOpened);
+  console.log(dropdownButtonFrame);
 
   return (
-    <TouchableOpacity
-      style={styles.block}
-      onPress={toggleOpen}
-      onBlur={() => toggleOpen()}
-    >
-      <Text style={styles.mainLabel}>{selected.label}</Text>
-      <View style={styles.dropdown}>
-        {isOpened && (
-          <TouchableWithoutFeedback
-            ref={testRef}
-            onPress={() => {
-              console.log(testRef);
-              toggleOpen();
-            }}
-          >
-            <View>
-              <FlatList
-                data={items}
-                renderItem={DropdownItem}
-                keyExtractor={(item) => item.value}
-              ></FlatList>
-            </View>
-          </TouchableWithoutFeedback>
-        )}
-      </View>
-    </TouchableOpacity>
+    <View>
+      <TouchableOpacity
+        style={styles.block}
+        ref={dropdownButtonRef}
+        onPress={onPressButton}
+      >
+        <Text style={styles.mainLabel}>{selected.label}</Text>
+        <View style={styles.dropdown}>
+          {isOpened && (
+            <Modal visible transparent>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  handleIsOpened(false);
+                }}
+              >
+                <FlatList
+                  style={{
+                    top: dropdownButtonFrame.height + dropdownButtonFrame.y,
+                    left: dropdownButtonFrame.x,
+                  }}
+                  data={items}
+                  renderItem={DropdownItem}
+                  keyExtractor={(item) => item.value}
+                ></FlatList>
+              </TouchableWithoutFeedback>
+            </Modal>
+          )}
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -80,7 +100,6 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: "absolute",
-    top: 20,
 
     zIndex: 99,
 
@@ -102,6 +121,7 @@ const styles = StyleSheet.create({
     }),
   },
   dropdownItem: {
+    paddingHorizontal: 4,
     backgroundColor: "#FFFFFF",
   },
 });
