@@ -16,7 +16,7 @@ import {
 } from "../components/buttons/IconButton";
 import { useTokenContext } from "../contexts/TokenContext";
 import BaseDropdown from "../components/dropdowns/BaseDropdown";
-import useDropdown from "../hooks/useDropdown";
+import useSelect from "../hooks/useSelect";
 
 const MyDocumentsScreen = () => {
   const navigation = useNavigation();
@@ -37,7 +37,7 @@ const MyDocumentsScreen = () => {
     { label: "asc", value: "ASC" },
   ]);
   const { items, isOpened, selected, handleSelection, handleIsOpened } =
-    useDropdown([
+    useSelect([
       { label: "test1", value: 1 },
       { label: "test2", value: 2 },
     ]);

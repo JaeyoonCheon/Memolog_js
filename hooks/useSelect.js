@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function useDropdown(values, initialValue) {
+export default function useSelect(values, initialValue) {
   const [items, setItems] = useState(values);
   const [selected, setSelected] = useState(initialValue || values[0]);
   const [isOpened, setIsOpened] = useState(false);
