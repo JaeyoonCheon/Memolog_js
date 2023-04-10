@@ -17,6 +17,7 @@ import {
 import { useTokenContext } from "../contexts/TokenContext";
 import BaseDropdown from "../components/dropdowns/BaseDropdown";
 import useSelect from "../hooks/useSelect";
+import ToggleButton from "../components/buttons/toggleButton";
 
 const MyDocumentsScreen = () => {
   const navigation = useNavigation();
@@ -41,6 +42,14 @@ const MyDocumentsScreen = () => {
       { label: "test1", value: 1 },
       { label: "test2", value: 2 },
     ]);
+  const {
+    items: orderItems,
+    selected: orderSelected,
+    handleSelection: handleOrder,
+  } = useSelect([
+    { label: "arrow-down-thin", value: "DESC" },
+    { label: "arrow-up-thin", value: "ASC" },
+  ]);
   const [layout, setLayout] = useState("grid");
   const [refreshing, setRefreshing] = useState(false);
 
@@ -139,13 +148,11 @@ const MyDocumentsScreen = () => {
             />
           </View>
           <View style={[styles.sort, { marginLeft: 4 }]}>
-            <BaseDropdown
-              items={items}
-              selected={selected}
-              isOpened={isOpened}
-              handleSelection={handleSelection}
-              handleIsOpened={handleIsOpened}
-            ></BaseDropdown>
+            <ToggleButton
+              items={orderItems}
+              selected={orderSelected}
+              handleSelection={handleOrder}
+            ></ToggleButton>
           </View>
         </View>
         <View style={styles.layout}>
