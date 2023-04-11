@@ -3,20 +3,24 @@ import React from "react";
 
 import { MaterialCommunityIconButton } from "./IconButton";
 
-const ToggleButton = ({ items, selected, handleSelection, size = 24 }) => {
-  const opposite = items.filter((item) => !item)[0];
-  console.log(selected);
+const ToggleButton = ({
+  items,
+  selected,
+  handleSelection,
+  size = 24,
+  containerStyle = {},
+}) => {
+  const opposite = items.filter((item) => item.value !== selected.value)[0];
 
   return (
     <MaterialCommunityIconButton
+      iconName={selected.label}
       color="#000000"
       size={size}
-      iconName={selected.label}
+      containerStyle={containerStyle}
       onPress={() => handleSelection(opposite)}
     ></MaterialCommunityIconButton>
   );
 };
 
 export default ToggleButton;
-
-const styles = StyleSheet.create({});

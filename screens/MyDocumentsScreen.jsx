@@ -17,31 +17,24 @@ import {
 import { useTokenContext } from "../contexts/TokenContext";
 import BaseDropdown from "../components/dropdowns/BaseDropdown";
 import useSelect from "../hooks/useSelect";
-import ToggleButton from "../components/buttons/toggleButton";
+import ToggleButton from "../components/buttons/ToggleButton";
 
 const MyDocumentsScreen = () => {
   const navigation = useNavigation();
 
   const [token, setToken] = useTokenContext();
 
-  const [sortOpen, setSortOpen] = useState(false);
-  const [sortValue, setSortValue] = useState("created_at");
-  const [sortItem, setSortItem] = useState([
+  const {
+    items: sortItems,
+    isOpened: sortOpened,
+    selected: sortSelected,
+    handleSelection: handleSort,
+    handleIsOpened: handleSortOpened,
+  } = useSelect([
     { label: "작성일", value: "created_at" },
     { label: "마지막 수정", value: "updated_at" },
     { label: "제목", value: "title" },
   ]);
-  const [orderOpen, setOrderOpen] = useState(false);
-  const [orderValue, setOrderValue] = useState("DESC");
-  const [orderItem, setOrderItem] = useState([
-    { label: "desc", value: "DESC" },
-    { label: "asc", value: "ASC" },
-  ]);
-  const { items, isOpened, selected, handleSelection, handleIsOpened } =
-    useSelect([
-      { label: "test1", value: 1 },
-      { label: "test2", value: 2 },
-    ]);
   const {
     items: orderItems,
     selected: orderSelected,
@@ -60,14 +53,14 @@ const MyDocumentsScreen = () => {
     hasNextPage,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: ["Documents", sortValue, orderValue],
+    queryKey: ["Documents", sortSelected.value, orderSelected.value],
     queryFn: ({ pageParam = { id: "", cursor: "" } }) =>
-      getDocuments(pageParam, sortValue, orderValue),
+      getDocuments(pageParam, sortSelected.value, orderSelected.value),
     getNextPageParam: (lastPage, pages) => {
       return lastPage[lastPage.length - 1]
         ? {
             id: lastPage[lastPage.length - 1]?.id,
-            cursor: lastPage[lastPage.length - 1][`${sortValue}`],
+            cursor: lastPage[lastPage.length - 1][`${sortSelected.value}`],
           }
         : undefined;
     },
@@ -123,37 +116,19 @@ const MyDocumentsScreen = () => {
       ></BaseHeader>
       <View style={styles.toolbar}>
         <View style={styles.sortOrder}>
-          <View style={styles.sort}>
-            <DropDownPicker
-              open={sortOpen}
-              value={sortValue}
-              items={sortItem}
-              setOpen={setSortOpen}
-              setValue={setSortValue}
-              setItems={setSortItem}
-              style={styles.sort.dropdown}
-              listItemContainerStyle={{ height: 32 }}
-            />
-          </View>
-          <View style={[styles.sort, { marginLeft: 4 }]}>
-            <DropDownPicker
-              open={orderOpen}
-              value={orderValue}
-              items={orderItem}
-              setOpen={setOrderOpen}
-              setValue={setOrderValue}
-              setItems={setOrderItem}
-              style={styles.sort.dropdown}
-              listItemContainerStyle={{ height: 32 }}
-            />
-          </View>
-          <View style={[styles.sort, { marginLeft: 4 }]}>
-            <ToggleButton
-              items={orderItems}
-              selected={orderSelected}
-              handleSelection={handleOrder}
-            ></ToggleButton>
-          </View>
+          <BaseDropdown
+            items={sortItems}
+            selected={sortSelected}
+            isOpened={sortOpened}
+            handleIsOpened={handleSortOpened}
+            handleSelection={handleSort}
+          ></BaseDropdown>
+          <ToggleButton
+            items={orderItems}
+            selected={orderSelected}
+            handleSelection={handleOrder}
+            size={32}
+          ></ToggleButton>
         </View>
         <View style={styles.layout}>
           <MaterialIconButton
@@ -214,20 +189,12 @@ const styles = StyleSheet.create({
   sortOrder: {
     flexDirection: "row",
   },
-  sort: {
-    width: 100,
-    alignItems: "center",
-    justifyContent: "center",
-    dropdown: {
-      minHeight: 32,
-    },
-  },
   layout: {
     flexDirection: "row",
   },
   layoutButton: { marginLeft: 4 },
   itemsWrapper: {
     flex: 1,
-    marginTop: 32,
+    marginTop: 16,
   },
 });
