@@ -14,7 +14,7 @@ const BaseDropdown = ({
 
   const [dropdownButtonFrame, setDropdownButtonFrame] = useState();
 
-  const onPressButton = () => {
+  const onPressMainButton = () => {
     if (dropdownButtonRef.current && dropdownButtonRef.current.measure) {
       dropdownButtonRef.current.measure((fx, fy, width, height, x, y) => {
         setDropdownButtonFrame({ width, height, x, y });
@@ -28,7 +28,7 @@ const BaseDropdown = ({
       <TouchableOpacity
         style={styles.block}
         ref={dropdownButtonRef}
-        onPress={onPressButton}
+        onPress={onPressMainButton}
       >
         <Text style={styles.mainLabel}>{selected.label}</Text>
         <View>

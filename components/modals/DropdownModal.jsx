@@ -30,6 +30,8 @@ const DropdownModal = ({
     );
   };
 
+  console.log(position);
+
   return (
     <Modal visible={isOpened} transparent>
       <TouchableWithoutFeedback

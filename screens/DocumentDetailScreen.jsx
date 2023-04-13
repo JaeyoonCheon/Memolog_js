@@ -12,6 +12,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
+import KebabButton from "../components/buttons/KebabButton";
 import { getDocument, deleteDocument } from "../api/documents";
 import { MaterialIconButton } from "../components/buttons/IconButton";
 import { useUserContext } from "../contexts/UserContext";
@@ -24,6 +25,24 @@ const DocumentDetailScreen = () => {
   const { id } = params;
 
   const [user, _] = useUserContext();
+
+  const kebabItems = [
+    { label: "검색", value: "Search", action: () => {} },
+    {
+      label: "편집",
+      value: "Modify",
+      action: () =>
+        navigation.navigate("Modify", {
+          id: id,
+          documentData: contents,
+        }),
+    },
+    {
+      label: "삭제",
+      value: "Delte",
+      action: () => deleteMutate(id),
+    },
+  ];
 
   const {
     data: contents,
@@ -80,6 +99,7 @@ const DocumentDetailScreen = () => {
                 ></MaterialIconButton>
               </>
             )}
+            <KebabButton items={kebabItems}></KebabButton>
             <MaterialIconButton
               iconName="search"
               size={24}
