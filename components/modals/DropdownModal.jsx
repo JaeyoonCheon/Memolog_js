@@ -16,6 +16,7 @@ const DropdownModal = ({
   items,
   position,
 }) => {
+  console.log("Dropdown Rendered");
   const DropdownItem = ({ item, isSelected }) => {
     return (
       <TouchableOpacity
@@ -46,7 +47,6 @@ const DropdownModal = ({
               {
                 top: position.height + position.y + 4,
                 left: position.x,
-                width: position.width,
               },
             ]}
             data={items}

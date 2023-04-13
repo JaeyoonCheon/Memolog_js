@@ -45,25 +45,24 @@ const KebabButton = ({ items }) => {
   console.log(dropdownButtonFrame);
 
   return (
-    <MainButton
-      iconName="more-vert"
-      size={24}
-      color="#000000"
-      onPress={onPressMainButton}
-      ref={dropdownButtonRef}
-    >
-      <View>
-        {isOpened && (
-          <DropdownModal
-            isOpened={isOpened}
-            handleIsOpened={handleIsOpened}
-            handleSelection={onPressButton}
-            items={items}
-            position={dropdownButtonFrame}
-          />
-        )}
-      </View>
-    </MainButton>
+    <>
+      <MainButton
+        iconName="more-vert"
+        size={24}
+        color="#000000"
+        onPress={onPressMainButton}
+        ref={dropdownButtonRef}
+      ></MainButton>
+      {isOpened && (
+        <DropdownModal
+          isOpened={isOpened}
+          handleIsOpened={handleIsOpened}
+          handleSelection={onPressButton}
+          items={items}
+          position={dropdownButtonFrame}
+        />
+      )}
+    </>
   );
 };
 
