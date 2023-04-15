@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   FlatList,
+  useWindowDimensions,
 } from "react-native";
-import React from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 
 const DropdownModal = ({
   isOpened,
@@ -16,7 +17,10 @@ const DropdownModal = ({
   items,
   position,
 }) => {
-  console.log("Dropdown Rendered");
+  const modalRef = useRef();
+  const { width: windowWidth } = useWindowDimensions();
+  const [modalPosition, setModalPosition] = useState();
+
   const DropdownItem = ({ item, isSelected }) => {
     return (
       <TouchableOpacity
@@ -31,7 +35,21 @@ const DropdownModal = ({
     );
   };
 
-  console.log(position);
+  useLayoutEffect(() => {
+    if (modalRef.current && modalRef.current.measure) {
+      modalRef.current.measure((fx, fy, width, height, x, y) => {
+        console.log(position);
+        console.log(`${width} ${height} ${x} ${y}`);
+        console.log(windowWidth);
+        const modalRight = position.x + width;
+        if (windowWidth < modalRight) {
+          setModalPosition({ right: 0 });
+        } else {
+          setModalPosition({ left: position.x });
+        }
+      });
+    }
+  }, []);
 
   return (
     <Modal visible={isOpened} transparent>
@@ -41,18 +59,23 @@ const DropdownModal = ({
         }}
       >
         <View style={styles.dropdownBackground}>
-          <FlatList
+          <View
             style={[
               styles.dropdown,
               {
                 top: position.height + position.y + 4,
-                left: position.x,
               },
+              modalPosition,
             ]}
-            data={items}
-            renderItem={DropdownItem}
-            keyExtractor={(item) => item.value}
-          ></FlatList>
+          >
+            <View ref={modalRef} style={{ borderWidth: 1, borderColor: "red" }}>
+              <FlatList
+                data={items}
+                renderItem={DropdownItem}
+                keyExtractor={(item) => item.value}
+              ></FlatList>
+            </View>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </Modal>

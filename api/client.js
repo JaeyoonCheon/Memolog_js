@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { SOURCE_ADDRESS, SOURCE_PORT } from "@env";
 
 // wsl2 서버 실행 시 wsl2의 IP address를 대응 후 adb 포트 연동 필요
-const baseURL = `http://172.21.163.29:${SOURCE_PORT}`;
+const baseURL = `http://172.21.171.196:${SOURCE_PORT}`;
 
 console.log(baseURL);
 

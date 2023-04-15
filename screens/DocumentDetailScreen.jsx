@@ -26,23 +26,7 @@ const DocumentDetailScreen = () => {
 
   const [user, _] = useUserContext();
 
-  const kebabItems = [
-    { label: "검색", value: "Search", action: () => {} },
-    {
-      label: "편집",
-      value: "Modify",
-      action: () =>
-        navigation.navigate("Modify", {
-          id: id,
-          documentData: contents,
-        }),
-    },
-    {
-      label: "삭제",
-      value: "Delte",
-      action: () => deleteMutate(id),
-    },
-  ];
+  let kebabItems = [{ label: "검색", value: "Search", action: () => {} }];
 
   const {
     data: contents,
@@ -61,6 +45,26 @@ const DocumentDetailScreen = () => {
 
   if (isSuccess) {
     console.log(contents);
+
+    if (contents?.user_id === user?.userId) {
+      kebabItems = [
+        { label: "검색", value: "Search", action: () => {} },
+        {
+          label: "편집",
+          value: "Modify",
+          action: () =>
+            navigation.navigate("Modify", {
+              id: id,
+              documentData: contents,
+            }),
+        },
+        {
+          label: "삭제",
+          value: "Delte",
+          action: () => deleteMutate(id),
+        },
+      ];
+    }
   }
 
   return (
@@ -74,39 +78,7 @@ const DocumentDetailScreen = () => {
             onPress={() => navigation.goBack()}
           ></MaterialIconButton>
         }
-        rightButtons={
-          <>
-            {contents?.user_id === user?.userId && (
-              <>
-                <MaterialIconButton
-                  iconName="delete"
-                  size={24}
-                  color="#000000"
-                  onPress={() => {
-                    deleteMutate(id);
-                  }}
-                ></MaterialIconButton>
-                <MaterialIconButton
-                  iconName="mode-edit"
-                  size={24}
-                  color="#000000"
-                  onPress={() => {
-                    navigation.navigate("Modify", {
-                      id: id,
-                      documentData: contents,
-                    });
-                  }}
-                ></MaterialIconButton>
-              </>
-            )}
-            <KebabButton items={kebabItems}></KebabButton>
-            <MaterialIconButton
-              iconName="search"
-              size={24}
-              color="#000000"
-            ></MaterialIconButton>
-          </>
-        }
+        rightButtons={<KebabButton items={kebabItems}></KebabButton>}
       ></BaseHeader>
       <ScrollView style={styles.contentBlock}>
         <View style={styles.topIndicator}>
