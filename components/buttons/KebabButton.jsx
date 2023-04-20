@@ -59,7 +59,8 @@ const KebabButton = ({ items }) => {
           handleIsOpened={handleIsOpened}
           handleSelection={onPressButton}
           items={items}
-          position={dropdownButtonFrame}
+          frame={dropdownButtonFrame}
+          position="right"
         />
       )}
     </>

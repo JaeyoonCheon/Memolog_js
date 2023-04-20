@@ -38,7 +38,7 @@ const BaseDropdown = ({
               handleIsOpened={handleIsOpened}
               handleSelection={handleSelection}
               items={items}
-              position={dropdownButtonFrame}
+              frame={dropdownButtonFrame}
             />
           )}
         </View>

@@ -15,7 +15,8 @@ const DropdownModal = ({
   handleIsOpened,
   handleSelection,
   items,
-  position,
+  frame,
+  position = "left",
 }) => {
   const modalRef = useRef();
   const { width: windowWidth } = useWindowDimensions();
@@ -36,18 +37,14 @@ const DropdownModal = ({
   };
 
   useLayoutEffect(() => {
-    if (modalRef.current && modalRef.current.measure) {
-      modalRef.current.measure((fx, fy, width, height, x, y) => {
-        console.log(position);
-        console.log(`${width} ${height} ${x} ${y}`);
-        console.log(windowWidth);
-        const modalRight = position.x + width;
-        if (windowWidth < modalRight) {
-          setModalPosition({ right: 0 });
-        } else {
-          setModalPosition({ left: position.x });
-        }
-      });
+    const frameRight = frame.x + frame.width;
+
+    if (position === "left") {
+      setModalPosition({ left: frame.x });
+    } else if (position === "right") {
+      setModalPosition({ right: windowWidth - frameRight });
+    } else {
+      setModalPosition({ left: frame.x });
     }
   }, []);
 
@@ -63,12 +60,12 @@ const DropdownModal = ({
             style={[
               styles.dropdown,
               {
-                top: position.height + position.y + 4,
+                top: frame.height + frame.y + 4,
               },
               modalPosition,
             ]}
           >
-            <View ref={modalRef} style={{ borderWidth: 1, borderColor: "red" }}>
+            <View>
               <FlatList
                 data={items}
                 renderItem={DropdownItem}
