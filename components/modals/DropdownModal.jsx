@@ -18,7 +18,6 @@ const DropdownModal = ({
   frame,
   position = "left",
 }) => {
-  const modalRef = useRef();
   const { width: windowWidth } = useWindowDimensions();
   const [modalPosition, setModalPosition] = useState();
 

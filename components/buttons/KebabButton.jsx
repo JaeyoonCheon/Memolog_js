@@ -41,9 +41,6 @@ const KebabButton = ({ items }) => {
     item.action();
   };
 
-  console.log(isOpened);
-  console.log(dropdownButtonFrame);
-
   return (
     <>
       <MainButton
