@@ -26,11 +26,14 @@ const styles = (props) =>
       height: props.isPrimary ? 45 : 30,
       flexDirection: "row",
       alignItems: "center",
+      justifyContent: "center",
 
       backgroundColor: "#FFFFFF",
       borderRadius: 45,
     },
     circle: {
+      position: "absolute",
+      left: 0,
       width: props.isPrimary ? 45 : 30,
       height: props.isPrimary ? 45 : 30,
       alignSelf: "flex-start",
@@ -44,6 +47,7 @@ const styles = (props) =>
       color: "#22BCCE",
     },
     labelBlock: {
+      flexGrow: 1,
       height: props.isPrimary ? 45 : 30,
       alignSelf: "center",
       alignItems: "center",
