@@ -5,6 +5,7 @@ import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 
 import BaseHeader from "../components/headers/BaseHeader";
+import Trends from "../components/charts/hashtags/Trends";
 
 const data = {
   labels: ["January", "February", "March", "April", "May", "June"],
@@ -50,6 +51,9 @@ const ChartScreen = () => {
           borderRadius: 16,
         }}
       />
+      <View>
+        <Trends></Trends>
+      </View>
     </View>
   );
 };
