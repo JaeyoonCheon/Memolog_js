@@ -44,7 +44,7 @@ const ChartScreen = () => {
   return (
     <View style={styles.block}>
       <BaseHeader title="통계"></BaseHeader>
-      <ScrollView>
+      <ScrollView style={styles.container}>
         <LineChart
           data={data}
           width={screenWidth}
@@ -71,7 +71,9 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#FFFFFF",
   },
+  container: {},
   hashtagContainer: {
+    paddingVertical: 12,
     marginHorizontal: 12,
   },
 });
