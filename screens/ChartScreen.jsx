@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import Trends from "../components/charts/hashtags/Trends";
+import { getHashtagTrends } from "../api/statistics";
 
 const data = {
   labels: ["January", "February", "March", "April", "May", "June"],
@@ -35,11 +36,15 @@ const ChartScreen = () => {
   const screenWidth = Dimensions.get("window").width;
   const navigation = useNavigation();
 
-  const {} = useQuery();
+  const { data: trendsData, isFetched } = useQuery(["HashtagTrends"], () =>
+    getHashtagTrends()
+  );
 
   const onPressSearch = () => {
     navigation.navigate("Search");
   };
+
+  console.log(trendsData);
 
   return (
     <View style={styles.block}>
@@ -56,7 +61,7 @@ const ChartScreen = () => {
           }}
         />
         <View style={styles.hashtagContainer}>
-          <Trends></Trends>
+          {isFetched && <Trends data={trendsData}></Trends>}
         </View>
       </ScrollView>
     </View>

@@ -3,7 +3,7 @@ import React from "react";
 
 import RankCard from "../../cards/RankCard";
 
-const Trends = () => {
+const Trends = ({ data }) => {
   return (
     <View style={styles.block}>
       <View style={styles.titleBlock}>
@@ -13,32 +13,21 @@ const Trends = () => {
         </Text>
       </View>
       <FlatList
-        data={[
-          { id: 1, name: "#test1" },
-          { id: 2, name: "#test2" },
-          { id: 3, name: "#test3" },
-          { id: 4, name: "#test4" },
-          { id: 5, name: "#test5" },
-          { id: 6, name: "#test6" },
-          { id: 7, name: "#test7" },
-          { id: 8, name: "#test8" },
-          { id: 9, name: "#test9" },
-          { id: 10, name: "#test10" },
-        ]}
+        data={data}
         renderItem={({ item, index }) =>
           index < 3 ? (
             <RankCard
               isPrimary
               rankNumber={index + 1}
-              label={item.name}
+              label={"#" + item.name}
             ></RankCard>
           ) : (
-            <RankCard rankNumber={index + 1} label={item.name}></RankCard>
+            <RankCard rankNumber={index + 1} label={"#" + item.name}></RankCard>
           )
         }
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={<View style={{ height: 10 }}></View>}
-        nestedScrollEnabled={true}
+        scrollEnabled={false}
       ></FlatList>
     </View>
   );
