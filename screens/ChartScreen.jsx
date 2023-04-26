@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
+import { useQuery } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import Trends from "../components/charts/hashtags/Trends";
@@ -34,6 +35,8 @@ const ChartScreen = () => {
   const screenWidth = Dimensions.get("window").width;
   const navigation = useNavigation();
 
+  const {} = useQuery();
+
   const onPressSearch = () => {
     navigation.navigate("Search");
   };
@@ -41,19 +44,21 @@ const ChartScreen = () => {
   return (
     <View style={styles.block}>
       <BaseHeader title="통계"></BaseHeader>
-      <LineChart
-        data={data}
-        width={screenWidth}
-        height={220}
-        chartConfig={chartConfig}
-        style={{
-          marginVertical: 8,
-          borderRadius: 16,
-        }}
-      />
-      <View>
-        <Trends></Trends>
-      </View>
+      <ScrollView>
+        <LineChart
+          data={data}
+          width={screenWidth}
+          height={220}
+          chartConfig={chartConfig}
+          style={{
+            marginVertical: 8,
+            borderRadius: 16,
+          }}
+        />
+        <View style={styles.hashtagContainer}>
+          <Trends></Trends>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -65,5 +70,8 @@ const styles = StyleSheet.create({
     flex: 1,
 
     backgroundColor: "#FFFFFF",
+  },
+  hashtagContainer: {
+    marginHorizontal: 12,
   },
 });

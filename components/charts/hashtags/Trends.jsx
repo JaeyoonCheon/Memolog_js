@@ -9,7 +9,7 @@ const Trends = () => {
       <View style={styles.titleBlock}>
         <Text style={styles.title}>#해시태그</Text>
         <Text style={styles.title}>
-          TOP <Text style={styles.titleNumber}>20</Text>
+          TOP <Text style={styles.titleNumber}>10</Text>
         </Text>
       </View>
       <FlatList
@@ -38,6 +38,7 @@ const Trends = () => {
         }
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={<View style={{ height: 10 }}></View>}
+        nestedScrollEnabled={true}
       ></FlatList>
     </View>
   );
@@ -47,7 +48,6 @@ export default Trends;
 
 const styles = StyleSheet.create({
   block: {
-    height: 300,
     paddingVertical: 12,
 
     borderRadius: 16,
