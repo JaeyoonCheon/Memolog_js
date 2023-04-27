@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 
 import BaseHeader from "../components/headers/BaseHeader";
 import Trends from "../components/charts/hashtags/Trends";
+import TagFrequency from "../components/charts/hashtags/TagFrequency";
 import { getHashtagTrends } from "../api/statistics";
 
 const ChartScreen = () => {
@@ -25,9 +26,12 @@ const ChartScreen = () => {
   return (
     <View style={styles.block}>
       <BaseHeader title="통계"></BaseHeader>
-      <ScrollView style={styles.container}>
-        <View style={styles.hashtagContainer}>
+      <ScrollView style={styles.contents}>
+        <View style={styles.container}>
           {isFetched && <Trends data={trendsData}></Trends>}
+        </View>
+        <View style={styles.container}>
+          {isFetched && <TagFrequency data={trendsData}></TagFrequency>}
         </View>
       </ScrollView>
     </View>
@@ -42,8 +46,8 @@ const styles = StyleSheet.create({
 
     backgroundColor: "#FFFFFF",
   },
-  container: {},
-  hashtagContainer: {
+  contents: {},
+  container: {
     paddingVertical: 12,
     marginHorizontal: 12,
   },
