@@ -11,9 +11,7 @@ const FlatCard = ({ item, onPress }) => {
         <View style={styles.bodyBlock}>
           <Text style={styles.body}>{item.form}</Text>
         </View>
-        <View style={styles.addon}>
-          <Text>기타 정보</Text>
-        </View>
+        <View style={styles.addon}></View>
       </View>
       {item.thumbnail_url && (
         <Image

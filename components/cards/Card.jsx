@@ -8,12 +8,6 @@ import {
 } from "react-native";
 import React from "react";
 
-const testData = {
-  title: "문서 제목 .. 1",
-  body: "대통령은 헌법과 법률이 정하는 바에 의하여 국군을 통수한다. 국회의원이 회기전에 체포 또는 구금된 때에는 현행범인이 아닌 한 국회의 요구가 있으면 회기중 석방된다.",
-  imageURL: "https://picsum.photos/200/300",
-};
-
 const Card = ({ item, onPress }) => {
   return (
     <TouchableOpacity style={styles.block} onPress={() => onPress(item.id)}>
