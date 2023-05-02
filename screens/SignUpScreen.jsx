@@ -5,7 +5,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
@@ -16,9 +16,11 @@ import PasswordField from "../components/textfields/PasswordField";
 import BaseButton from "../components/buttons/BaseButton";
 import useSignUp from "../hooks/useSignUp";
 import { MaterialIconButton } from "../components/buttons/IconButton";
+import AlertModal from "../components/modals/AlertModal";
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
+  const [isModalOpened, setIsModalOpened] = useState(false);
   const {
     control,
     handleSubmit,
@@ -106,7 +108,16 @@ const SignUpScreen = () => {
             name="email"
           ></Controller>
           <View style={styles.availButton}>
-            <BaseButton label="중복 확인"></BaseButton>
+            <BaseButton
+              label="중복 확인"
+              onPress={() => setIsModalOpened(!isModalOpened)}
+            ></BaseButton>
+            {isModalOpened && (
+              <AlertModal
+                isOpened={isModalOpened}
+                handleIsOpened={setIsModalOpened}
+              ></AlertModal>
+            )}
           </View>
           <Controller
             control={control}
