@@ -26,11 +26,6 @@ const Card = ({ item, onPress }) => {
         <View style={styles.bodyBlock}>
           <Text style={styles.body}>{item.form}</Text>
         </View>
-        {item?.addon && (
-          <View style={styles.addonBlock}>
-            <Text style={styles.addon}>기타 정보</Text>
-          </View>
-        )}
       </View>
     </TouchableOpacity>
   );
@@ -89,6 +84,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#000000",
   },
-  addonBlock: {},
-  addon: {},
 });
