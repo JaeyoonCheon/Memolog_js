@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useMutation } from "react-query";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
 
@@ -17,10 +17,11 @@ import BaseButton from "../components/buttons/BaseButton";
 import useSignUp from "../hooks/useSignUp";
 import { MaterialIconButton } from "../components/buttons/IconButton";
 import AlertModal from "../components/modals/AlertModal";
+import { checkEmailDuplication } from "../api/auth";
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
-  const [isModalOpened, setIsModalOpened] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     control,
     handleSubmit,
@@ -35,7 +36,13 @@ const SignUpScreen = () => {
   });
 
   const { mutate: signUpMutate, isLoading, isSuccess } = useSignUp();
+  const { mutate: checkMutate } = useMutation(checkEmailDuplication, {});
 
+  const onPressCheck = (data) => {
+    checkMutate({
+      email: data.email,
+    });
+  };
   const onSubmit = (data) => {
     if (isLoading) {
       return;
@@ -110,12 +117,14 @@ const SignUpScreen = () => {
           <View style={styles.availButton}>
             <BaseButton
               label="중복 확인"
-              onPress={() => setIsModalOpened(!isModalOpened)}
+              onPress={() => setIsModalOpen(!isModalOpen)}
             ></BaseButton>
-            {isModalOpened && (
+            {isModalOpen && (
               <AlertModal
-                isOpened={isModalOpened}
-                handleIsOpened={setIsModalOpened}
+                isOpen={isModalOpen}
+                handleIsOpen={setIsModalOpen}
+                innerText={`동일한 이메일이 이미 등록되어있습니다.\n다른 이메일로 등록해주세요.`}
+                buttonText={"확인"}
               ></AlertModal>
             )}
           </View>

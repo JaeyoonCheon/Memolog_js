@@ -19,3 +19,13 @@ export const signUp = async (payload) => {
     return e;
   }
 };
+
+export const checkEmailDuplication = async (payload) => {
+  try {
+    const results = await client.post("/auth/check-email-duplicated", payload);
+
+    return results.data;
+  } catch (e) {
+    return e;
+  }
+};

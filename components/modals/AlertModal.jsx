@@ -7,22 +7,29 @@ import {
 } from "react-native";
 import React from "react";
 
-const AlertModal = ({ isOpened, handleIsOpened }) => {
-  console.log(isOpened);
+import BaseButton from "../buttons/BaseButton";
+
+const AlertModal = ({
+  isOpen,
+  handleIsOpen,
+  innerText = "",
+  buttonText = "",
+}) => {
+  console.log(isOpen);
   return (
-    <Modal visible={isOpened} transparent>
+    <Modal visible={isOpen} transparent>
       <TouchableWithoutFeedback
         onPress={() => {
-          handleIsOpened(false);
+          handleIsOpen(false);
         }}
       >
         <View style={styles.modalBackground}>
           <View style={styles.block}>
             <View style={styles.modalContent}>
-              <Text>모달 제목</Text>
+              <Text style={styles.innerText}>{innerText}</Text>
             </View>
             <View style={styles.modalButton}>
-              <Text>모달 내용</Text>
+              <BaseButton label={buttonText}></BaseButton>
             </View>
           </View>
         </View>
@@ -54,6 +61,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  innerText: {
+    textAlign: "center",
   },
   modalButton: {
     height: 50,
