@@ -21,8 +21,11 @@ import { checkEmailDuplication } from "../api/auth";
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+
   const {
+    getValues,
     control,
     handleSubmit,
     formState: { errors },
@@ -35,12 +38,31 @@ const SignUpScreen = () => {
     },
   });
 
-  const { mutate: signUpMutate, isLoading, isSuccess } = useSignUp();
-  const { mutate: checkMutate } = useMutation(checkEmailDuplication, {});
+  const {
+    mutate: signUpMutate,
+    isLoading: isSignUpLoading,
+    isSignUpSuccess,
+  } = useSignUp();
+  const {
+    mutate: checkMutate,
+    isSuccess: isEmailCheckSuccess,
+    isError: isEmailCheckError,
+  } = useMutation(checkEmailDuplication, {
+    onSuccess: (data) => {
+      setIsEmailChecked(true);
+    },
+    onError: (error) => {
+      if (error.response.httpCode === 400) {
+        setIsErrorModalOpen(true);
+      }
+    },
+  });
 
-  const onPressCheck = (data) => {
+  const onPressCheck = () => {
+    const email = getValues("email");
+
     checkMutate({
-      email: data.email,
+      email: email,
     });
   };
   const onSubmit = (data) => {
@@ -115,14 +137,11 @@ const SignUpScreen = () => {
             name="email"
           ></Controller>
           <View style={styles.availButton}>
-            <BaseButton
-              label="중복 확인"
-              onPress={() => setIsModalOpen(!isModalOpen)}
-            ></BaseButton>
+            <BaseButton label="중복 확인" onPress={onPressCheck}></BaseButton>
             {isModalOpen && (
               <AlertModal
-                isOpen={isModalOpen}
-                handleIsOpen={setIsModalOpen}
+                isOpen={isErrorModalOpen}
+                handleIsOpen={setIsErrorModalOpen}
                 innerText={`동일한 이메일이 이미 등록되어있습니다.\n다른 이메일로 등록해주세요.`}
                 buttonText={"확인"}
               ></AlertModal>
