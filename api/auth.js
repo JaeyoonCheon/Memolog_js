@@ -24,7 +24,7 @@ export const checkEmailDuplication = async (payload) => {
   try {
     const results = await client.post("/auth/check-email-duplicated", payload);
 
-    return results.data;
+    return results;
   } catch (e) {
     return e;
   }

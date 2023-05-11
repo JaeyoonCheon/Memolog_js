@@ -25,7 +25,9 @@ const SignUpScreen = () => {
   const [isEmailChecked, setIsEmailChecked] = useState(false);
 
   const {
+    trigger,
     getValues,
+    getFieldState,
     control,
     handleSubmit,
     formState: { errors },
@@ -41,7 +43,7 @@ const SignUpScreen = () => {
   const {
     mutate: signUpMutate,
     isLoading: isSignUpLoading,
-    isSignUpSuccess,
+    isSuccess: isSignUpSuccess,
   } = useSignUp();
   const {
     mutate: checkMutate,
@@ -52,18 +54,26 @@ const SignUpScreen = () => {
       setIsEmailChecked(true);
     },
     onError: (error) => {
-      if (error.response.httpCode === 400) {
+      console.log(error);
+      if (error.response.status === 400) {
         setIsErrorModalOpen(true);
       }
     },
   });
 
-  const onPressCheck = () => {
-    const email = getValues("email");
+  const onPressCheck = async () => {
+    const result = await trigger("email");
 
-    checkMutate({
-      email: email,
-    });
+    if (result) {
+      const email = getValues("email");
+
+      checkMutate({
+        email: email,
+      });
+    } else {
+      const { error: emailErrors } = getFieldState("email");
+      setIsErrorModalOpen(true);
+    }
   };
   const onSubmit = (data) => {
     if (isLoading) {
@@ -138,7 +148,7 @@ const SignUpScreen = () => {
           ></Controller>
           <View style={styles.availButton}>
             <BaseButton label="중복 확인" onPress={onPressCheck}></BaseButton>
-            {isModalOpen && (
+            {isErrorModalOpen && (
               <AlertModal
                 isOpen={isErrorModalOpen}
                 handleIsOpen={setIsErrorModalOpen}
@@ -192,7 +202,7 @@ const SignUpScreen = () => {
             name="passwordConfirm"
           ></Controller>
         </View>
-        {isLoading ? (
+        {isSignUpLoading ? (
           <ActivityIndicator size="large" color="#22BCCE"></ActivityIndicator>
         ) : (
           <View style={styles.button}>
