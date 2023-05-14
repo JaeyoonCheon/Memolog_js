@@ -76,7 +76,7 @@ const SignUpScreen = () => {
     }
   };
   const onSubmit = (data) => {
-    if (isLoading) {
+    if (isSignUpLoading) {
       return;
     }
 
@@ -86,8 +86,8 @@ const SignUpScreen = () => {
       password: data.password,
     });
 
-    if (isSuccess) {
-      navigation.navigate("MyDocuments");
+    if (isSignUpSuccess) {
+      navigation.navigate("MakeProfile");
     }
   };
 

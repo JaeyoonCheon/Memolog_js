@@ -6,6 +6,7 @@ import MainTab from "./MainTab";
 import MySearchScreen from "./MySearchScreen";
 import SignInScreen from "./SignInScreen";
 import SignUpScreen from "./SignUpScreen";
+import MakeProfileScreen from "./MakeProfileScreen";
 import WriteScreen from "./WriteScreen";
 import ModifyScreen from "./ModifyScreen";
 import DocumentDetailScreen from "./DocumentDetailScreen";
@@ -48,6 +49,11 @@ const RootStack = () => {
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
+        options={{ headerShown: false }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="MakeProfile"
+        component={MakeProfileScreen}
         options={{ headerShown: false }}
       ></Stack.Screen>
       <Stack.Screen
