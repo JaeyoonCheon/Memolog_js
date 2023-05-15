@@ -1,17 +1,38 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
+import { launchImageLibrary } from "react-native-image-picker";
 
 import BaseTextField from "../components/textfields/BaseTextField";
 import BaseButton from "../components/buttons/BaseButton";
 
 const MakeProfileScreen = () => {
+  const [profileImageURI, setProfileImageURI] = useState("");
   const [nickname, setNickname] = useState("");
+
+  const onPressChangeImage = async () => {
+    const image = await launchImageLibrary({
+      mediaType: "photo",
+      maxWidth: 512,
+      maxHeight: 512,
+      includeBase64: Platform.OS === "android",
+    });
+
+    setProfileImageURI(image.assets[0].uri);
+  };
 
   return (
     <View style={styles.block}>
       <View style={styles.profileImageBlock}>
-        <TouchableOpacity style={styles.profileImageButton}>
-          <View style={styles.profileImage}></View>
+        <TouchableOpacity
+          style={styles.profileImageButton}
+          onPress={onPressChangeImage}
+        >
+          <View style={styles.profileImage}>
+            <Image
+              style={styles.image}
+              source={{ uri: profileImageURI }}
+            ></Image>
+          </View>
         </TouchableOpacity>
       </View>
       <View style={styles.messageBlock}>
@@ -53,7 +74,9 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: "#22BCCE",
     borderWidth: 2,
+    overflow: "hidden",
   },
+  image: { flex: 1 },
   messageBlock: {
     flexGrow: 1,
     marginVertical: 32,
