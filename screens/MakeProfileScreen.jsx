@@ -1,13 +1,27 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
+import { useNavigation } from "@react-navigation/native";
+import { useMutation } from "react-query";
 
 import BaseTextField from "../components/textfields/BaseTextField";
 import BaseButton from "../components/buttons/BaseButton";
+import { makeUserProfile } from "api/user";
 
 const MakeProfileScreen = () => {
+  const navigation = useNavigation();
   const [profileImageURI, setProfileImageURI] = useState("");
   const [nickname, setNickname] = useState("");
+
+  const { mutate: makeProfileMutate } = useMutation(makeUserProfile, {
+    onError: () => {
+      setProfileImageURI("");
+      setNickname("");
+    },
+    onSuccess: () => {
+      navigation.navigate("MainTab");
+    },
+  });
 
   const onPressChangeImage = async () => {
     const image = await launchImageLibrary({
@@ -18,6 +32,12 @@ const MakeProfileScreen = () => {
     });
 
     setProfileImageURI(image.assets[0].uri);
+  };
+  const onPressConfirm = async () => {
+    makeProfileMutate({
+      nickname,
+      profileImageURI,
+    });
   };
 
   return (
@@ -47,7 +67,7 @@ const MakeProfileScreen = () => {
           onChange={setNickname}
         ></BaseTextField>
         <View style={styles.confirmButton}>
-          <BaseButton label="확인"></BaseButton>
+          <BaseButton label="확인" onPress={onPressConfirm}></BaseButton>
         </View>
       </View>
     </View>
