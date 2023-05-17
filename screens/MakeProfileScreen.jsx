@@ -6,11 +6,12 @@ import { useMutation } from "react-query";
 
 import BaseTextField from "../components/textfields/BaseTextField";
 import BaseButton from "../components/buttons/BaseButton";
-import { makeUserProfile } from "api/user";
+import { makeUserProfile } from "../api/user";
+import DefaultImage from "../assets/user.png";
 
 const MakeProfileScreen = () => {
   const navigation = useNavigation();
-  const [profileImageURI, setProfileImageURI] = useState("");
+  const [profileImageURI, setProfileImageURI] = useState(null);
   const [nickname, setNickname] = useState("");
 
   const { mutate: makeProfileMutate } = useMutation(makeUserProfile, {
@@ -40,6 +41,9 @@ const MakeProfileScreen = () => {
     });
   };
 
+  console.log(profileImageURI);
+  console.log(!!profileImageURI);
+
   return (
     <View style={styles.block}>
       <View style={styles.profileImageBlock}>
@@ -48,10 +52,14 @@ const MakeProfileScreen = () => {
           onPress={onPressChangeImage}
         >
           <View style={styles.profileImage}>
-            <Image
-              style={styles.image}
-              source={{ uri: profileImageURI }}
-            ></Image>
+            {profileImageURI ? (
+              <Image
+                style={styles.image}
+                source={{ uri: profileImageURI }}
+              ></Image>
+            ) : (
+              <Image style={styles.image} source={DefaultImage}></Image>
+            )}
           </View>
         </TouchableOpacity>
       </View>
@@ -96,7 +104,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     overflow: "hidden",
   },
-  image: { flex: 1 },
+  image: {
+    width: 200,
+    height: 200,
+  },
   messageBlock: {
     flexGrow: 1,
     marginVertical: 32,
