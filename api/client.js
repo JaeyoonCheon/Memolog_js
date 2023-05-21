@@ -19,32 +19,27 @@ client.interceptors.response.use(
   },
   async function (error) {
     console.log("Error intercept");
-    try {
-      console.log(error);
-      // Access token 만료
-      if (error.response.data.name === "ER04") {
+    console.log(error);
+
+    if (error.response.data.name === "ER04") {
+      await refreshToken();
+
+      return axios.request(error.config);
+    } else if (error.response.data.name === "ER05") {
+      console.log("Too old account");
+
+      const navigation = useNavigation();
+      navigation.navigate("SignIn");
+    } else if (error.response.data.name === "ER06") {
+      const isRefreshTokenExist = await checkRefreshToken();
+
+      if (isRefreshTokenExist) {
+        console.log("Refetch refresh token");
         await refreshToken();
-
-        return axios.request(error.config);
-      } else if (error.response.data.name === "ER05") {
-        console.log("Too old account");
-
-        const navigation = useNavigation();
-        navigation.navigate("SignIn");
-      } else if (error.response.data.name === "ER06") {
-        const isRefreshTokenExist = await checkRefreshToken();
-
-        if (isRefreshTokenExist) {
-          console.log("Refetch refresh token");
-          await refreshToken();
-        }
-      } else {
-        throw error;
       }
-    } catch (e) {
-      console.log(e);
-      return Promise.reject(e);
     }
+
+    return Promise.reject(error);
   }
 );
 

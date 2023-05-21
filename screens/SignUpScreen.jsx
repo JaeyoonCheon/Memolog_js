@@ -151,6 +151,9 @@ const SignUpScreen = () => {
                 handleIsOpen={setIsErrorModalOpen}
                 innerText={`동일한 이메일이 이미 등록되어있습니다.\n다른 이메일로 등록해주세요.`}
                 buttonText={"확인"}
+                handleConfirm={() => {
+                  setIsErrorModalOpen(false);
+                }}
               ></AlertModal>
             )}
           </View>

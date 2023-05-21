@@ -14,13 +14,16 @@ const AlertModal = ({
   handleIsOpen,
   innerText = "",
   buttonText = "",
+  handleConfirm = () => {},
 }) => {
   console.log(isOpen);
   return (
     <Modal visible={isOpen} transparent>
       <TouchableWithoutFeedback
-        onPress={() => {
-          handleIsOpen(false);
+        onPress={(e) => {
+          if (e.target === e.currentTarget) {
+            handleIsOpen(false);
+          }
         }}
       >
         <View style={styles.modalBackground}>
@@ -29,7 +32,10 @@ const AlertModal = ({
               <Text style={styles.innerText}>{innerText}</Text>
             </View>
             <View style={styles.modalButton}>
-              <BaseButton label={buttonText}></BaseButton>
+              <BaseButton
+                label={buttonText}
+                onPress={handleConfirm}
+              ></BaseButton>
             </View>
           </View>
         </View>
