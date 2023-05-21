@@ -142,16 +142,6 @@ const SignUpScreen = () => {
           ></Controller>
           <View style={styles.availButton}>
             <BaseButton label="중복 확인" onPress={onPressCheck}></BaseButton>
-            {isErrorModalOpen && (
-              <AlertModal
-                isOpen={isErrorModalOpen}
-                handleIsOpen={setIsErrorModalOpen}
-                innerText={`동일한 이메일이 이미 등록되어있습니다.\n다른 이메일로 등록해주세요.`}
-                handleConfirm={() => {
-                  setIsErrorModalOpen(false);
-                }}
-              ></AlertModal>
-            )}
           </View>
           <Controller
             control={control}
@@ -209,6 +199,16 @@ const SignUpScreen = () => {
           </View>
         )}
       </ScrollView>
+      {isErrorModalOpen && (
+        <AlertModal
+          isOpen={isErrorModalOpen}
+          handleIsOpen={setIsErrorModalOpen}
+          innerText={`동일한 이메일이 이미 등록되어있습니다.\n다른 이메일로 등록해주세요.`}
+          handleConfirm={() => {
+            setIsErrorModalOpen(false);
+          }}
+        ></AlertModal>
+      )}
     </View>
   );
 };
