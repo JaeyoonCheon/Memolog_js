@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { SOURCE_ADDRESS, SOURCE_PORT } from "@env";
 
 // wsl2 서버 실행 시 wsl2의 IP address를 대응 후 adb 포트 연동 필요
-const baseURL = `http://172.29.69.137:${SOURCE_PORT}`;
+const baseURL = `http://172.29.77.196:${SOURCE_PORT}`;
 
 console.log(baseURL);
 
@@ -22,30 +22,29 @@ client.interceptors.response.use(
     try {
       console.log(error);
       // Access token 만료
-      if (error.response.status === 401) {
-        if (error.response.data.name === "ER04") {
+      if (error.response.data.name === "ER04") {
+        await refreshToken();
+
+        return axios.request(error.config);
+      } else if (error.response.data.name === "ER05") {
+        console.log("Too old account");
+
+        const navigation = useNavigation();
+        navigation.navigate("SignIn");
+      } else if (error.response.data.name === "ER06") {
+        const isRefreshTokenExist = await checkRefreshToken();
+
+        if (isRefreshTokenExist) {
+          console.log("Refetch refresh token");
           await refreshToken();
-
-          return axios.request(error.config);
-        } else if (error.response.data.name === "ER05") {
-          console.log("Too old account");
-
-          const navigation = useNavigation();
-          navigation.navigate("SignIn");
-        } else if (error.response.data.name === "ER06") {
-          const isRefreshTokenExist = await checkRefreshToken();
-
-          if (isRefreshTokenExist) {
-            console.log("Refetch refresh token");
-            await refreshToken();
-          }
         }
+      } else {
+        throw error;
       }
     } catch (e) {
       console.log(e);
       return Promise.reject(e);
     }
-    return error;
   }
 );
 

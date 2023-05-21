@@ -6,7 +6,7 @@ export const getHashtagFrequency = async () => {
 
     return results.data;
   } catch (e) {
-    return e;
+    throw e;
   }
 };
 
@@ -16,6 +16,6 @@ export const getHashtagTrends = async () => {
 
     return results.data;
   } catch (e) {
-    return e;
+    throw e;
   }
 };

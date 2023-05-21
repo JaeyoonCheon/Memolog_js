@@ -1,27 +1,39 @@
 import client from "./client";
 
 export const getDocuments = async (pageParam, sort, order) => {
-  const { id, cursor } = pageParam;
-  const query = `?id=${id}&sort=${sort}&order=${order}&cursor=${cursor}`;
+  try {
+    const { id, cursor } = pageParam;
+    const query = `?id=${id}&sort=${sort}&order=${order}&cursor=${cursor}`;
 
-  const results = await client.get(`/document${query}`);
+    const results = await client.get(`/document${query}`);
 
-  return results.data;
+    return results.data;
+  } catch (e) {
+    throw e;
+  }
 };
 
 export const searchDocuments = async (pageParam, keyword) => {
-  const { id, cursor } = pageParam;
-  const query = `?id=${id}&keyword=${keyword}&cursor=${cursor}`;
+  try {
+    const { id, cursor } = pageParam;
+    const query = `?id=${id}&keyword=${keyword}&cursor=${cursor}`;
 
-  const results = await client.get(`/document/search${query}`);
+    const results = await client.get(`/document/search${query}`);
 
-  return results.data;
+    return results.data;
+  } catch (e) {
+    throw e;
+  }
 };
 
 export const writeDocument = async (payload) => {
-  const results = await client.post("/document", payload);
+  try {
+    const results = await client.post("/document", payload);
 
-  return results.data;
+    return results.data;
+  } catch (e) {
+    throw e;
+  }
 };
 
 export const getDocument = async (id) => {
@@ -31,13 +43,21 @@ export const getDocument = async (id) => {
 };
 
 export const modifyDocument = async ({ id, payload }) => {
-  const results = await client.post(`/document/${id}`, payload);
+  try {
+    const results = await client.post(`/document/${id}`, payload);
 
-  return results.data;
+    return results.data;
+  } catch (e) {
+    throw e;
+  }
 };
 
 export const deleteDocument = async (id) => {
-  const results = await client.delete(`/document/${id}`);
+  try {
+    const results = await client.delete(`/document/${id}`);
 
-  return results.data;
+    return results.data;
+  } catch (e) {
+    throw e;
+  }
 };

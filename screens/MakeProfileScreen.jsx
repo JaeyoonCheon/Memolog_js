@@ -35,6 +35,8 @@ const MakeProfileScreen = () => {
     setProfileImageURI(image.assets[0].uri);
   };
   const onPressConfirm = async () => {
+    console.log(nickname);
+    console.log(profileImageURI);
     makeProfileMutate({
       nickname,
       profileImageURI,

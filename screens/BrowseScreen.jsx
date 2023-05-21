@@ -25,10 +25,11 @@ const BrowseScreen = () => {
     queryFn: ({ pageParam = { id: "", cursor: "" } }) =>
       getOtherDocuments(pageParam),
     getNextPageParam: (lastPage, pages) => {
-      return lastPage[lastPage.length - 1]
+      console.log(lastPage);
+      return lastPage[lastPage?.length - 1]
         ? {
-            id: lastPage[lastPage.length - 1]?.id,
-            cursor: lastPage[lastPage.length - 1]["created_at"],
+            id: lastPage[lastPage?.length - 1]?.id,
+            cursor: lastPage[lastPage?.length - 1]["created_at"],
           }
         : undefined;
     },

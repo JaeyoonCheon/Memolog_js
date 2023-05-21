@@ -6,7 +6,7 @@ export const signIn = async (payload) => {
 
     return results.data;
   } catch (e) {
-    return e;
+    throw e;
   }
 };
 
@@ -16,7 +16,7 @@ export const signUp = async (payload) => {
 
     return results.data;
   } catch (e) {
-    return e;
+    throw e;
   }
 };
 
@@ -26,6 +26,6 @@ export const checkEmailDuplication = async (payload) => {
 
     return results;
   } catch (e) {
-    return e;
+    throw e;
   }
 };

@@ -54,8 +54,9 @@ const SignUpScreen = () => {
       setIsEmailChecked(true);
     },
     onError: (error) => {
+      console.log(`got error here`);
       console.log(error);
-      if (error.response.status === 400) {
+      if (error.response.data.name === "ER11") {
         setIsErrorModalOpen(true);
       }
     },
@@ -75,11 +76,7 @@ const SignUpScreen = () => {
       setIsErrorModalOpen(true);
     }
   };
-  const onSubmit = (data) => {
-    if (isSignUpLoading) {
-      return;
-    }
-
+  const onSubmit = async (data) => {
     signUpMutate({
       name: data.name,
       email: data.email,
