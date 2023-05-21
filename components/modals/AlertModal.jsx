@@ -13,8 +13,10 @@ const AlertModal = ({
   isOpen,
   handleIsOpen,
   innerText = "",
-  buttonText = "",
+  confirmText = "확인",
+  closeText = "취소",
   handleConfirm = () => {},
+  handleClose = null,
 }) => {
   console.log(isOpen);
   return (
@@ -31,11 +33,19 @@ const AlertModal = ({
             <View style={styles.modalContent}>
               <Text style={styles.innerText}>{innerText}</Text>
             </View>
-            <View style={styles.modalButton}>
+            <View style={styles.modalButtonBlock}>
               <BaseButton
-                label={buttonText}
+                label={confirmText}
                 onPress={handleConfirm}
               ></BaseButton>
+              {handleClose && (
+                <BaseButton
+                  label={closeText}
+                  onPress={handleClose}
+                  secondary
+                  style={styles.closeButton}
+                ></BaseButton>
+              )}
             </View>
           </View>
         </View>
@@ -71,10 +81,12 @@ const styles = StyleSheet.create({
   innerText: {
     textAlign: "center",
   },
-  modalButton: {
+  modalButtonBlock: {
     height: 50,
     margin: 12,
-
-    backgroundColor: "#22BCCE",
+    flexDirection: "row",
+  },
+  closeButton: {
+    marginLeft: 12,
   },
 });
