@@ -8,23 +8,37 @@ import {
 import React from "react";
 
 import BaseButton from "../buttons/BaseButton";
+import useAlertModal from "../../hooks/useAlertModal";
 
 const AlertModal = ({
-  isOpen,
-  handleIsOpen,
+  type,
   innerText = "",
   confirmText = "확인",
   closeText = "취소",
-  handleConfirm = () => {},
-  handleClose = null,
+  handleConfirm,
+  handleClose,
 }) => {
-  console.log(isOpen);
+  const { modalState, disableModal } = useAlertModal();
+
+  const onConfirm = () => {
+    if (handleConfirm) {
+      handleConfirm();
+    }
+    disableModal();
+  };
+  const onClose = () => {
+    if (handleClose) {
+      handleClose();
+    }
+    disableModal();
+  };
+
   return (
-    <Modal visible={isOpen} transparent>
+    <Modal transparent>
       <TouchableWithoutFeedback
         onPress={(e) => {
           if (e.target === e.currentTarget) {
-            handleIsOpen(false);
+            onClose();
           }
         }}
       >
@@ -34,14 +48,11 @@ const AlertModal = ({
               <Text style={styles.innerText}>{innerText}</Text>
             </View>
             <View style={styles.modalButtonBlock}>
-              <BaseButton
-                label={confirmText}
-                onPress={handleConfirm}
-              ></BaseButton>
-              {handleClose && (
+              <BaseButton label={confirmText} onPress={onConfirm}></BaseButton>
+              {type === "Confirm" && (
                 <BaseButton
                   label={closeText}
-                  onPress={handleClose}
+                  onPress={onClose}
                   secondary
                   style={styles.closeButton}
                 ></BaseButton>
