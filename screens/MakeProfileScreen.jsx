@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "react-query";
+import storage from "@react-native-firebase/storage";
 
 import BaseTextField from "../components/textfields/BaseTextField";
 import BaseButton from "../components/buttons/BaseButton";
@@ -11,7 +12,7 @@ import DefaultImage from "../assets/user.png";
 
 const MakeProfileScreen = () => {
   const navigation = useNavigation();
-  const [profileImageURI, setProfileImageURI] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
   const [nickname, setNickname] = useState("");
 
   const { mutate: makeProfileMutate } = useMutation(makeUserProfile, {
@@ -25,26 +26,35 @@ const MakeProfileScreen = () => {
   });
 
   const onPressChangeImage = async () => {
-    const image = await launchImageLibrary({
+    const imagePath = await launchImageLibrary({
       mediaType: "photo",
       maxWidth: 512,
       maxHeight: 512,
       includeBase64: Platform.OS === "android",
     });
 
-    setProfileImageURI(image.assets[0].uri);
+    setProfileImage(imagePath.assets[0]);
   };
   const onPressConfirm = async () => {
     console.log(nickname);
-    console.log(profileImageURI);
+
+    const fileNameRegex = /\/([^/]+)$/;
+    const fileName = profileImage.fileName;
+    const uploadImageRef = storage().ref("profile_image/" + fileName);
+
+    await uploadImageRef.putFile(profileImage.uri);
+    const downloadUrl = await uploadImageRef.getDownloadURL();
+
+    console.log(nickname);
+    console.log(downloadUrl);
+
     makeProfileMutate({
       nickname,
-      profileImageURI,
+      profileImageURI: downloadUrl,
     });
   };
 
-  console.log(profileImageURI);
-  console.log(!!profileImageURI);
+  console.log(profileImage);
 
   return (
     <View style={styles.block}>
@@ -54,10 +64,10 @@ const MakeProfileScreen = () => {
           onPress={onPressChangeImage}
         >
           <View style={styles.profileImage}>
-            {profileImageURI ? (
+            {profileImage ? (
               <Image
                 style={styles.image}
-                source={{ uri: profileImageURI }}
+                source={{ uri: profileImage.uri }}
               ></Image>
             ) : (
               <Image style={styles.image} source={DefaultImage}></Image>

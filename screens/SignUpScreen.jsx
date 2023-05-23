@@ -54,8 +54,6 @@ const SignUpScreen = () => {
       setIsEmailChecked(true);
     },
     onError: (error) => {
-      console.log(`got error here`);
-      console.log(error);
       if (error.response.data.name === "ER11") {
         const alertMsg = `동일한 이메일이 이미 등록되어있습니다.\n다른 이메일로 등록해주세요.`;
         enableModal({
@@ -79,7 +77,7 @@ const SignUpScreen = () => {
       });
     }
   };
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     if (!isEmailChecked) {
       const alertMsg = `이메일 중복 확인이 진행되지 않았습니다.`;
       enableModal({
@@ -92,15 +90,16 @@ const SignUpScreen = () => {
       return;
     }
 
-    signUpMutate({
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    });
-
-    if (isSignUpSuccess) {
-      navigation.navigate("MakeProfile");
-    }
+    signUpMutate(
+      {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: () => navigation.navigate("MakeProfile"),
+      }
+    );
   };
 
   return (
