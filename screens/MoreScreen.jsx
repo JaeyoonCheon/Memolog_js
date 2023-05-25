@@ -39,22 +39,30 @@ const MoreScreen = () => {
   );
 
   const onPressChangeImage = async () => {
-    const image = await launchImageLibrary({
-      mediaType: "photo",
-      maxWidth: 512,
-      maxHeight: 512,
-      includeBase64: Platform.OS === "android",
-    });
+    try {
+      const image = await launchImageLibrary({
+        mediaType: "photo",
+        maxWidth: 512,
+        maxHeight: 512,
+        includeBase64: Platform.OS === "android",
+      });
 
-    const fileName = image.assets[0].fileName;
-    const uploadImageRef = storage().ref("profile_image/" + fileName);
+      if (!image) {
+        throw Error("None Selected Image");
+      }
 
-    await uploadImageRef.putFile(image.assets[0].uri);
-    const downloadUrl = await uploadImageRef.getDownloadURL();
+      const fileName = image.assets[0].fileName;
+      const uploadImageRef = storage().ref("profile_image/" + fileName);
 
-    changeProfileImageMutate({
-      profile_image_url: downloadUrl,
-    });
+      await uploadImageRef.putFile(image.assets[0].uri);
+      const downloadUrl = await uploadImageRef.getDownloadURL();
+
+      changeProfileImageMutate({
+        profile_image_url: downloadUrl,
+      });
+    } catch (e) {
+      return;
+    }
   };
 
   return (
