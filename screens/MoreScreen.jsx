@@ -8,26 +8,78 @@ import {
 } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { launchImageLibrary } from "react-native-image-picker";
+import { useMutation } from "react-query";
+import storage from "@react-native-firebase/storage";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 import { useUserContext } from "../contexts/UserContext";
 import useSignOut from "../hooks/useSignOut";
 import BaseHeader from "../components/headers/BaseHeader";
+import { changeUserProfileImage } from "../api/user";
+import DefaultImage from "../assets/user.png";
 
 const MoreScreen = () => {
   const navigation = useNavigation();
-  const [user, _] = useUserContext();
+  const [user, setUser] = useUserContext();
+  const { setItem: setUserInfo } = useAsyncStorage("UserInfo");
   const [isLoading, signOut] = useSignOut();
+
+  const { mutate: changeProfileImageMutate } = useMutation(
+    changeUserProfileImage,
+    {
+      onSuccess: (data) => {
+        setUser({
+          ...user,
+          profile_image_url: data.profile_image_url,
+        });
+        setUserInfo(JSON.stringify(user));
+      },
+    }
+  );
+
+  const onPressChangeImage = async () => {
+    const image = await launchImageLibrary({
+      mediaType: "photo",
+      maxWidth: 512,
+      maxHeight: 512,
+      includeBase64: Platform.OS === "android",
+    });
+
+    const fileName = image.assets[0].fileName;
+    const uploadImageRef = storage().ref("profile_image/" + fileName);
+
+    await uploadImageRef.putFile(image.assets[0].uri);
+    const downloadUrl = await uploadImageRef.getDownloadURL();
+
+    changeProfileImageMutate({
+      profile_image_url: downloadUrl,
+    });
+  };
 
   return (
     <View style={styles.block}>
       <BaseHeader title="더 보기"></BaseHeader>
       <View style={styles.profileBlock}>
-        <TouchableOpacity style={styles.profileButton}>
-          <View style={styles.profileImage}></View>
+        <TouchableOpacity
+          style={styles.profileButton}
+          onPress={onPressChangeImage}
+        >
+          {user?.profile_image_url ? (
+            <Image
+              style={styles.profileImage}
+              source={{ uri: user?.profile_image_url }}
+            ></Image>
+          ) : (
+            <Image style={styles.profileImage} source={DefaultImage}></Image>
+          )}
         </TouchableOpacity>
         <Text style={styles.helloText}>{`${user?.name} 님 안녕하세요!`}</Text>
       </View>
       <ScrollView>
+        <TouchableOpacity style={styles.menuBlock}>
+          <Text style={styles.menuLabel}>닉네임 변경</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.menuBlock}>
           <Text style={styles.menuLabel}>앱 설정</Text>
         </TouchableOpacity>
@@ -63,14 +115,13 @@ const styles = StyleSheet.create({
     height: 150,
 
     borderRadius: 75,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: "#95F1FF",
     overflow: "hidden",
   },
   profileImage: {
-    flex: 1,
-
-    backgroundColor: "gray",
+    width: 150,
+    height: 150,
   },
   helloText: {
     fontSize: 28,

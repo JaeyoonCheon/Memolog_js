@@ -20,24 +20,23 @@ const MakeProfileScreen = () => {
       setProfileImageURI("");
       setNickname("");
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data);
       navigation.navigate("MainTab");
     },
   });
 
   const onPressChangeImage = async () => {
-    const imagePath = await launchImageLibrary({
+    const image = await launchImageLibrary({
       mediaType: "photo",
       maxWidth: 512,
       maxHeight: 512,
       includeBase64: Platform.OS === "android",
     });
 
-    setProfileImage(imagePath.assets[0]);
+    setProfileImage(image.assets[0]);
   };
   const onPressConfirm = async () => {
-    console.log(nickname);
-
     const fileNameRegex = /\/([^/]+)$/;
     const fileName = profileImage.fileName;
     const uploadImageRef = storage().ref("profile_image/" + fileName);
@@ -45,16 +44,11 @@ const MakeProfileScreen = () => {
     await uploadImageRef.putFile(profileImage.uri);
     const downloadUrl = await uploadImageRef.getDownloadURL();
 
-    console.log(nickname);
-    console.log(downloadUrl);
-
     makeProfileMutate({
       nickname,
-      profileImageURI: downloadUrl,
+      profile_image_url: downloadUrl,
     });
   };
-
-  console.log(profileImage);
 
   return (
     <View style={styles.block}>

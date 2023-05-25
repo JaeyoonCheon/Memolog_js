@@ -19,7 +19,6 @@ export default function useLoadAuthEffect() {
       const isRememberString = await getRemember();
       const isRemember = JSON.parse(isRememberString);
       if (!isRemember) {
-        console.log("No auto-login");
         return;
       }
 
@@ -27,14 +26,11 @@ export default function useLoadAuthEffect() {
       const userInfoString = await getUserInfo();
       const userInfo = JSON.parse(userInfoString);
       if (!userInfo) {
-        console.log("No saved user info");
         return;
       }
       setUser(userInfo);
 
       if (!accessToken) {
-        console.log("No access token");
-
         await refreshToken();
       }
 
