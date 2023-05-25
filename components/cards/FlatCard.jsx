@@ -11,6 +11,15 @@ const FlatCard = ({ item, onPress }) => {
         <View style={styles.bodyBlock}>
           <Text style={styles.body}>{item.form}</Text>
         </View>
+        {item?.profile_image_url && (
+          <View style={styles.profileBlock}>
+            <Image
+              style={styles.profileImage}
+              source={{ uri: item.profile_image_url }}
+            ></Image>
+            <Text style={styles.profile}>{item.nickname}</Text>
+          </View>
+        )}
       </View>
       {item.thumbnail_url && (
         <Image
@@ -45,11 +54,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000000",
   },
-  bodyBlock: {},
+  bodyBlock: {
+    flexGrow: 1,
+  },
   body: {
     fontSize: 12,
+    color: "#000000",
   },
-  addon: {},
+  profileBlock: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  profileImage: {
+    width: 16,
+    height: 16,
+    marginRight: 8,
+
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  profile: {
+    fontSize: 16,
+    color: "#000000",
+  },
   image: {
     width: 72,
     marginLeft: 12,
