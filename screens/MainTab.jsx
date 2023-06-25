@@ -2,6 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Book from "../assets/icon-font-book.svg";
 
 import MyDocumentsScreen from "./MyDocumentsScreen";
 import BrowseScreen from "./BrowseScreen";
@@ -20,11 +21,7 @@ const MainTab = () => {
           headerShown: false,
           tabBarLabel: "내 기록",
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons
-              name="grid-on"
-              color={color}
-              size={size}
-            ></MaterialIcons>
+            <Book color={color} width={24} height={24}></Book>
           ),
         }}
       ></BottomTab.Screen>
