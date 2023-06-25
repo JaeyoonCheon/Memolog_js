@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const Card = ({ item, onPress }) => {
   return (
@@ -19,7 +19,7 @@ const Card = ({ item, onPress }) => {
           ></Image>
         </View>
       )}
-      <View style={[styles.contents, item.thumbnail_url && { flex: 0.5 }]}>
+      <View style={styles.contents}>
         <View style={styles.titleBlock}>
           <Text style={styles.title}>{item.title}</Text>
         </View>
@@ -68,16 +68,14 @@ const styles = StyleSheet.create({
     }),
   },
   imageBlock: {
-    flex: 0.5,
     minHeight: 150,
     resizeMode: "cover",
   },
   image: {
-    flex: 1,
+    flexGrow: 1,
   },
   contents: {
     minHeight: 100,
-    flex: 1,
     paddingHorizontal: 10,
     paddingVertical: 10,
 
