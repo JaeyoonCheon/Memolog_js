@@ -21,7 +21,7 @@ const MainTab = () => {
           headerShown: false,
           tabBarLabel: "내 기록",
           tabBarIcon: ({ color, size }) => (
-            <Book color={color} width={24} height={24}></Book>
+            <Book fill={color} width={size} height={size}></Book>
           ),
         }}
       ></BottomTab.Screen>
