@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
   },
   profile: {
     fontSize: 18,
+    lineHeight: 18,
     color: "#000000",
   },
 });

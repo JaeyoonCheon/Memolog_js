@@ -23,6 +23,7 @@ const MainTab = () => {
           tabBarIcon: ({ color, size }) => (
             <Book fill={color} width={size} height={size}></Book>
           ),
+          tabBarActiveTintColor: "#22BCCE",
         }}
       ></BottomTab.Screen>
       <BottomTab.Screen
@@ -38,6 +39,7 @@ const MainTab = () => {
               size={size}
             ></MaterialIcons>
           ),
+          tabBarActiveTintColor: "#22BCCE",
         }}
       ></BottomTab.Screen>
       <BottomTab.Screen
@@ -53,6 +55,7 @@ const MainTab = () => {
               size={size}
             ></MaterialIcons>
           ),
+          tabBarActiveTintColor: "#22BCCE",
         }}
       ></BottomTab.Screen>
       <BottomTab.Screen
@@ -68,6 +71,7 @@ const MainTab = () => {
               size={size}
             ></MaterialIcons>
           ),
+          tabBarActiveTintColor: "#22BCCE",
         }}
       ></BottomTab.Screen>
     </BottomTab.Navigator>

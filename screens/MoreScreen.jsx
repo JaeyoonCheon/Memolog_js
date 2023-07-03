@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
 
     borderBottomWidth: 1,
-    borderBottomColor: "#000000",
+    borderBottomColor: "#9c9c9c",
   },
   menuLabel: {
     fontSize: 16,
